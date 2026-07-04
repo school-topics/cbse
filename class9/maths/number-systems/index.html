@@ -1,1 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brahmagupta's Ledger — A Number Systems Adventure</title>
+<style>
+  :root{
+    --ink:#1b2a4a;
+    --paper:#f7f4ec;
+    --line:#d3dae6;
+    --nat:#2f6f4f;   /* naturals / positive - green */
+    --neg:#c0392b;   /* negatives / debt - red */
+    --irr:#7a3ea8;   /* irrational - violet */
+    --rat:#1b6ca8;   /* rational - blue */
+    --gold:#b8892b;
+    --good:#2f7d4f;
+    --bad:#c0392b;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 18px 70px}
 
+  .eyebrow{font-family:ui-monospace,Menlo,monospace;letter-spacing:.2em;
+    text-transform:uppercase;font-size:.66rem;color:var(--gold);margin:0 0 6px}
+  h1{font-size:1.9rem;line-height:1.1;margin:0 0 6px;font-weight:600}
+  .sub{margin:0;color:#3a4a68;max-width:60ch}
+  .rule{height:3px;width:60px;background:var(--ink);border-radius:2px;margin:14px 0 22px}
+
+  /* mode picker */
+  .modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:8px}
+  @media(max-width:680px){.modes{grid-template-columns:1fr}}
+  .mode-card{background:var(--card);border:1.5px solid var(--ink);border-radius:12px;
+    padding:20px;cursor:pointer;transition:.15s;text-align:left}
+  .mode-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(27,42,74,.12)}
+  .mode-card h3{margin:0 0 6px;font-size:1.25rem}
+  .mode-card p{margin:0;font-size:.9rem;color:#3a4a68}
+  .mode-card .tag{display:inline-block;margin-top:12px;font-family:ui-monospace,monospace;
+    font-size:.72rem;padding:4px 10px;border-radius:20px;background:var(--ink);color:var(--paper)}
+
+  /* progress */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .pips{display:flex;gap:6px}
+  .pip{width:22px;height:6px;border-radius:3px;background:var(--line)}
+  .pip.done{background:var(--good)}
+  .pip.wrong{background:var(--bad)}
+  .pip.now{background:var(--ink)}
+  .backlink{font-family:ui-monospace,monospace;font-size:.75rem;color:var(--ink);
+    background:none;border:1.5px solid var(--ink);border-radius:20px;padding:5px 12px;cursor:pointer}
+  .backlink:hover{background:var(--ink);color:var(--paper)}
+  .score{font-family:ui-monospace,monospace;font-size:.8rem;color:#3a4a68}
+
+  /* question layout */
+  .qstage{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+  @media(max-width:760px){.qstage{grid-template-columns:1fr}}
+  .plot-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+  svg{width:100%;height:auto;display:block;touch-action:none}
+
+  .badge{font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+  .story{font-size:1.02rem;margin:0 0 14px}
+  .story b{color:var(--ink)}
+  .ask{font-weight:600;margin:0 0 14px}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{font-family:inherit;font-size:.95rem;text-align:left;padding:11px 14px;
+    border:1.5px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;transition:.12s;color:var(--ink)}
+  .opt:hover{border-color:var(--ink)}
+  .opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .opt.correct{border-color:var(--good);background:rgba(47,125,79,.10)}
+  .opt.incorrect{border-color:var(--bad);background:rgba(192,57,43,.09)}
+  .opt.locked{cursor:default;opacity:.75}
+  .opt.locked.correct,.opt.locked.incorrect{opacity:1}
+
+  .numrow{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .numrow input{font-family:ui-monospace,monospace;font-size:1rem;width:110px;padding:9px 10px;
+    border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+  .numrow input:focus{outline:none;border-color:var(--ink)}
+
+  .check{font-family:ui-monospace,monospace;font-size:.82rem;letter-spacing:.03em;
+    padding:10px 18px;border:none;border-radius:8px;background:var(--ink);color:var(--paper);cursor:pointer;margin-top:6px}
+  .check:disabled{opacity:.4;cursor:default}
+  .next{font-family:ui-monospace,monospace;font-size:.82rem;padding:10px 18px;border:none;
+    border-radius:8px;background:var(--gold);color:#fff;cursor:pointer;margin-top:12px}
+
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:.92rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:rgba(47,125,79,.10);border-left:3px solid var(--good)}
+  .feedback.no{background:rgba(192,57,43,.09);border-left:3px solid var(--bad)}
+  .feedback b{color:var(--ink)}
+
+  /* number-line svg styling */
+  .nl-axis{stroke:var(--ink);stroke-width:2.5}
+  .nl-tick{stroke:#8a97ad;stroke-width:1}
+  .nl-tick.major{stroke:var(--ink);stroke-width:1.6}
+  .nl-sub{stroke:#c3ccdb;stroke-width:1}
+  .tick-num{font-size:9px;fill:#5a6b88;font-family:ui-monospace,monospace}
+  .nl-label{font-size:11px;font-weight:700;fill:var(--ink);font-family:ui-monospace,monospace}
+  .nl-dot{fill:var(--rat)}
+  .nl-dot.irr{fill:var(--irr)}
+  .nl-dot.neg{fill:var(--neg)}
+  .nl-dot.nat{fill:var(--nat)}
+  .nl-dot.ghost{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:3 2}
+  .nl-span{stroke:var(--gold);stroke-width:3}
+  .nl-brace{stroke:var(--gold);stroke-width:1.4;fill:none}
+  .constr{stroke:var(--irr);stroke-width:1.6;fill:none}
+  .constr-arc{stroke:var(--gold);stroke-width:1.4;fill:none;stroke-dasharray:4 3}
+  .point{cursor:grab}.point:active{cursor:grabbing}
+
+  /* results */
+  .result{text-align:center;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:34px 24px}
+  .result .big{font-size:3rem;margin:8px 0;font-weight:600}
+  .result p{color:#3a4a68;max-width:46ch;margin:0 auto 8px}
+  .stars{font-size:1.6rem;letter-spacing:6px;margin:6px 0 14px}
+  .again{font-family:ui-monospace,monospace;font-size:.82rem;padding:11px 22px;border:none;
+    border-radius:8px;background:var(--ink);color:var(--paper);cursor:pointer;margin:6px}
+  footer{margin-top:30px;font-size:.75rem;color:#7a879d;font-family:ui-monospace,monospace;text-align:center}
+  .hide{display:none !important}
+
+  /* challenge set picker */
+  .setgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  @media(max-width:680px){.setgrid{grid-template-columns:1fr}}
+  .set-card{background:var(--card);border:1.5px solid var(--ink);border-radius:12px;
+    padding:20px;cursor:pointer;transition:.15s;text-align:left}
+  .set-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(27,42,74,.12)}
+  .set-card .num{font-family:ui-monospace,monospace;font-size:.72rem;color:var(--gold);letter-spacing:.1em}
+  .set-card h3{margin:4px 0 6px;font-size:1.3rem}
+  .set-card p{margin:0;font-size:.88rem;color:#3a4a68}
+  .set-card .rungs{display:flex;gap:4px;margin-top:12px}
+  .rung{height:6px;flex:1;border-radius:3px;background:var(--line)}
+  .rung.on{background:var(--gold)}
+  .set-card .best{margin-top:10px;font-family:ui-monospace,monospace;font-size:.72rem;color:#7a879d}
+
+  /* true/false */
+  .tf-row{display:flex;gap:10px;margin-bottom:6px}
+  .tf-btn{flex:1;font-family:ui-monospace,monospace;font-size:.9rem;padding:12px;
+    border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);cursor:pointer;transition:.12s}
+  .tf-btn:hover{border-color:var(--ink)}
+  .tf-btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .tf-btn.correct{border-color:var(--good);background:rgba(47,125,79,.10)}
+  .tf-btn.incorrect{border-color:var(--bad);background:rgba(192,57,43,.09)}
+  .tf-btn.locked{cursor:default}
+  .vocab{background:rgba(184,137,43,.10);border:1px solid rgba(184,137,43,.35);
+    border-radius:8px;padding:9px 12px;font-size:.84rem;color:#7a5a12;margin-bottom:12px}
+  .vocab b{color:var(--gold)}
+
+  /* explore panel */
+  #explore h2{font-size:1rem;margin:0 0 6px}
+  .xtabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .xtab{font-family:ui-monospace,monospace;font-size:.72rem;letter-spacing:.04em;
+    padding:7px 11px;border:1.5px solid var(--line);border-radius:20px;background:var(--card);
+    color:var(--ink);cursor:pointer;transition:.12s}
+  .xtab:hover{border-color:var(--ink)}
+  .xtab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .xtab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .xlead{font-size:.9rem;color:#3a4a68;margin:0 0 14px}
+  .xstepper{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+  .xstep-label{font-family:ui-monospace,monospace;font-size:.72rem;color:#7a879d}
+  .xstepper .backlink:disabled{opacity:.35;cursor:default}
+  .setpick-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .readout-x{background:var(--ink);color:var(--paper);border-radius:8px;padding:14px 16px;
+    font-family:ui-monospace,monospace;font-size:.86rem;margin-bottom:14px;line-height:1.7}
+  .readout-x .row{display:flex;justify-content:space-between;gap:12px}
+  .readout-x .k{opacity:.65}
+  .readout-x .v{font-weight:700}
+  .toggles{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:.86rem;color:#3a4a68;cursor:pointer}
+  .toggle input{accent-color:var(--ink);width:16px;height:16px}
+  .explain-x{background:#fff;border-left:3px solid var(--gold);padding:10px 14px;
+    border-radius:0 6px 6px 0;color:#3a4a68;font-size:.88rem;min-height:20px}
+  .explain-x b{color:var(--ink)}
+  .twopt{margin-bottom:14px}
+  .twopt-head{font-family:ui-monospace,monospace;font-size:.74rem;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--ink);margin-bottom:7px}
+  .twopt-sub{color:#8a97ad;text-transform:none;letter-spacing:0}
+  .seg-pick{display:flex;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden}
+  .seg-btn{flex:1;font-family:ui-monospace,monospace;font-size:.72rem;padding:8px 4px;
+    border:none;border-right:1.5px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer}
+  .seg-btn:last-child{border-right:none}
+  .seg-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .denrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:.86rem;color:#3a4a68}
+  .denrow input{flex:1;accent-color:var(--rat)}
+  .denrow .dval{font-family:ui-monospace,monospace;font-weight:700;color:var(--ink);min-width:64px;text-align:right}
+  .toggle:focus-within,.seg-btn:focus-visible,.denrow input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- HOME -->
+  <section id="home">
+    <p class="eyebrow">Grade 9 · The World of Numbers</p>
+    <h1>Brahmagupta's Ledger</h1>
+    <div class="rule"></div>
+    <p class="sub">Travel the number line the way mathematicians built it — from counting pebbles to zero, debts and fortunes, fractions, and the restless irrationals like √2 and π. Drag a point, watch which family it belongs to, and put Brahmagupta's rules to the test.</p>
+    <div style="height:22px"></div>
+    <div class="modes">
+      <button class="mode-card" data-mode="explore">
+        <h3>Explore</h3>
+        <p>Drag a point along the number line. Snap it to fractions, see which set it lives in, measure its distance from zero, and watch its decimal expansion appear.</p>
+        <span class="tag">sandbox · no wrong answers</span>
+      </button>
+      <button class="mode-card" data-mode="practice">
+        <h3>Practice</h3>
+        <p>Ten guided questions, easy to hard. Each one shows the idea on a number line with a full explanation. No pressure, no score.</p>
+        <span class="tag">10 questions · learn as you go</span>
+      </button>
+      <button class="mode-card" data-mode="quiz">
+        <h3>Quiz</h3>
+        <p>Five mixed questions across the whole chapter. Scored at the end, one shot each. Think before you answer.</p>
+        <span class="tag">5 questions · scored</span>
+      </button>
+      <button class="mode-card" data-mode="challenge">
+        <h3>Challenge</h3>
+        <p>Exemplar-level sets built as a ladder — classification, rationalising denominators, laws of exponents, and True/False with reasoning, just like the exam.</p>
+        <span class="tag">3 sets · progressive</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- CHALLENGE SET PICKER -->
+  <section id="setpick" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnS">← Menu</button>
+      <div class="score">Challenge · pick a set</div>
+      <div></div>
+    </div>
+    <p class="sub" style="margin:0 0 18px">Same skills, rising difficulty. Each set uses fresh numbers, so you can retake it to build mastery rather than memory.</p>
+    <div class="setgrid" id="setGrid"></div>
+  </section>
+
+  <!-- EXPLORE -->
+  <section id="explore" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnX">← Menu</button>
+      <div class="score">Explore mode · drag the point</div>
+      <div></div>
+    </div>
+    <div class="qstage">
+      <div class="plot-card"><svg id="svgX" viewBox="0 0 420 220"></svg></div>
+      <div class="qbox">
+        <div class="xtabs" id="xtabs" role="tablist">
+          <button class="xtab" data-tab="sets" role="tab" aria-selected="true">Sets</button>
+          <button class="xtab" data-tab="frac" role="tab" aria-selected="false">Fractions</button>
+          <button class="xtab" data-tab="irr" role="tab" aria-selected="false">Irrationals</button>
+          <button class="xtab" data-tab="dec" role="tab" aria-selected="false">Decimals</button>
+          <button class="xtab" data-tab="dist" role="tab" aria-selected="false">Distance</button>
+        </div>
+
+        <h2 id="xTitle">Sets &amp; the number line</h2>
+        <p class="xlead" id="xLead"></p>
+
+        <!-- FRACTIONS control: denominator slider -->
+        <div class="denrow hide" id="denRow">
+          <span>Divide unit into&nbsp;<b id="denText">2</b>&nbsp;parts</span>
+          <input type="range" id="denSlider" min="1" max="6" step="1" value="2" aria-label="denominator q">
+          <span class="dval" id="denVal">q=2</span>
+        </div>
+
+        <!-- IRRATIONALS control: which irrational -->
+        <div class="seg-pick hide" id="irrPick" style="margin-bottom:14px">
+          <button class="seg-btn" data-irr="r2" aria-pressed="true">√2</button>
+          <button class="seg-btn" data-irr="r3" aria-pressed="false">√3</button>
+          <button class="seg-btn" data-irr="r5" aria-pressed="false">√5</button>
+          <button class="seg-btn" data-irr="pi" aria-pressed="false">π</button>
+        </div>
+
+        <!-- DISTANCE control: two-point tool -->
+        <div class="twopt hide" id="twoptRow">
+          <div class="twopt-head">Two-point tools <span class="twopt-sub">— drag the ◆ marker too</span></div>
+          <div class="seg-pick" id="segPick">
+            <button class="seg-btn" data-tp="dist" aria-pressed="true">Distance |a−b|</button>
+            <button class="seg-btn" data-tp="mid" aria-pressed="false">Average (density)</button>
+          </div>
+        </div>
+
+        <div class="readout-x" id="readoutX"></div>
+        <div class="explain-x" id="explainX"></div>
+
+        <div class="xstepper">
+          <button class="backlink" id="xPrev">← Prev</button>
+          <span class="xstep-label" id="xStepLabel">1 / 5</span>
+          <button class="backlink" id="xNext">Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SESSION -->
+  <section id="session" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtn">← Menu</button>
+      <div class="pips" id="pips"></div>
+      <div class="score" id="scoreLabel"></div>
+    </div>
+    <div class="qstage">
+      <div class="plot-card"><svg id="svg" viewBox="0 0 420 220"></svg></div>
+      <div class="qbox">
+        <p class="badge" id="qbadge">Question 1 · easy</p>
+        <p class="story" id="qstory"></p>
+        <p class="ask" id="qask"></p>
+        <div id="answerArea"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="next hide" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hide">
+    <div class="result">
+      <p class="eyebrow" id="resTitle">Quiz complete</p>
+      <div class="big" id="resScore">0 / 5</div>
+      <div class="stars" id="resStars"></div>
+      <p id="resMsg"></p>
+      <div style="height:10px"></div>
+      <button class="again" id="retryBtn">Try again</button>
+      <button class="again" id="menuBtn">Menu</button>
+    </div>
+  </section>
+
+  <footer>Built on <span>Ganita Manjari · Grade 9 · The World of Numbers</span></footer>
+</div>
+<script>
+// ===================== NUMBER-LINE ENGINE =====================
+const W=420, H=220, PADX=26, AXY=118; // axis y-position
+const spanW=W-2*PADX;
+const NS="http://www.w3.org/2000/svg";
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+
+// VIEW is 1-D: {min,max}. sx maps a number to a pixel x; ux inverts.
+let VIEW={min:-5,max:5};
+function sx(v){return PADX+(v-VIEW.min)/(VIEW.max-VIEW.min)*spanW;}
+function ux(px){return VIEW.min+(px-PADX)/spanW*(VIEW.max-VIEW.min);}
+
+const svg=document.getElementById('svg');
+function clearSvg(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+
+// pretty-print a value that may be an exact fraction n/d
+function fracStr(n,d){
+  if(d===1)return String(n);
+  const g=gcd(Math.abs(n),Math.abs(d));
+  let nn=n/g, dd=d/g;
+  if(dd<0){dd=-dd;nn=-nn;}
+  if(dd===1)return String(nn);
+  return nn+"/"+dd;
+}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+
+function drawLine(labelStep){
+  // baseline
+  svg.appendChild(el('line',{x1:sx(VIEW.min),y1:AXY,x2:sx(VIEW.max),y2:AXY,class:'nl-axis'}));
+  // arrowheads
+  svg.appendChild(el('path',{d:`M${sx(VIEW.max)},${AXY} l-8,-4 l0,8 z`,fill:'var(--ink)'}));
+  svg.appendChild(el('path',{d:`M${sx(VIEW.min)},${AXY} l8,-4 l0,8 z`,fill:'var(--ink)'}));
+  const lo=Math.ceil(VIEW.min), hi=Math.floor(VIEW.max);
+  const step=labelStep||1;
+  for(let i=lo;i<=hi;i++){
+    const major=(i%5===0)||(i===0);
+    svg.appendChild(el('line',{x1:sx(i),y1:AXY-(major?9:6),x2:sx(i),y2:AXY+(major?9:6),
+      class:'nl-tick'+(major?' major':'')}));
+    if(i%step===0){
+      const t=el('text',{x:sx(i),y:AXY+22,'text-anchor':'middle',class:'tick-num'});
+      t.textContent=i;svg.appendChild(t);
+    }
+  }
+}
+
+// tick a fraction position (light sub-tick), used to hint reachable spots
+function subTicks(den){
+  if(den<2)return;
+  const lo=Math.ceil(VIEW.min*den), hi=Math.floor(VIEW.max*den);
+  for(let k=lo;k<=hi;k++){
+    if(k%den===0)continue;
+    const v=k/den;
+    svg.appendChild(el('line',{x1:sx(v),y1:AXY-4,x2:sx(v),y2:AXY+4,class:'nl-sub'}));
+  }
+}
+
+// plot a fixed point value v with label; cls adds colour class
+function point(v,label,cls){
+  const g=el('g',{});
+  g.appendChild(el('circle',{cx:sx(v),cy:AXY,r:6,class:'nl-dot'+(cls?' '+cls:'')}));
+  if(label){const t=el('text',{x:sx(v),y:AXY-14,'text-anchor':'middle',class:'nl-label'});t.textContent=label;g.appendChild(t);}
+  svg.appendChild(g);return g;
+}
+function ghost(v,label){
+  const g=el('g',{});
+  g.appendChild(el('circle',{cx:sx(v),cy:AXY,r:6,class:'nl-dot ghost'}));
+  if(label){const t=el('text',{x:sx(v),y:AXY-14,'text-anchor':'middle',class:'nl-label',fill:'#7a879d'});t.textContent=label;g.appendChild(t);}
+  svg.appendChild(g);
+}
+// a gold span between two values with a distance brace above
+function span(a,b,label){
+  svg.appendChild(el('line',{x1:sx(a),y1:AXY,x2:sx(b),y2:AXY,class:'nl-span'}));
+  if(label){
+    const mid=(sx(a)+sx(b))/2;
+    const t=el('text',{x:mid,y:AXY-26,'text-anchor':'middle',class:'nl-label',fill:'var(--gold)'});
+    t.textContent=label;svg.appendChild(t);
+    svg.appendChild(el('path',{d:`M${sx(a)},${AXY-20} L${sx(a)},${AXY-14} M${sx(a)},${AXY-17} L${sx(b)},${AXY-17} M${sx(b)},${AXY-20} L${sx(b)},${AXY-14}`,class:'nl-brace'}));
+  }
+}
+// draw the √n right-triangle construction hint above the line (for locating √2, √3…)
+function sqrtConstruction(n){
+  // simple visual: unit segment + perpendicular + arc back to line at √n
+  const baseY=AXY;
+  // right triangle sitting on [0,1] with height depending on n (illustrative only)
+  const x0=sx(0), x1=sx(1);
+  const hpix=(baseY-40);
+  svg.appendChild(el('line',{x1:x0,y1:baseY,x2:x1,y2:hpix,class:'constr'}));
+  svg.appendChild(el('line',{x1:x1,y1:baseY,x2:x1,y2:hpix,class:'constr'}));
+  const r=sx(Math.sqrt(n))-x0;
+  svg.appendChild(el('path',{d:`M${x0+r},${baseY} A ${r} ${r} 0 0 0 ${x0},${baseY-r}`,class:'constr-arc'}));
+}
+
+// draggable point that snaps to multiples of 1/den within [VIEW.min,VIEW.max]
+function draggable(v0,den,onMove){
+  const g=point(v0,'?',null);
+  g.classList.add('point');
+  const circ=g.querySelector('circle'); const txt=g.querySelector('text');
+  const pt=svg.createSVGPoint();
+  let drag=false;
+  function loc(e){const t=e.touches?e.touches[0]:e;pt.x=t.clientX;pt.y=t.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());}
+  function set(e){drag=true;e.preventDefault();}
+  function mv(e){if(!drag)return;e.preventDefault();const p=loc(e);
+    let raw=ux(p.x);
+    let num=Math.round(raw*den);
+    let v=num/den;
+    v=Math.max(VIEW.min,Math.min(VIEW.max,v));
+    circ.setAttribute('cx',sx(v));
+    txt.setAttribute('x',sx(v));
+    txt.textContent=fracStr(Math.round(v*den),den);
+    onMove(v);}
+  function end(){drag=false;}
+  g.addEventListener('mousedown',set);g.addEventListener('touchstart',set,{passive:false});
+  svg.addEventListener('mousemove',mv);svg.addEventListener('touchmove',mv,{passive:false});
+  window.addEventListener('mouseup',end);window.addEventListener('touchend',end);
+  return g;
+}
+// ===================== PRACTICE / QUIZ BANK =====================
+// Every q: {level, story, ask, view, draw(), type, ...}
+// types: 'mc', 'num' (answer,tol,unit), 'tf', 'set' (categorical: which set),
+//        'coord' (drag on line to a value; correct=value, den=snap denominator)
+
+// A neutral illustrative shell for a plain line
+const LINE = ()=>{ /* baseline drawn by drawLine already */ };
+
+const BANK = [
+  // 1 — easy: closure of naturals under subtraction (Ex 3.1 Q3)
+  { level:'easy', view:{min:-4,max:6}, den:1,
+    story:"Long ago a herder matched one pebble to each cow — the birth of the <b>natural numbers</b> ℕ = {1, 2, 3, …}. Adding two of them always gives another natural number.",
+    ask:"Is 3 − 5 a natural number?",
+    draw:()=>{ point(3,'3','nat'); point(5,'5','nat'); point(-2,'3−5','neg'); },
+    type:'tf', answer:false,
+    explain:"<b>No.</b> 3 − 5 = −2, which is negative. Naturals are closed under addition but <b>not</b> subtraction — that gap is exactly why integers were needed." },
+
+  // 2 — easy: identify set of a plotted point
+  { level:'easy', view:{min:-6,max:6}, den:1,
+    story:"Brahmagupta extended the line left of zero into <b>debts</b> (negative numbers). The integers ℤ = {…, −2, −1, 0, 1, 2, …}.",
+    ask:"Which set does −4 first belong to (its smallest home)?",
+    draw:()=>{ point(-4,'−4','neg'); },
+    type:'mc', options:["Natural numbers ℕ","Integers ℤ","Irrationals","None of these"], answer:1,
+    explain:"−4 is negative, so it is not a natural number, but it <b>is</b> an integer. Every integer is also rational and real." },
+
+  // 3 — easy: integer arithmetic, Brahmagupta rule (product of two debts)
+  { level:'easy', view:{min:-4,max:14}, den:1,
+    story:"Brahmagupta's rule: <b>the product of two debts is a fortune</b> — a negative times a negative is positive.",
+    ask:"Compute (−3) × (−4).",
+    draw:()=>{ point(12,'12','nat'); },
+    type:'num', answer:12, tol:0.001, unit:'',
+    explain:"(−3) × (−4) = <b>12</b>. Removing 4 debts of ₹3 each leaves you ₹12 richer — a fortune." },
+
+  // 4 — easy: temperature drop (Ex 3.2 Q1)
+  { level:'easy', view:{min:-14,max:8}, den:1,
+    story:"In Ladakh the temperature is <b>4 °C</b> at noon. By midnight it drops by <b>15 °C</b>.",
+    ask:"What is the midnight temperature (°C)?",
+    draw:()=>{ point(4,'noon','nat'); point(-11,'?','neg'); span(-11,4,'drop 15'); },
+    type:'num', answer:-11, tol:0.001, unit:'°C',
+    explain:"4 − 15 = <b>−11 °C</b>. Subtracting a larger number lands you left of zero, in the debts." },
+
+  // 5 — medium: rational density — a number strictly between two
+  { level:'medium', view:{min:0,max:3}, den:4,
+    story:"Rational numbers are <b>dense</b>: between any two there is always another, found by averaging.",
+    ask:"Drag the point to a rational number strictly between 1 and 3/2. (Snap set to quarters.)",
+    draw:()=>{ point(1,'1','rat'); point(1.5,'3/2','rat'); },
+    type:'coord', correct:1.25, den:4,
+    explain:"The average (1 + 3/2)/2 = 5/4 = <b>1.25</b> sits exactly halfway between them, and it is rational." },
+
+  // 6 — medium: absolute value / distance between two rationals |a-b| (Fig 3.8)
+  { level:'medium', view:{min:-6,max:5}, den:1,
+    story:"The distance between two numbers a and b on the line is <b>|a − b|</b>.",
+    ask:"What is the distance between −4 and 3?",
+    draw:()=>{ point(-4,'−4','neg'); point(3,'3','nat'); span(-4,3,'?'); },
+    type:'num', answer:7, tol:0.001, unit:'units',
+    explain:"|−4 − 3| = |−7| = <b>7</b>. Distance is always non-negative — it is how far apart they sit, regardless of order." },
+
+  // 7 — medium: terminating vs repeating via prime factors (Ex 3.5 Q1)
+  { level:'medium', view:{min:0,max:1}, den:1,
+    story:"A fraction p/q in lowest terms <b>terminates</b> exactly when q's only prime factors are 2 and/or 5.",
+    ask:"Does 7/20 have a terminating decimal?",
+    draw:()=>{ point(0.35,'7/20','rat'); },
+    type:'tf', answer:true,
+    explain:"<b>True.</b> 20 = 2² × 5, only 2s and 5s, so 7/20 = 0.35 <b>terminates</b>. (Compare 4/15: 15 = 3 × 5, so it repeats.)" },
+
+  // 8 — hard: √2 is irrational (proof by contradiction)
+  { level:'hard', view:{min:-1,max:3}, den:1,
+    story:"The diagonal of a unit square has length √2. Hippasus proved √2 cannot be written as any fraction p/q.",
+    ask:"Which kind of number is √2?",
+    draw:()=>{ point(Math.SQRT2,'√2','irr'); },
+    type:'mc', options:["A natural number","A rational number","An irrational number","An integer"], answer:2,
+    explain:"√2 ≈ 1.414… never terminates and never repeats. Assuming √2 = p/q in lowest terms forces both p and q to be even — a contradiction. So √2 is <b>irrational</b>." },
+
+  // 9 — hard: locate √2 on the number line (construction)
+  { level:'hard', view:{min:-1,max:4}, den:1,
+    story:"Using a right triangle with legs 1 and 1, the hypotenuse is √2. Swinging it down onto the line marks √2.",
+    ask:"Drag the point to where √2 lands (nearest whole tick is fine — snap is set to 1).",
+    draw:()=>{ sqrtConstruction(2); point(1,'1','rat'); },
+    type:'coord', correct:1, den:1, tolLine:0.6,
+    explain:"√2 ≈ 1.41, so it sits just past 1, before 2. The construction transfers the hypotenuse length exactly onto the line." },
+
+  // 10 — hard: 0.999... = 1 (Ex 3.5 Q4)
+  { level:'hard', view:{min:0,max:2}, den:1,
+    story:"Let x = 0.999…  Then 10x = 9.999…, so 10x − x = 9, giving 9x = 9.",
+    ask:"What does 0.999… equal exactly?",
+    draw:()=>{ point(1,'1','rat'); },
+    type:'num', answer:1, tol:0.001, unit:'',
+    explain:"9x = 9 ⇒ x = <b>1</b>. So 0.999… is exactly 1 — a terminating decimal and its all-9s form name the same point." },
+
+  // ---- extra items for a varied quiz pull ----
+  // 11 — easy: subtracting a negative (Ex 3.2 Q4)
+  { level:'easy', view:{min:-2,max:16}, den:1,
+    story:"Subtracting a debt is the same as adding a fortune: taking away what you owe makes you richer.",
+    ask:"Compute 10 − (−5).",
+    draw:()=>{ point(15,'15','nat'); },
+    type:'num', answer:15, tol:0.001, unit:'',
+    explain:"10 − (−5) = 10 + 5 = <b>15</b>. Removing a ₹5 debt is the same as gaining ₹5." },
+
+  // 12 — medium: convert 0.45 repeating to fraction (Example 6)
+  { level:'medium', view:{min:0,max:1}, den:1,
+    story:"Let x = 0.454545…  Since two digits repeat, 100x = 45.4545…, so 99x = 45.",
+    ask:"Write 0.454545… as a fraction in lowest terms — enter its decimal value to 4 dp.",
+    draw:()=>{ point(45/99,'0.45̅','rat'); },
+    type:'num', answer:0.4545, tol:0.0005, unit:'',
+    explain:"99x = 45 ⇒ x = 45/99 = <b>5/11</b> ≈ 0.4545. A repeating decimal is always rational." },
+
+  // 13 — hard: classify a patterned decimal (Ex 3.5 Q3v style)
+  { level:'hard', view:{min:0,max:2}, den:1,
+    story:"Consider the number 1.01001000100001…  where the gaps of zeros keep growing.",
+    ask:"Is this number rational?",
+    draw:()=>{ point(1.01,'≈1.01','irr'); },
+    type:'tf', answer:false,
+    explain:"<b>No.</b> The digits never settle into a fixed repeating block, so it is non-terminating and non-repeating → <b>irrational</b>." }
+];
+// ===================== CHALLENGE BANKS (exemplar-based, progressive) =====================
+// Set 1 warm-up → Set 3 exam pitch. Same skill spine, fresh numbers each set.
+// Vocab notes introduce exemplar terms the chapter doesn't stress.
+const VOCAB_RAT = "<b>Rationalising the denominator</b> means rewriting a fraction so no root is left on the bottom, by multiplying by the conjugate (e.g. (√a+b) uses (√a−b)).";
+const VOCAB_EXP = "<b>Laws of exponents</b> for a>0: aᵖ·aᵠ = aᵖ⁺ᵠ,  (aᵖ)ᵠ = aᵖᵠ,  aᵖ/aᵠ = aᵖ⁻ᵠ,  aᵖ·bᵖ = (ab)ᵖ.";
+
+// exemplar map:
+// CH1: MCQ1 (every rational is real), MCQ2 (∞ many rationals between two),
+//      MCQ6 (which is irrational), Ex1.2 Q3 T/F, MCQ8 (rational between roots),
+//      Ex1.3 Q2 (rationals between), MCQ5 (decimal of √2)
+const CH1 = [
+  { level:'set 1 · number sets', view:{min:-5,max:5}, den:1,
+    story:"Exemplar MCQ 1. Every rational number can be written as p/q with q ≠ 0.",
+    ask:"Every rational number is also —",
+    draw:()=>{ point(2,'2','nat'); point(-3,'−3','neg'); },
+    type:'mc', options:["a natural number","an integer","a real number","a whole number"], answer:2,
+    explain:"Every rational number sits on the real line, so it is a <b>real number</b>. But not every rational is a natural number or integer (e.g. 1/2)." },
+
+  { level:'set 1 · density', view:{min:0,max:1}, den:1,
+    story:"Exemplar MCQ 2.",
+    ask:"Between two distinct rational numbers there are —",
+    draw:()=>{ point(0.2,'','rat'); point(0.5,'','rat'); point(0.35,'avg','rat'); },
+    type:'mc', options:["no rational numbers","exactly one rational number","infinitely many rational numbers","only irrational numbers"], answer:2,
+    explain:"Averaging repeatedly always yields another rational strictly between → <b>infinitely many</b>." },
+
+  { level:'set 1 · spot the irrational', view:{min:0,max:10}, den:1,
+    story:"Exemplar MCQ 6. Recall √81 = 9 and √(12/3) = √4 = 2.",
+    ask:"Which of these is irrational?",
+    draw:()=>{ point(3,'√9','rat'); point(Math.sqrt(7),'√7','irr'); },
+    type:'mc', options:["√(4/9)","√12 / √3","√7","√81"], answer:2,
+    explain:"√(4/9)=2/3, √12/√3=√4=2, √81=9 — all rational. Only <b>√7</b> has a non-terminating non-repeating decimal." },
+
+  { level:'set 1 · true / false', view:{min:0,max:2}, den:1, vocab:VOCAB_RAT,
+    story:"Exemplar Ex 1.2 Q3(i). Statement: “√2 / 3 is a rational number.”",
+    ask:"True or False?",
+    draw:()=>{ point(Math.SQRT2/3,'√2/3','irr'); },
+    type:'tf', answer:false,
+    explain:"<b>False.</b> Dividing the irrational √2 by the non-zero rational 3 stays irrational. A rational ÷ rational would be rational, but √2 is not rational." },
+
+  { level:'set 1 · rational between roots', view:{min:1,max:2}, den:1,
+    story:"Exemplar MCQ 8. Here √2 ≈ 1.414 and √3 ≈ 1.732.",
+    ask:"Which of these is a rational number lying between √2 and √3?",
+    draw:()=>{ point(Math.SQRT2,'√2','irr'); point(Math.sqrt(3),'√3','irr'); point(1.5,'1.5','rat'); },
+    type:'mc', options:["(√2+√3)/2","√2·√3 / 2","1.5","√6"], answer:2,
+    explain:"1.5 is rational and 1.414 < 1.5 < 1.732. The other options are irrational (they still contain roots)." },
+
+  { level:'set 1 · three rationals between', view:{min:0,max:0.2}, den:1,
+    story:"Exemplar Ex 1.3 Q2(ii). We want rationals between 0.1 and 0.11.",
+    ask:"Is 0.105 a rational number lying between 0.1 and 0.11?",
+    draw:()=>{ point(0.1,'0.1','rat'); point(0.11,'0.11','rat'); point(0.105,'0.105','rat'); },
+    type:'tf', answer:true,
+    explain:"<b>True.</b> 0.105 = 105/1000 is rational, and 0.1 < 0.105 < 0.11. You can fit infinitely many such rationals in the gap." },
+
+  { level:'set 1 · decimal of √2', view:{min:0,max:2}, den:1,
+    story:"Exemplar MCQ 5.",
+    ask:"The decimal expansion of √2 is —",
+    draw:()=>{ point(Math.SQRT2,'√2','irr'); },
+    type:'mc', options:["a finite decimal","exactly 1.41421","non-terminating recurring","non-terminating non-recurring"], answer:3,
+    explain:"√2 is irrational, so its decimal is <b>non-terminating non-recurring</b>. 1.41421 is only a rounded approximation." }
+];
+
+// CH2: Ex1.2 Q1/Q2 (rational+irrational), MCQ4 (product of two irrationals),
+//      MCQ9 (1.999...=2 as p/q), MCQ10 (2√3+√3), Ex1.3 Q3 (insert rational),
+//      Ex1.4 Q1 flavour (repeating→fraction), Ex1.2 Q3(v) T/F
+const CH2 = [
+  { level:'set 2 · rational + irrational', view:{min:0,max:6}, den:1,
+    story:"Exemplar Ex 1.2 Q1. Take the rational 3 and the irrational √2.",
+    ask:"Is 3 + √2 rational or irrational?",
+    draw:()=>{ point(3,'3','rat'); point(3+Math.SQRT2,'3+√2','irr'); },
+    type:'mc', options:["Always rational","Always irrational","Sometimes rational","It is an integer"], answer:1,
+    explain:"A rational plus an irrational is <b>always irrational</b>. If 3+√2 were rational, subtracting 3 would make √2 rational — impossible." },
+
+  { level:'set 2 · product of irrationals', view:{min:0,max:4}, den:1,
+    story:"Exemplar MCQ 4. Note √2·√2 = 2, but √2·√3 = √6.",
+    ask:"The product of any two irrational numbers is —",
+    draw:()=>{ point(2,'√2·√2','rat'); point(Math.sqrt(6),'√2·√3','irr'); },
+    type:'mc', options:["always irrational","always rational","always an integer","sometimes rational, sometimes irrational"], answer:3,
+    explain:"√2·√2 = 2 (rational) but √2·√3 = √6 (irrational) → <b>sometimes rational, sometimes irrational</b>." },
+
+  { level:'set 2 · 1.999… as a fraction', view:{min:1,max:3}, den:1,
+    story:"Exemplar MCQ 9. Let x = 1.999…, then 10x − x gives 9x = 18.",
+    ask:"Enter the exact value of 1.999… .",
+    draw:()=>{ point(2,'2','rat'); },
+    type:'num', answer:2, tol:0.001, unit:'',
+    explain:"9x = 18 ⇒ x = <b>2</b>. As a fraction that is 2/1, so 1.999… = 2 exactly." },
+
+  { level:'set 2 · combining surds', view:{min:0,max:8}, den:1, vocab:VOCAB_EXP,
+    story:"Exemplar MCQ 10. Like terms in √3 add just like ordinary like terms.",
+    ask:"2√3 + √3 equals k√3. Enter k.",
+    draw:()=>{ point(3*Math.sqrt(3),'3√3','irr'); },
+    type:'num', answer:3, tol:0.001, unit:'',
+    explain:"2√3 + √3 = (2+1)√3 = <b>3√3</b>, so k = 3. You add the coefficients, keeping the same root." },
+
+  { level:'set 2 · insert a rational', view:{min:0,max:0.2}, den:1,
+    story:"Exemplar Ex 1.3 Q3(v). We look between 0.15 and 0.16.",
+    ask:"Drag the point to a rational value strictly between 0.15 and 0.16. (Line runs 0 to 0.2; land near 0.155 — nearest tick is fine.)",
+    draw:()=>{ point(0.15,'0.15','rat'); point(0.16,'0.16','rat'); },
+    type:'coord', correct:0, den:1, tolLine:0.09,
+    explain:"0.155 = 155/1000 is rational and lies between 0.15 and 0.16. Any terminating decimal in that gap works." },
+
+  { level:'set 2 · repeating to fraction', view:{min:0,max:1}, den:1,
+    story:"Exemplar Ex 1.3 Q7(ii). Let x = 0.888…, so 10x − x = 8.",
+    ask:"Enter 0.888… to 4 decimal places (its exact value is a simple fraction).",
+    draw:()=>{ point(8/9,'8/9','rat'); },
+    type:'num', answer:0.8889, tol:0.0006, unit:'',
+    explain:"9x = 8 ⇒ x = 8/9 ≈ <b>0.8889</b>. Every repeating decimal equals a fraction, so it is rational." },
+
+  { level:'set 2 · true / false', view:{min:0,max:3}, den:1,
+    story:"Exemplar Ex 1.2 Q3(v). Statement: “The square of an irrational number is always rational.”",
+    ask:"True or False?",
+    draw:()=>{ point(2,'(√2)²','rat'); point(Math.pow(2,0.75),'(⁴√2)²','irr'); },
+    type:'tf', answer:false,
+    explain:"<b>False.</b> (√2)² = 2 is rational, but (⁴√2)² = √2 is irrational. So the square is <b>not always</b> rational." }
+];
+
+// CH3: Ex1.3 Q1 (x²=5 etc), MCQ12 (rationalise 1/(√7−2)), MCQ11 (√10·√15),
+//      MCQ17 (nested roots exponent), MCQ19 ((81)^-2 fourth root),
+//      Ex1.4 Sample T/F style, MCQ21 (which equals x)
+const CH3 = [
+  { level:'set 3 · square roots & sets', view:{min:0,max:4}, den:1,
+    story:"Exemplar Ex 1.3 Q1(i). A variable satisfies x² = 5.",
+    ask:"Is x rational or irrational?",
+    draw:()=>{ point(Math.sqrt(5),'x=√5','irr'); },
+    type:'mc', options:["Rational","Irrational","An integer","A natural number"], answer:1,
+    explain:"x = √5, and 5 is not a perfect square, so √5 is <b>irrational</b>. (By contrast y²=9 gives the rational y=3.)" },
+
+  { level:'set 3 · rationalise', view:{min:0,max:4}, den:1, vocab:VOCAB_RAT,
+    story:"Exemplar MCQ 12. Rationalise 1/(√7 − 2) by multiplying top and bottom by (√7 + 2).",
+    ask:"The result is (√7 + 2)/k. Enter k.",
+    draw:()=>{ point(1/(Math.sqrt(7)-2),'≈1.55','irr'); },
+    type:'num', answer:3, tol:0.001, unit:'',
+    explain:"(√7−2)(√7+2) = (√7)² − 2² = 7 − 4 = <b>3</b>. So 1/(√7−2) = (√7+2)/3." },
+
+  { level:'set 3 · multiply surds', view:{min:0,max:16}, den:1,
+    story:"Exemplar MCQ 11. Use √a·√b = √(ab), then simplify √150.",
+    ask:"√10 × √15 = k√6. Enter k.",
+    draw:()=>{ point(Math.sqrt(150),'√150','irr'); },
+    type:'num', answer:5, tol:0.001, unit:'',
+    explain:"√10·√15 = √150 = √(25·6) = 5√6, so k = <b>5</b>." },
+
+  { level:'set 3 · nested roots', view:{min:0,max:2}, den:1, vocab:VOCAB_EXP,
+    story:"Exemplar MCQ 17. Write the fourth root of the cube root of 2² as a single power of 2.",
+    ask:"⁴√(³√(2²)) = 2^(1/k). Enter k.",
+    draw:()=>{ point(Math.pow(2,1/6),'2^(1/6)','irr'); },
+    type:'num', answer:6, tol:0.001, unit:'',
+    explain:"2² raised to 1/3 is 2^(2/3); then to 1/4 gives 2^(2/12) = 2^(1/6), so k = <b>6</b>." },
+
+  { level:'set 3 · negative exponent', view:{min:0,max:1}, den:1, vocab:VOCAB_EXP,
+    story:"Exemplar MCQ 19. Evaluate the fourth root of 81⁻². Note 81 = 3⁴.",
+    ask:"Enter the value of ⁴√(81⁻²) as a decimal (4 dp).",
+    draw:()=>{ point(1/9,'1/9','rat'); },
+    type:'num', answer:0.1111, tol:0.0006, unit:'',
+    explain:"81⁻² = 3⁻⁸; its fourth root is 3⁻² = 1/9 ≈ <b>0.1111</b>." },
+
+  { level:'set 3 · true / false', view:{min:0,max:8}, den:1,
+    story:"Exemplar Ex 1.2 style. Statement: “There is a number x with x² irrational but x⁴ rational.”",
+    ask:"True or False?",
+    draw:()=>{ point(Math.pow(2,0.25),'⁴√2','irr'); point(Math.SQRT2,'x²=√2','irr'); point(2,'x⁴=2','rat'); },
+    type:'tf', answer:true,
+    explain:"<b>True.</b> Take x = ⁴√2. Then x² = √2 (irrational) but x⁴ = 2 (rational). A neat existence example." },
+
+  { level:'set 3 · which equals x', view:{min:0,max:4}, den:1, vocab:VOCAB_EXP,
+    story:"Exemplar MCQ 21. For x > 0, simplify each option using exponent laws.",
+    ask:"Which expression equals x?",
+    draw:()=>{ point(2,'x','rat'); },
+    type:'mc', options:["x^(12/7) − x^(5/7)","¹²√(x⁴)^(1/3) ... ≠ x","(√(x³))^(2/3)","x^(12/7) × x^(7/12)"], answer:2,
+    explain:"(√(x³))^(2/3) = (x^(3/2))^(2/3) = x^(3/2·2/3) = x¹ = <b>x</b>. The others do not simplify to a single x." }
+];
+
+const CHALLENGE={set1:CH1, set2:CH2, set3:CH3};
+// ===================== ENGINE (drives every bank) =====================
+const PRACTICE_SET=[0,1,2,3,4,5,6,7,8,9];
+const QUIZ_SET=[1,4,6,7,9]; // spread: integer sets, density, distance, √2, 0.999
+let mode=null, order=[], idx=0, correctCount=0, marks=[];
+let activeBank=BANK, currentSet=null;
+
+const $=id=>document.getElementById(id);
+function show(sec){['home','explore','setpick','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));}
+
+function startMode(m){
+  if(window.stopExplore)window.stopExplore();
+  if(m==='explore'){show('explore');startExplore();return;}
+  if(m==='challenge'){showSetPicker();return;}
+  mode=m; idx=0; correctCount=0;
+  activeBank=BANK;
+  order = m==='practice'?PRACTICE_SET.map(i=>BANK[i]):QUIZ_SET.map(i=>BANK[i]);
+  marks = order.map(()=>null);
+  show('session'); renderPips(); loadQuestion();
+}
+
+// ---- challenge set picker ----
+const SET_META=[
+  {key:'set1', num:'Set 1', title:'Warm-up', desc:'Number sets, density, spotting irrationals, and a first True/False — the exemplar MCQ basics.', rungs:1},
+  {key:'set2', num:'Set 2', title:'Steady', desc:'Rational + irrational, products of surds, repeating decimals to fractions, and combining like roots.', rungs:2},
+  {key:'set3', num:'Set 3', title:'Exam pitch', desc:'Rationalising denominators, multiplying surds, nested roots and negative exponents — the full laws.', rungs:3}
+];
+const setBest={set1:null,set2:null,set3:null};
+function showSetPicker(){
+  const g=$('setGrid');g.innerHTML='';
+  SET_META.forEach(s=>{
+    const c=document.createElement('button');c.className='set-card';
+    const rungs=[0,1,2].map(i=>`<div class="rung${i<s.rungs?' on':''}"></div>`).join('');
+    const best=setBest[s.key]!=null?`best: ${setBest[s.key]}/${CHALLENGE[s.key].length}`:'not attempted';
+    c.innerHTML=`<div class="num">${s.num}</div><h3>${s.title}</h3><p>${s.desc}</p>`+
+      `<div class="rungs">${rungs}</div><div class="best">${best}</div>`;
+    c.onclick=()=>startChallenge(s.key);
+    g.appendChild(c);
+  });
+  show('setpick');
+}
+function startChallenge(setKey){
+  mode='challenge'; currentSet=setKey; idx=0; correctCount=0;
+  activeBank=CHALLENGE[setKey];
+  order=activeBank.map(q=>q);
+  marks=order.map(()=>null);
+  show('session'); renderPips(); loadQuestion();
+}
+
+function renderPips(){
+  const p=$('pips');p.innerHTML='';
+  order.forEach((_,i)=>{
+    const d=document.createElement('div');d.className='pip';
+    if(marks[i]==='ok')d.classList.add('done');
+    else if(marks[i]==='no')d.classList.add('wrong');
+    else if(i===idx)d.classList.add('now');
+    p.appendChild(d);
+  });
+  $('scoreLabel').textContent = (mode==='quiz'||mode==='challenge')
+    ?`Score ${correctCount}/${order.length}`:`Practice ${idx+1}/${order.length}`;
+}
+
+let answered=false;
+function loadQuestion(){
+  answered=false;
+  const q=order[idx];
+  VIEW=q.view;
+  clearSvg();
+  drawLine(q.labelStep);
+  if(q.den && q.den>1) subTicks(q.den);
+  q.draw();
+  $('qbadge').textContent=`Question ${idx+1} · ${q.level}`;
+  $('qstory').innerHTML=q.story;
+  $('qask').textContent=q.ask;
+  const fb=$('feedback');fb.className='feedback';fb.innerHTML='';
+  $('nextBtn').classList.add('hide');
+  $('nextBtn').textContent = idx===order.length-1?'See results →':'Next →';
+  buildAnswer(q);
+  renderPips();
+}
+
+function buildAnswer(q){
+  const area=$('answerArea');area.innerHTML='';
+  if(q.vocab){
+    const v=document.createElement('div');v.className='vocab';v.innerHTML=q.vocab;
+    area.appendChild(v);
+  }
+  if(q.type==='tf'){
+    const row=document.createElement('div');row.className='tf-row';
+    [['True',true],['False',false]].forEach(([label,val])=>{
+      const b=document.createElement('button');b.className='tf-btn';b.textContent=label;
+      b.onclick=()=>{
+        if(answered)return;
+        const ok=val===q.answer;
+        [...row.children].forEach(btn=>{btn.classList.add('locked');btn.disabled=true;});
+        row.children[q.answer?0:1].classList.add('correct');
+        if(!ok)b.classList.add('incorrect');
+        finish(ok,q);
+      };
+      row.appendChild(b);
+    });
+    area.appendChild(row);
+    return;
+  }
+  if(q.type==='mc'||q.type==='set'){
+    const opts = q.type==='set'
+      ? ["Natural ℕ","Integer ℤ","Rational ℚ","Irrational"]
+      : q.options;
+    const wrap=document.createElement('div');wrap.className='opts';
+    opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='opt';b.textContent=o;
+      b.onclick=()=>{
+        if(answered)return;
+        const ok=i===q.answer;
+        lockMC(wrap,i,q,ok);
+        finish(ok,q);
+      };
+      wrap.appendChild(b);
+    });
+    area.appendChild(wrap);
+  }
+  else if(q.type==='num'){
+    const row=document.createElement('div');row.className='numrow';
+    const inp=document.createElement('input');inp.type='number';inp.step='any';inp.placeholder='answer';
+    const unit=document.createElement('span');unit.textContent=q.unit||'';unit.style.cssText='font-family:ui-monospace,monospace;font-size:.8rem;color:#5a6b88';
+    row.appendChild(inp);row.appendChild(unit);area.appendChild(row);
+    const btn=document.createElement('button');btn.className='check';btn.textContent='Check';
+    btn.onclick=()=>{if(answered)return;
+      const v=parseFloat(inp.value);
+      if(isNaN(v))return;
+      const ok=Math.abs(v-q.answer)<=q.tol;
+      inp.style.borderColor= ok?'var(--good)':'var(--bad)';
+      finish(ok,q);};
+    area.appendChild(btn);
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+  }
+  else if(q.type==='coord'){
+    let cur=null;
+    const den=q.den||1;
+    const start=Math.round((q.view.min+q.view.max)/2*den)/den;
+    const g=draggable(start, den, (v)=>{cur=v;btn.disabled=false;});
+    const hint=document.createElement('p');
+    hint.style.cssText='font-size:.85rem;color:#5a6b88;margin:0 0 8px';
+    hint.innerHTML='Drag the <b>?</b> point along the line, then lock in your answer.';
+    area.appendChild(hint);
+    const btn=document.createElement('button');btn.className='check';btn.textContent='Lock in';btn.disabled=true;
+    btn.onclick=()=>{if(answered||cur===null)return;
+      const tol=q.tolLine!=null?q.tolLine:(0.5/den);
+      const ok=Math.abs(cur-q.correct)<=tol;
+      if(!ok)ghost(q.correct,'✓');
+      finish(ok,q);};
+    area.appendChild(btn);
+  }
+}
+
+function lockMC(wrap,chosen,q,ok){
+  [...wrap.children].forEach((b,i)=>{
+    b.classList.add('locked');b.disabled=true;
+    if(i===q.answer)b.classList.add('correct');
+    if(i===chosen&&!ok)b.classList.add('incorrect');
+  });
+}
+
+function finish(ok,q){
+  answered=true;
+  marks[idx]=ok?'ok':'no';
+  if(ok)correctCount++;
+  const fb=$('feedback');
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'<b>Correct.</b> ':'<b>Not quite.</b> ')+q.explain;
+  $('answerArea').querySelectorAll('.check').forEach(b=>b.disabled=true);
+  $('nextBtn').classList.remove('hide');
+  renderPips();
+}
+
+$('nextBtn').onclick=()=>{
+  if(idx<order.length-1){idx++;loadQuestion();}
+  else finishSession();
+};
+
+function finishSession(){
+  if(mode==='practice'){
+    $('resTitle').textContent='Practice complete';
+    $('resScore').textContent=`${correctCount} / ${order.length}`;
+    $('resMsg').textContent = correctCount===order.length
+      ? "Every one right — the whole number line is in your hands. Try the quiz to make it count."
+      : "Nice work exploring. Replay any time, or take the scored quiz when you're ready.";
+  } else if(mode==='challenge'){
+    const setName={set1:'Set 1 · Warm-up',set2:'Set 2 · Steady',set3:'Set 3 · Exam pitch'}[currentSet];
+    $('resTitle').textContent=`Challenge ${setName} complete`;
+    $('resScore').textContent=`${correctCount} / ${order.length}`;
+    if(setBest[currentSet]==null||correctCount>setBest[currentSet])setBest[currentSet]=correctCount;
+    const pct=correctCount/order.length;
+    const nextSet={set1:'set2',set2:'set3',set3:null}[currentSet];
+    $('resMsg').textContent = pct===1
+      ? (nextSet?"Perfect run. Ready to climb to the next set?":"Perfect run on the hardest set — you've mastered this chapter.")
+      : pct>=0.6 ? "Strong. Review the misses, then retry or move up a set."
+      : "Keep at it — the explanations show the reasoning. Retry this set when ready.";
+  } else {
+    $('resTitle').textContent='Quiz complete';
+    $('resScore').textContent=`${correctCount} / ${order.length}`;
+    const pct=correctCount/order.length;
+    $('resMsg').textContent = pct===1?"Flawless. Brahmagupta would be proud."
+      : pct>=0.6?"Solid grasp — review the ones you missed and go again."
+      : "Good start. Try Practice mode to build up, then come back.";
+  }
+  const stars=Math.round((correctCount/order.length)*5);
+  $('resStars').textContent='★★★★★'.slice(0,stars)+'☆☆☆☆☆'.slice(0,5-stars);
+  show('results');
+}
+// ===================== EXPLORE SANDBOX =====================
+// Self-contained on #svgX. Organised into 5 focused tabs; each tab isolates one concept
+// and shows only the controls it needs (spec §1: "toggles isolate one concept at a time").
+(function(){
+  const XVIEW={min:-5,max:5};
+  const XW=420, XPAD=26, XAXY=132;
+  const XSP=XW-2*XPAD;
+  const xsvg=document.getElementById('svgX');
+  const XX=v=>XPAD+(v-XVIEW.min)/(XVIEW.max-XVIEW.min)*XSP;
+  const XU=px=>XVIEW.min+(px-XPAD)/XSP*(XVIEW.max-XVIEW.min);
+  const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const unitPx=()=>XX(1)-XX(0);
+
+  const TABS=['sets','frac','irr','dec','dist'];
+  const TAB_META={
+    sets:{title:'Sets & the number line',
+      lead:'Drag the point. Every number belongs to several nested families at once (ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ) — see which ones each value is in.'},
+    frac:{title:'Building fractions p/q',
+      lead:'Choose how many parts q to cut each unit into, then drag. The blue marks show the unit divided into q equal parts and how many you count across — the construction from §3.4.1.'},
+    irr:{title:'Irrational numbers',
+      lead:'These cannot be written as any fraction. √2, √3, √5 are built with a right triangle and swung onto the line. π is different — it is measured by rolling a circle and computed by Mādhava\'s infinite series.'},
+    dec:{title:'Decimals: terminating or repeating',
+      lead:'Every rational is one or the other. Drag the point and see why — it comes down to the prime factors of the denominator.'},
+    dist:{title:'Distance & density',
+      lead:'Distance between two numbers is |a − b|, never negative. Their average always lands strictly between them — so between any two numbers there is always another.'}
+  };
+
+  let tab='sets';
+  let den=2;           // fractions tab denominator q
+  let val=1.5;         // draggable rational value (multiple of 1/den)
+  let irr='r2';        // irrationals tab: r2|r3|r5|pi
+  let mark=-2;         // ◆ second point (distance tab)
+  let tpMode='dist';   // dist|mid (distance tab)
+  let started=false;
+  // π animation state
+  let piTimer=null;      // interval handle for Mādhava series stepping
+  let piTerms=1;         // how many series terms are currently summed (1..PI_MAX)
+  let piRoll=0;          // rolling-circle progress 0..1 (0 = not rolled, 1 = full turn laid flat)
+  const PI_MAX=12;       // cap on visible series terms
+
+  const IRR={
+    r2:{v:Math.SQRT2,   label:'√2', n:2,    note:'√2 is the diagonal of a unit square. Hippasus proved it cannot be written as any fraction p/q — assuming it could forces p and q both even, a contradiction.'},
+    r3:{v:Math.sqrt(3), label:'√3', n:3,    note:'√3 comes from a right triangle with legs √2 and 1. The same contradiction proof shows it is irrational.'},
+    r5:{v:Math.sqrt(5), label:'√5', n:5,    note:'√5 is irrational: 5 is not a perfect square, so its root never terminates or repeats.'},
+    pi:{v:Math.PI,      label:'π',  n:null, note:'π is a circle\'s circumference ÷ its diameter. Lambert proved it irrational in 1761; Mādhava expressed it as the infinite series 4(1 − 1/3 + 1/5 − …).'}
+  };
+
+  function gcdL(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+  function fr(n,d){if(d===1)return String(n);const g=gcdL(n,d);let nn=n/g,dd=d/g;if(dd<0){dd=-dd;nn=-nn;}return dd===1?String(nn):nn+'/'+dd;}
+  function trimDec(x,p){return x.toFixed(p).replace(/0+$/,'').replace(/\.$/,'');}
+
+  function classify(n,d){
+    const g=gcdL(n,d);const dd=d/g;const nn=n/g;
+    if(dd===1){
+      if(nn>0)return{set:'Natural ℕ',cls:'nat',in:['Natural ℕ','Integer ℤ','Rational ℚ','Real ℝ'],
+        note:'A positive whole number — a counting number, the oldest kind. Because the sets nest (ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ), it is also an integer, a rational and a real.'};
+      if(nn===0)return{set:'Zero',cls:'nat',in:['Integer ℤ','Rational ℚ','Real ℝ'],
+        note:'Zero — Brahmagupta\'s śhūnya. The chapter\'s naturals start at 1, so zero is not natural, but it is an integer, a rational and a real.'};
+      return{set:'Integer ℤ',cls:'neg',in:['Integer ℤ','Rational ℚ','Real ℝ'],
+        note:'A negative whole number — a debt (ṛiṇa). Not a natural number, but it is an integer, a rational and a real.'};
+    }
+    return{set:'Rational ℚ',cls:'rat',in:['Rational ℚ','Real ℝ'],
+      note:'A ratio p/q of integers with q ≠ 0. Not an integer, but it is a rational and a real, sitting strictly between two integers.'};
+  }
+  function decInfo(n,d){
+    const g=gcdL(n,d);let dd=d/g;
+    let t=dd;while(t%2===0)t/=2;while(t%5===0)t/=5;
+    return {terminating:(t===1), denom:dd, leftover:t};
+  }
+
+  function drawAxis(showBands){
+    while(xsvg.firstChild)xsvg.removeChild(xsvg.firstChild);
+    if(showBands){
+      xsvg.appendChild(mk('rect',{x:XX(XVIEW.min),y:XAXY-26,width:XX(0)-XX(XVIEW.min),height:52,fill:'rgba(192,57,43,.06)'}));
+      xsvg.appendChild(mk('rect',{x:XX(0),y:XAXY-26,width:XX(XVIEW.max)-XX(0),height:52,fill:'rgba(47,111,79,.06)'}));
+      const a=mk('text',{x:XX(-2.5),y:XAXY+40,'text-anchor':'middle','font-size':9,fill:'#c0392b','font-family':'ui-monospace,monospace'});a.textContent='debts (−)';xsvg.appendChild(a);
+      const b=mk('text',{x:XX(2.5),y:XAXY+40,'text-anchor':'middle','font-size':9,fill:'#2f6f4f','font-family':'ui-monospace,monospace'});b.textContent='fortunes (+)';xsvg.appendChild(b);
+    }
+    xsvg.appendChild(mk('line',{x1:XX(XVIEW.min),y1:XAXY,x2:XX(XVIEW.max),y2:XAXY,stroke:'#1b2a4a','stroke-width':2.5}));
+    xsvg.appendChild(mk('path',{d:`M${XX(XVIEW.max)},${XAXY} l-8,-4 l0,8 z`,fill:'#1b2a4a'}));
+    xsvg.appendChild(mk('path',{d:`M${XX(XVIEW.min)},${XAXY} l8,-4 l0,8 z`,fill:'#1b2a4a'}));
+    for(let i=Math.ceil(XVIEW.min);i<=Math.floor(XVIEW.max);i++){
+      const major=(i===0);
+      xsvg.appendChild(mk('line',{x1:XX(i),y1:XAXY-(major?9:7),x2:XX(i),y2:XAXY+(major?9:7),stroke:'#1b2a4a','stroke-width':major?1.6:1.1}));
+      const t=mk('text',{x:XX(i),y:XAXY+22,'text-anchor':'middle','font-size':9,fill:'#5a6b88','font-family':'ui-monospace,monospace'});t.textContent=i;xsvg.appendChild(t);
+    }
+  }
+
+  function drawUnitDivision(){
+    if(den<2)return;
+    const base=Math.floor(val);
+    for(let k=0;k<=den;k++){
+      const v=base+k/den; if(v<XVIEW.min||v>XVIEW.max)continue;
+      const end=(k===0||k===den);
+      xsvg.appendChild(mk('line',{x1:XX(v),y1:XAXY-(end?12:8),x2:XX(v),y2:XAXY+(end?12:8),
+        stroke:'#1b6ca8','stroke-width':end?1.6:1,'stroke-dasharray':end?'':'2 2'}));
+    }
+    const num=Math.round((val-base)*den);
+    if(num>0){
+      const y=XAXY-16;
+      xsvg.appendChild(mk('line',{x1:XX(base),y1:y,x2:XX(val),y2:y,stroke:'#1b6ca8','stroke-width':1.4}));
+      const t=mk('text',{x:(XX(base)+XX(val))/2,y:y-4,'text-anchor':'middle','font-size':9,fill:'#1b6ca8','font-family':'ui-monospace,monospace'});
+      t.textContent=num+' of '+den;xsvg.appendChild(t);
+    }
+  }
+
+  // Mādhava's series: 4(1 − 1/3 + 1/5 − 1/7 + …). Partial sum after k terms.
+  function madhavaPartial(k){
+    let s=0; for(let i=0;i<k;i++){ s += (i%2===0?1:-1)/(2*i+1); } return 4*s;
+  }
+
+  // π sub-view: rolling circle (measure by rectification) + Mādhava series converging.
+  function drawPi(){
+    const yb=XAXY, x0=XX(0), u=unitPx();
+    // ---- rolling circle: diameter 1, rolls piRoll of a full turn, laying circumference flat ----
+    const r=u/2;                       // radius 0.5 unit in pixels
+    const rolled=piRoll*Math.PI;       // distance unrolled so far, in units (full turn = π)
+    const cxUnit=rolled;               // circle centre currently sits above this x (rolls right)
+    const cx=XX(cxUnit), cy=yb-r;
+    // the flattened circumference laid on the line from 0 to rolled
+    xsvg.appendChild(mk('line',{x1:x0,y1:yb-2,x2:XX(rolled),y2:yb-2,stroke:'#7a3ea8','stroke-width':3}));
+    // the rolling circle itself (diameter 1)
+    xsvg.appendChild(mk('circle',{cx,cy,r,fill:'none',stroke:'#7a3ea8','stroke-width':1.4}));
+    // a spoke/mark on the rim so the roll is legible
+    const ang=-Math.PI/2 + piRoll*2*Math.PI; // start mark at bottom, rotates with roll
+    xsvg.appendChild(mk('line',{x1:cx,y1:cy,x2:cx+r*Math.cos(ang),y2:cy+r*Math.sin(ang),stroke:'#7a3ea8','stroke-width':1}));
+    xsvg.appendChild(mk('circle',{cx:cx+r*Math.cos(ang),cy:cy+r*Math.sin(ang),r:2,fill:'#7a3ea8'}));
+    // diameter label under the circle at the start
+    if(piRoll<0.15){
+      const dl=mk('text',{x:XX(0.5),y:yb+13,'text-anchor':'middle','font-size':9,'font-weight':700,'font-family':'ui-monospace,monospace',fill:'#7a3ea8'});
+      dl.textContent='diam 1';xsvg.appendChild(dl);
+    }
+    // when fully rolled, mark the landing at π
+    if(piRoll>=0.999){
+      xsvg.appendChild(mk('circle',{cx:XX(Math.PI),cy:yb,r:5,fill:'#7a3ea8',stroke:'#fff','stroke-width':1}));
+      const t=mk('text',{x:XX(Math.PI),y:yb+13,'text-anchor':'middle','font-size':9.5,'font-weight':700,'font-family':'ui-monospace,monospace',fill:'#7a3ea8'});
+      t.textContent='π ≈ 3.14';xsvg.appendChild(t);
+    }
+    // ---- Mādhava partial sums as points converging toward π (above the line) ----
+    const yTop=yb-58;                  // series band sits above the circle
+    // faint target line at π
+    xsvg.appendChild(mk('line',{x1:XX(Math.PI),y1:yTop-6,x2:XX(Math.PI),y2:yb,stroke:'#b8892b','stroke-width':1,'stroke-dasharray':'3 3'}));
+    let prevX=null,prevY=null;
+    for(let k=1;k<=piTerms;k++){
+      const val=madhavaPartial(k);
+      if(val<XVIEW.min||val>XVIEW.max)continue;
+      const px=XX(val), py=yTop - (k/PI_MAX)*0 ; // keep on one band; use small vertical jitter by parity
+      const yy=yTop + ((k%2===0)?6:-6);
+      const last=(k===piTerms);
+      xsvg.appendChild(mk('circle',{cx:px,cy:yy,r:last?4:2.5,fill:last?'#b8892b':'rgba(184,137,43,.5)'}));
+      if(prevX!==null) xsvg.appendChild(mk('line',{x1:prevX,y1:prevY,x2:px,y2:yy,stroke:'rgba(184,137,43,.5)','stroke-width':1}));
+      prevX=px;prevY=yy;
+    }
+    // label the current partial sum
+    const cur=madhavaPartial(piTerms);
+    const cl=mk('text',{x:XX(Math.min(Math.max(cur,XVIEW.min+0.5),XVIEW.max-0.5)),y:yTop-12,'text-anchor':'middle','font-size':9.5,'font-weight':700,'font-family':'ui-monospace,monospace',fill:'#b8892b'});
+    cl.textContent='S'+piTerms+' ≈ '+cur.toFixed(3);xsvg.appendChild(cl);
+    // π target label
+    const pl=mk('text',{x:XX(Math.PI),y:yTop-24,'text-anchor':'middle','font-size':9,'font-family':'ui-monospace,monospace',fill:'#b8892b'});
+    pl.textContent='→ π';xsvg.appendChild(pl);
+  }
+
+  function drawSqrtConstruction(){
+    const info=IRR[irr];
+    if(irr==='pi'){ drawPi(); return; }
+    const u=unitPx();
+    let legA,legB,baseLbl;
+    if(info.n===2){legA=1;legB=1;baseLbl='1';}
+    else if(info.n===3){legA=Math.SQRT2;legB=1;baseLbl='√2';}
+    else if(info.n===5){legA=2;legB=1;baseLbl='2';}
+    else {legA=Math.sqrt(info.n-1);legB=1;baseLbl='√'+(info.n-1);}
+    const x0=XX(0), yb=XAXY, apexX=XX(legA), apexTopY=yb-legB*u;
+    // triangle sides
+    xsvg.appendChild(mk('line',{x1:x0,y1:yb,x2:apexX,y2:yb,stroke:'#7a3ea8','stroke-width':1.5}));            // base leg
+    xsvg.appendChild(mk('line',{x1:apexX,y1:yb,x2:apexX,y2:apexTopY,stroke:'#7a3ea8','stroke-width':1.5}));   // vertical leg
+    xsvg.appendChild(mk('line',{x1:x0,y1:yb,x2:apexX,y2:apexTopY,stroke:'#7a3ea8','stroke-width':2}));        // hypotenuse
+    xsvg.appendChild(mk('path',{d:`M${apexX-5},${yb} L${apexX-5},${yb-5} L${apexX},${yb-5}`,fill:'none',stroke:'#7a3ea8','stroke-width':1})); // right angle
+    // side length labels
+    const lblStyle={'font-size':9.5,'font-weight':700,'font-family':'ui-monospace,monospace',fill:'#7a3ea8'};
+    // base label: below the base leg, centred
+    const bl=mk('text',Object.assign({x:(x0+apexX)/2,y:yb+13,'text-anchor':'middle'},lblStyle));bl.textContent=baseLbl;xsvg.appendChild(bl);
+    // vertical leg label: just right of the vertical leg, mid-height
+    const vl=mk('text',Object.assign({x:apexX+4,y:(yb+apexTopY)/2+3,'text-anchor':'start'},lblStyle));vl.textContent=String(legB);xsvg.appendChild(vl);
+    // hypotenuse label: above-left of its midpoint
+    const hl=mk('text',Object.assign({x:(x0+apexX)/2-4,y:(yb+apexTopY)/2-4,'text-anchor':'end'},lblStyle));hl.textContent=info.label;xsvg.appendChild(hl);
+    const r=XX(info.v)-x0;
+    xsvg.appendChild(mk('path',{d:`M${apexX},${apexTopY} A ${r} ${r} 0 0 1 ${XX(info.v)},${yb}`,fill:'none',stroke:'#b8892b','stroke-width':1.3,'stroke-dasharray':'4 3'}));
+    // arc-lands-here label at √n on the line
+    const al=mk('text',{x:XX(info.v),y:yb+13,'text-anchor':'middle','font-size':9.5,'font-weight':700,'font-family':'ui-monospace,monospace',fill:'#b8892b'});al.textContent=info.label;xsvg.appendChild(al);
+  }
+
+  // current value depends on tab: irr tab uses the irrational; others use val
+  function currentVal(){ return tab==='irr'?IRR[irr].v:val; }
+
+  function render(){
+    drawAxis(tab==='sets');           // debts/fortunes bands only on the Sets tab
+    if(tab==='frac') drawUnitDivision();
+    if(tab==='irr')  drawSqrtConstruction();
+
+    const cur=currentVal();
+
+    // distance tab: two-point tool + ◆ marker
+    if(tab==='dist'){
+      const a=cur,b=mark;
+      xsvg.appendChild(mk('line',{x1:XX(Math.min(a,b)),y1:XAXY,x2:XX(Math.max(a,b)),y2:XAXY,stroke:'#b8892b','stroke-width':3}));
+      if(tpMode==='mid'){
+        const m=(a+b)/2;
+        xsvg.appendChild(mk('circle',{cx:XX(m),cy:XAXY,r:5,fill:'#2f7d4f'}));
+        const t=mk('text',{x:XX(m),y:XAXY+34,'text-anchor':'middle','font-size':10,'font-weight':700,fill:'#2f7d4f','font-family':'ui-monospace,monospace'});t.textContent='avg';xsvg.appendChild(t);
+      } else {
+        // distance mode: also show |value| bar to 0
+        xsvg.appendChild(mk('line',{x1:XX(0),y1:XAXY+12,x2:XX(cur),y2:XAXY+12,stroke:'#b8892b','stroke-width':2.5}));
+      }
+      const mg=mk('g',{class:'point'});
+      mg.appendChild(mk('path',{d:`M${XX(b)},${XAXY-9} L${XX(b)+8},${XAXY} L${XX(b)},${XAXY+9} L${XX(b)-8},${XAXY} Z`,fill:'#7a3ea8',stroke:'#fff','stroke-width':1}));
+      const mt=mk('text',{x:XX(b),y:XAXY-14,'text-anchor':'middle','font-size':10,'font-weight':700,fill:'#7a3ea8','font-family':'ui-monospace,monospace'});mt.textContent=fr(Math.round(b*den),den);mg.appendChild(mt);
+      xsvg.appendChild(mg);
+      attachDrag(mg,'mark');
+    }
+
+    // main point
+    if(tab==='irr'){
+      if(irr!=='pi'){   // π draws its own markers (rolling circle + series) in drawPi
+        const info=IRR[irr];
+        xsvg.appendChild(mk('circle',{cx:XX(info.v),cy:XAXY,r:6.5,fill:'#7a3ea8',stroke:'#fff','stroke-width':1.2}));
+        const gt=mk('text',{x:XX(info.v),y:XAXY-14,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#7a3ea8','font-family':'ui-monospace,monospace'});
+        gt.textContent=info.label;xsvg.appendChild(gt);
+      }
+    } else {
+      const num=Math.round(val*den);
+      const info=classify(num,den);
+      const g=mk('g',{class:'point'});
+      g.appendChild(mk('circle',{cx:XX(val),cy:XAXY,r:6.5,
+        fill:info.cls==='nat'?'#2f6f4f':info.cls==='neg'?'#c0392b':'#1b6ca8',stroke:'#fff','stroke-width':1.2}));
+      const gt=mk('text',{x:XX(val),y:XAXY-14,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#1b2a4a','font-family':'ui-monospace,monospace'});
+      gt.textContent=fr(num,den);g.appendChild(gt);
+      xsvg.appendChild(g);
+      attachDrag(g,'val');
+    }
+
+    updateReadout();
+  }
+
+  function attachDrag(g,which){
+    const pt=xsvg.createSVGPoint();let drag=false;
+    function loc(e){const t=e.touches?e.touches[0]:e;pt.x=t.clientX;pt.y=t.clientY;
+      return pt.matrixTransform(xsvg.getScreenCTM().inverse());}
+    function start(e){drag=true;e.preventDefault();}
+    function move(e){if(!drag)return;e.preventDefault();const p=loc(e);
+      let v=Math.round(XU(p.x)*den)/den; v=Math.max(XVIEW.min,Math.min(XVIEW.max,v));
+      if(which==='val')val=v;else mark=v; render();}
+    function end(){drag=false;}
+    g.addEventListener('mousedown',start);g.addEventListener('touchstart',start,{passive:false});
+    xsvg.addEventListener('mousemove',move);xsvg.addEventListener('touchmove',move,{passive:false});
+    window.addEventListener('mouseup',end);window.addEventListener('touchend',end);
+  }
+
+  function updateReadout(){
+    let html='',msg='';
+    if(tab==='sets'){
+      const num=Math.round(val*den);const info=classify(num,den);
+      html+=`<div class="row"><span class="k">value</span><span class="v">${fr(num,den)}</span></div>`;
+      html+=`<div class="row"><span class="k">belongs to</span><span class="v">${info.in.join(', ')}</span></div>`;
+      msg=info.note;
+    } else if(tab==='frac'){
+      const num=Math.round(val*den);const base=Math.floor(val);const across=Math.round((val-base)*den);
+      html+=`<div class="row"><span class="k">value</span><span class="v">${fr(num,den)}</span></div>`;
+      html+=`<div class="row"><span class="k">as decimal</span><span class="v">${trimDec(num/den,4)}</span></div>`;
+      html+=`<div class="row"><span class="k">construction</span><span class="v">${across}/${den} past ${base}</span></div>`;
+      msg=`The unit from ${base} to ${base+1} is cut into <b>${den}</b> equal parts; the point sits <b>${across}</b> parts across, giving <b>${fr(num,den)}</b>. That is exactly how any p/q is placed on the line.`;
+    } else if(tab==='irr'){
+      const info=IRR[irr];
+      if(irr==='pi'){
+        const cur=madhavaPartial(piTerms);
+        html+=`<div class="row"><span class="k">π (true value)</span><span class="v">${Math.PI.toFixed(6)}…</span></div>`;
+        html+=`<div class="row"><span class="k">rolling circle</span><span class="v">${(piRoll*100).toFixed(0)}% turn</span></div>`;
+        html+=`<div class="row"><span class="k">Mādhava S${piTerms}</span><span class="v">${cur.toFixed(4)}</span></div>`;
+        html+=`<div class="row"><span class="k">set</span><span class="v">Irrational</span></div>`;
+        msg=`<b>Measuring π (violet):</b> a circle of diameter 1 has circumference π, so rolling it one full turn lays a length of π flat on the line — landing at ≈3.14. This is <b>rectification</b> (unrolling an arc), a physical action, not a ruler-and-compass construction: π is transcendental, so no finite compass-and-straightedge steps can reach it. `+
+            `<b>Computing π (gold):</b> Mādhava's series 4(1 − 1/3 + 1/5 − 1/7 + …) creeps toward π — the partial sums wobble above and below, tightening each term. After ${piTerms} term${piTerms>1?'s':''} it is ${cur.toFixed(4)}; it converges slowly, which is why it only nears π after very many terms.`;
+      } else {
+        html+=`<div class="row"><span class="k">value</span><span class="v">${info.label}</span></div>`;
+        html+=`<div class="row"><span class="k">decimal (≈)</span><span class="v">${info.v.toFixed(6)}…</span></div>`;
+        html+=`<div class="row"><span class="k">set</span><span class="v">Irrational</span></div>`;
+        msg=info.note+` The violet triangle\'s hypotenuse is <b>${info.label}</b>; the gold arc swings it onto the line at exactly ${info.label}.`;
+      }
+    } else if(tab==='dec'){
+      const num=Math.round(val*den);const dec=decInfo(num,den);
+      html+=`<div class="row"><span class="k">value</span><span class="v">${fr(num,den)}</span></div>`;
+      html+=`<div class="row"><span class="k">as decimal</span><span class="v">${trimDec(num/den,6)}</span></div>`;
+      html+=`<div class="row"><span class="k">type</span><span class="v">${dec.terminating?'terminating':'repeating'}</span></div>`;
+      msg= dec.terminating
+        ? `Denominator in lowest terms is <b>${dec.denom}</b> — only 2s and 5s. Multiplying to a power of 10 makes it <b>terminate</b>.`
+        : `Denominator in lowest terms is <b>${dec.denom}</b>, which keeps a prime other than 2 or 5 (leftover ${dec.leftover}). So the decimal <b>repeats</b> forever.`;
+    } else if(tab==='dist'){
+      const cur=currentVal(),a=cur,b=mark,d=Math.abs(a-b),m=(a+b)/2;
+      html+=`<div class="row"><span class="k">point a</span><span class="v">${fr(Math.round(a*den),den)}</span></div>`;
+      html+=`<div class="row"><span class="k">marker ◆ b</span><span class="v">${fr(Math.round(b*den),den)}</span></div>`;
+      if(tpMode==='dist'){
+        html+=`<div class="row"><span class="k">|a − b|</span><span class="v">${trimDec(d,3)}</span></div>`;
+        html+=`<div class="row"><span class="k">|a| (dist to 0)</span><span class="v">${trimDec(Math.abs(a),3)}</span></div>`;
+        msg=`Distance is <b>|a − b| = ${trimDec(d,3)}</b> — always non-negative, whichever order you take. The lower gold bar is |a|, the point\'s own distance from 0.`;
+      } else {
+        html+=`<div class="row"><span class="k">average (a+b)/2</span><span class="v">${fr(Math.round(m*den),den)}</span></div>`;
+        msg=`The green point is the <b>average = ${trimDec(m,3)}</b>. It always falls strictly between a and b, so between any two numbers there is always another — the rationals are <b>dense</b>.`;
+      }
+    }
+    document.getElementById('readoutX').innerHTML=html;
+    document.getElementById('explainX').innerHTML=msg;
+  }
+
+  function piStop(){ if(piTimer){clearInterval(piTimer);piTimer=null;} }
+  function piStart(){
+    piStop(); piTerms=1; piRoll=0;
+    render();
+    piTimer=setInterval(()=>{
+      // advance rolling circle over ~2s, then step the series; loop softly
+      if(piRoll<1){ piRoll=Math.min(1, piRoll+0.08); }
+      else if(piTerms<PI_MAX){ piTerms++; }
+      else { piRoll=0; piTerms=1; } // restart the demo so it keeps illustrating
+      render();
+    }, 380);
+  }
+  function piSyncAnim(){
+    if(tab==='irr' && irr==='pi') piStart();
+    else piStop();
+  }
+
+  function setTab(t){
+    tab=t;
+    document.querySelectorAll('#xtabs .xtab').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab===t));
+    document.getElementById('xTitle').textContent=TAB_META[t].title;
+    document.getElementById('xLead').textContent=TAB_META[t].lead;
+    document.getElementById('denRow').classList.toggle('hide', t!=='frac');
+    document.getElementById('irrPick').classList.toggle('hide', t!=='irr');
+    document.getElementById('twoptRow').classList.toggle('hide', t!=='dist');
+    const i=TABS.indexOf(t);
+    document.getElementById('xStepLabel').textContent=(i+1)+' / '+TABS.length;
+    document.getElementById('xPrev').disabled=(i===0);
+    document.getElementById('xNext').disabled=(i===TABS.length-1);
+    piSyncAnim();          // start/stop π animation based on the new tab
+    if(!(tab==='irr'&&irr==='pi')) render();  // π path renders via piStart
+  }
+  function pickIrr(code){
+    irr=code;
+    document.querySelectorAll('#irrPick .seg-btn').forEach(b=>b.setAttribute('aria-pressed', b.dataset.irr===code));
+    piSyncAnim();
+    if(!(irr==='pi')) render();
+  }
+  function pickTP(m){
+    tpMode=m;
+    document.querySelectorAll('#segPick .seg-btn').forEach(b=>b.setAttribute('aria-pressed', b.dataset.tp===m));
+    render();
+  }
+
+  window.startExplore=function(){
+    if(!started){
+      document.querySelectorAll('#xtabs .xtab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+      document.getElementById('xPrev').addEventListener('click',()=>{const i=TABS.indexOf(tab);if(i>0)setTab(TABS[i-1]);});
+      document.getElementById('xNext').addEventListener('click',()=>{const i=TABS.indexOf(tab);if(i<TABS.length-1)setTab(TABS[i+1]);});
+      document.querySelectorAll('#irrPick .seg-btn').forEach(b=>b.addEventListener('click',()=>pickIrr(b.dataset.irr)));
+      document.querySelectorAll('#segPick .seg-btn').forEach(b=>b.addEventListener('click',()=>pickTP(b.dataset.tp)));
+      const sl=document.getElementById('denSlider');
+      sl.addEventListener('input',()=>{
+        den=parseInt(sl.value,10);
+        document.getElementById('denText').textContent=den;
+        document.getElementById('denVal').textContent='q='+den;
+        val=Math.round(val*den)/den; mark=Math.round(mark*den)/den;
+        render();
+      });
+      started=true;
+    }
+    setTab('sets');
+  };
+  window.stopExplore=function(){ piStop(); };
+})();
+
+// ===================== NAV =====================
+document.querySelectorAll('.mode-card').forEach(c=>c.onclick=()=>startMode(c.dataset.mode));
+$('quitBtn').onclick=()=>show('home');
+$('quitBtnX').onclick=()=>{ if(window.stopExplore)window.stopExplore(); show('home'); };
+$('quitBtnS').onclick=()=>show('home');
+$('menuBtn').onclick=()=>{ if(mode==='challenge')showSetPicker(); else show('home'); };
+$('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
+</script>
+</body>
+</html>
