@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 9 — CBSE Study Tools</title>
+<style>
+  :root{
+    --ink:#1b2a4a;
+    --paper:#f7f4ec;
+    --line:#d3dae6;
+    --gold:#b8892b;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 18px 70px}
+
+  .eyebrow{font-family:ui-monospace,Menlo,monospace;letter-spacing:.2em;
+    text-transform:uppercase;font-size:.66rem;color:var(--gold);margin:0 0 6px}
+  h1{font-size:1.9rem;line-height:1.1;margin:0 0 6px;font-weight:600}
+  .sub{margin:0;color:#3a4a68;max-width:58ch}
+  .rule{height:3px;width:60px;background:var(--ink);border-radius:2px;margin:14px 0 22px}
+
+  .backlink{font-family:ui-monospace,monospace;font-size:.75rem;color:var(--ink);
+    background:none;border:1.5px solid var(--ink);border-radius:20px;padding:5px 12px;
+    text-decoration:none;display:inline-block;margin-bottom:20px}
+  .backlink:hover{background:var(--ink);color:var(--paper)}
+
+  .modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:8px}
+  @media(max-width:680px){.modes{grid-template-columns:1fr}}
+  .mode-card{display:block;background:var(--card);border:1.5px solid var(--ink);border-radius:12px;
+    padding:20px;text-decoration:none;color:var(--ink);transition:.15s;text-align:left}
+  .mode-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(27,42,74,.12)}
+  .mode-card h3{margin:0 0 6px;font-size:1.25rem}
+  .mode-card p{margin:0;font-size:.9rem;color:#3a4a68}
+  .mode-card .tag{display:inline-block;margin-top:12px;font-family:ui-monospace,monospace;
+    font-size:.72rem;padding:4px 10px;border-radius:20px;background:var(--ink);color:var(--paper)}
+
+  footer{margin-top:30px;font-size:.75rem;color:#7a879d;font-family:ui-monospace,monospace;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="../">← Home</a>
+  <p class="eyebrow">CBSE · Grade 9</p>
+  <h1>Class 9</h1>
+  <div class="rule"></div>
+  <p class="sub">Pick a subject to explore the chapters available.</p>
+  <div style="height:22px"></div>
+  <div class="modes">
+    <a class="mode-card" href="maths/">
+      <h3>Maths</h3>
+      <p>Number Systems, Coordinate Geometry — interactive explorations and practice.</p>
+      <span class="tag">2 chapters · maths</span>
+    </a>
+  </div>
+  <footer>Ganita Manjari · Grade 9</footer>
+</div>
+</body>
+</html>
