@@ -1,1 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reiaan's Room — A Coordinate Geometry Adventure</title>
+<style>
+  :root{
+    --ink:#1b2a4a;
+    --paper:#f7f4ec;
+    --line:#d3dae6;
+    --axis:#2f6f4f;
+    --pt:#c0392b;
+    --pt2:#1b6ca8;
+    --gold:#b8892b;
+    --good:#2f7d4f;
+    --bad:#c0392b;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Iowan Old Style",Georgia,"Times New Roman",serif;line-height:1.5}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 18px 70px}
 
+  .eyebrow{font-family:ui-monospace,Menlo,monospace;letter-spacing:.2em;
+    text-transform:uppercase;font-size:.66rem;color:var(--gold);margin:0 0 6px}
+  h1{font-size:1.9rem;line-height:1.1;margin:0 0 6px;font-weight:600}
+  .sub{margin:0;color:#3a4a68;max-width:58ch}
+  .rule{height:3px;width:60px;background:var(--ink);border-radius:2px;margin:14px 0 22px}
+
+  /* mode picker */
+  .modes{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:8px}
+  @media(max-width:680px){.modes{grid-template-columns:1fr}}
+  .mode-card{background:var(--card);border:1.5px solid var(--ink);border-radius:12px;
+    padding:20px;cursor:pointer;transition:.15s;text-align:left}
+  .mode-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(27,42,74,.12)}
+  .mode-card h3{margin:0 0 6px;font-size:1.25rem}
+  .mode-card p{margin:0;font-size:.9rem;color:#3a4a68}
+  .mode-card .tag{display:inline-block;margin-top:12px;font-family:ui-monospace,monospace;
+    font-size:.72rem;padding:4px 10px;border-radius:20px;background:var(--ink);color:var(--paper)}
+
+  /* progress */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+  .pips{display:flex;gap:6px}
+  .pip{width:22px;height:6px;border-radius:3px;background:var(--line)}
+  .pip.done{background:var(--good)}
+  .pip.wrong{background:var(--bad)}
+  .pip.now{background:var(--ink)}
+  .backlink{font-family:ui-monospace,monospace;font-size:.75rem;color:var(--ink);
+    background:none;border:1.5px solid var(--ink);border-radius:20px;padding:5px 12px;cursor:pointer}
+  .backlink:hover{background:var(--ink);color:var(--paper)}
+  .score{font-family:ui-monospace,monospace;font-size:.8rem;color:#3a4a68}
+
+  /* question layout */
+  .qstage{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+  @media(max-width:760px){.qstage{grid-template-columns:1fr}}
+  .plot-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+  svg{width:100%;height:auto;display:block;touch-action:none}
+
+  .qbox{}
+  .badge{font-family:ui-monospace,monospace;font-size:.7rem;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--gold);margin:0 0 6px}
+  .story{font-size:1.02rem;margin:0 0 14px}
+  .story b{color:var(--ink)}
+  .ask{font-weight:600;margin:0 0 14px}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{font-family:inherit;font-size:.95rem;text-align:left;padding:11px 14px;
+    border:1.5px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;transition:.12s;color:var(--ink)}
+  .opt:hover{border-color:var(--ink)}
+  .opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .opt.correct{border-color:var(--good);background:rgba(47,125,79,.10)}
+  .opt.incorrect{border-color:var(--bad);background:rgba(192,57,43,.09)}
+  .opt.locked{cursor:default;opacity:.75}
+  .opt.locked.correct,.opt.locked.incorrect{opacity:1}
+
+  .numrow{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+  .numrow input{font-family:ui-monospace,monospace;font-size:1rem;width:90px;padding:9px 10px;
+    border:1.5px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+  .numrow input:focus{outline:none;border-color:var(--ink)}
+
+  .check{font-family:ui-monospace,monospace;font-size:.82rem;letter-spacing:.03em;
+    padding:10px 18px;border:none;border-radius:8px;background:var(--ink);color:var(--paper);cursor:pointer;margin-top:6px}
+  .check:disabled{opacity:.4;cursor:default}
+  .next{font-family:ui-monospace,monospace;font-size:.82rem;padding:10px 18px;border:none;
+    border-radius:8px;background:var(--gold);color:#fff;cursor:pointer;margin-top:12px}
+
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:.92rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:rgba(47,125,79,.10);border-left:3px solid var(--good)}
+  .feedback.no{background:rgba(192,57,43,.09);border-left:3px solid var(--bad)}
+  .feedback b{color:var(--ink)}
+
+  /* svg styling */
+  .grid-line{stroke:var(--line);stroke-width:1}
+  .grid-line.major{stroke:#bcc6d6}
+  .axis-line{stroke:var(--axis);stroke-width:2.5}
+  .tick-num{font-size:8.5px;fill:#5a6b88;font-family:ui-monospace,monospace}
+  .axis-label{font-size:11px;fill:var(--axis);font-style:italic}
+  .pt-dot{fill:var(--pt)}
+  .pt-dot.b{fill:var(--pt2)}
+  .pt-dot.ghost{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 2}
+  .pt-label{font-size:11px;font-weight:700;fill:var(--ink)}
+  .helper{stroke-dasharray:4 3;stroke-width:1.5;fill:none}
+  .leg-x{stroke:var(--pt2)}.leg-y{stroke:var(--pt)}
+  .hyp{stroke:var(--gold);stroke-width:2.5;fill:none}
+  .furn{fill:rgba(184,137,43,.14);stroke:var(--gold);stroke-width:1.5}
+  .furn-lbl{font-size:10px;fill:var(--gold);font-style:italic}
+  .seg{stroke:var(--ink);stroke-width:2}
+  .point{cursor:grab}.point:active{cursor:grabbing}
+
+  /* results */
+  .result{text-align:center;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:34px 24px}
+  .result .big{font-size:3rem;margin:8px 0;font-weight:600}
+  .result p{color:#3a4a68;max-width:46ch;margin:0 auto 8px}
+  .stars{font-size:1.6rem;letter-spacing:6px;margin:6px 0 14px}
+  .again{font-family:ui-monospace,monospace;font-size:.82rem;padding:11px 22px;border:none;
+    border-radius:8px;background:var(--ink);color:var(--paper);cursor:pointer;margin:6px}
+  footer{margin-top:30px;font-size:.75rem;color:#7a879d;font-family:ui-monospace,monospace;text-align:center}
+  .hide{display:none !important}
+
+  /* Explore sub-view tabs + stepper */
+  .xtabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .xtab{font-family:ui-monospace,Menlo,monospace;font-size:.72rem;letter-spacing:.04em;
+    padding:7px 11px;border:1.5px solid var(--line);border-radius:20px;background:var(--card);
+    color:var(--ink);cursor:pointer;transition:.12s}
+  .xtab:hover{border-color:var(--ink)}
+  .xtab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .xtab:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .xstepper{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+  .xstepper .backlink:disabled{opacity:.35;cursor:default}
+  .hintbtn{background:none;border:none;color:var(--gold);font-family:ui-monospace,monospace;
+    font-size:.76rem;cursor:pointer;text-decoration:underline;padding:0;margin-top:4px}
+
+  /* explore panel */
+  #explore h2{font-size:1rem;margin:0 0 10px}
+  .furn-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  .furn-btn{display:flex;align-items:center;gap:10px;font-family:inherit;font-size:.92rem;
+    text-align:left;padding:9px 12px;border:1.5px solid var(--line);border-radius:9px;
+    background:var(--card);cursor:pointer;color:var(--ink);transition:.12s}
+  .furn-btn:hover{border-color:var(--ink)}
+  .furn-btn[aria-pressed="true"]{border-color:var(--ink);background:rgba(27,42,74,.05)}
+  .swatch{width:16px;height:16px;border-radius:4px;flex:none}
+  .readout-x{background:var(--ink);color:var(--paper);border-radius:8px;padding:14px 16px;
+    font-family:ui-monospace,monospace;font-size:.86rem;margin-bottom:14px;line-height:1.7}
+  .readout-x .row{display:flex;justify-content:space-between;gap:12px}
+  .readout-x .k{opacity:.65}
+  .readout-x .v{font-weight:700}
+  .toggles{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:.86rem;color:#3a4a68;cursor:pointer}
+  .toggle input{accent-color:var(--ink);width:16px;height:16px}
+  .explain-x{background:#fff;border-left:3px solid var(--gold);padding:10px 14px;
+    border-radius:0 6px 6px 0;color:#3a4a68;font-size:.88rem;min-height:20px}
+  .explain-x b{color:var(--ink)}
+  .furn-shape{cursor:grab}
+  .furn-shape:active{cursor:grabbing}
+  .furn-rect{stroke-width:1.5}
+  .furn-name{font-size:9px;fill:#fff;font-weight:700;font-family:ui-monospace,monospace}
+  .dim-lbl{font-size:9px;font-family:ui-monospace,monospace;font-weight:700}
+  .twopt{margin-bottom:14px}
+  .twopt-head{font-family:ui-monospace,monospace;font-size:.74rem;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--ink);margin-bottom:7px}
+  .twopt-sub{color:#8a97ad;text-transform:none;letter-spacing:0}
+  .seg-pick{display:flex;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden}
+  .seg-btn{flex:1;font-family:ui-monospace,monospace;font-size:.72rem;padding:8px 4px;
+    border:none;border-right:1.5px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer}
+  .seg-btn:last-child{border-right:none}
+  .seg-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .star-mk{cursor:grab}.star-mk:active{cursor:grabbing}
+
+  /* challenge set picker */
+  .setgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+  @media(max-width:680px){.setgrid{grid-template-columns:1fr}}
+  .set-card{background:var(--card);border:1.5px solid var(--ink);border-radius:12px;
+    padding:20px;cursor:pointer;transition:.15s;text-align:left}
+  .set-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(27,42,74,.12)}
+  .set-card .num{font-family:ui-monospace,monospace;font-size:.72rem;color:var(--gold);letter-spacing:.1em}
+  .set-card h3{margin:4px 0 6px;font-size:1.3rem}
+  .set-card p{margin:0;font-size:.88rem;color:#3a4a68}
+  .set-card .rungs{display:flex;gap:4px;margin-top:12px}
+  .rung{height:6px;flex:1;border-radius:3px;background:var(--line)}
+  .rung.on{background:var(--gold)}
+  .set-card .best{margin-top:10px;font-family:ui-monospace,monospace;font-size:.72rem;color:#7a879d}
+
+  /* true/false */
+  .tf-row{display:flex;gap:10px;margin-bottom:6px}
+  .tf-btn{flex:1;font-family:ui-monospace,monospace;font-size:.9rem;padding:12px;
+    border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);cursor:pointer;transition:.12s}
+  .tf-btn:hover{border-color:var(--ink)}
+  .tf-btn.correct{border-color:var(--good);background:rgba(47,125,79,.10)}
+  .tf-btn.incorrect{border-color:var(--bad);background:rgba(192,57,43,.09)}
+  .tf-btn.locked{cursor:default}
+  .vocab{background:rgba(184,137,43,.10);border:1px solid rgba(184,137,43,.35);
+    border-radius:8px;padding:9px 12px;font-size:.84rem;color:#7a5a12;margin-bottom:12px}
+  .vocab b{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HOME -->
+  <section id="home">
+    <p class="eyebrow">Grade 9 · Coordinate Geometry</p>
+    <h1>Reiaan's Room</h1>
+    <div class="rule"></div>
+    <p class="sub">Shalini is helping her brother Reiaan map his new room with a coordinate grid. Help them place furniture, measure distances, and find their way around — one point at a time.</p>
+    <div style="height:22px"></div>
+    <div class="modes">
+      <button class="mode-card" data-mode="explore">
+        <h3>Explore</h3>
+        <p>Arrange Reiaan's room yourself. Drag the bed, wardrobe and door around the grid and watch coordinates, distances and quadrants update live.</p>
+        <span class="tag">sandbox · no wrong answers</span>
+      </button>
+      <button class="mode-card" data-mode="practice">
+        <h3>Practice</h3>
+        <p>Ten guided challenges. See the answer come alive on the grid, with an explanation every time. No pressure, no score.</p>
+        <span class="tag">10 questions · learn as you go</span>
+      </button>
+      <button class="mode-card" data-mode="quiz">
+        <h3>Quiz</h3>
+        <p>Five mixed questions, easy to hard. Scored at the end. One shot each — think before you answer.</p>
+        <span class="tag">5 questions · scored</span>
+      </button>
+      <button class="mode-card" data-mode="challenge">
+        <h3>Challenge</h3>
+        <p>Exemplar-level sets built as a ladder. Set 1 warms up, Set 3 pushes hard — including True/False with reasoning, just like the exam.</p>
+        <span class="tag">3 sets · progressive</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- CHALLENGE SET PICKER -->
+  <section id="setpick" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnS">← Menu</button>
+      <div class="score">Challenge · pick a set</div>
+      <div></div>
+    </div>
+    <p class="sub" style="margin:0 0 18px">Same concepts, rising difficulty. Each set has fresh numbers, so you can retake without repeating answers.</p>
+    <div class="setgrid" id="setGrid"></div>
+  </section>
+
+  <!-- EXPLORE -->
+  <section id="explore" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnX">← Menu</button>
+      <div class="score" id="xModeLabel">Explore · Coordinates</div>
+      <div></div>
+    </div>
+    <div class="xtabs" id="xtabs"></div>
+    <div class="qstage">
+      <div class="plot-card"><svg id="svgX" viewBox="0 0 400 400"></svg></div>
+      <div class="qbox">
+        <h2 id="xTitle">Coordinates</h2>
+        <div id="xControls"></div>
+        <div class="readout-x" id="readoutX"></div>
+        <div class="explain-x" id="explainX"></div>
+        <div class="xstepper">
+          <button class="backlink" id="xPrev">← Prev</button>
+          <div class="score" id="xCount">1 / 5</div>
+          <button class="backlink" id="xNext">Next →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SESSION -->
+  <section id="session" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtn">← Menu</button>
+      <div class="pips" id="pips"></div>
+      <div class="score" id="scoreLabel"></div>
+    </div>
+    <div class="qstage">
+      <div class="plot-card"><svg id="svg" viewBox="0 0 400 400"></svg></div>
+      <div class="qbox">
+        <p class="badge" id="qbadge">Question 1 · easy</p>
+        <p class="story" id="qstory"></p>
+        <p class="ask" id="qask"></p>
+        <div id="answerArea"></div>
+        <div class="feedback" id="feedback"></div>
+        <button class="next hide" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hide">
+    <div class="result">
+      <p class="eyebrow" id="resTitle">Quiz complete</p>
+      <div class="big" id="resScore">0 / 5</div>
+      <div class="stars" id="resStars"></div>
+      <p id="resMsg"></p>
+      <div style="height:10px"></div>
+      <button class="again" id="retryBtn">Try again</button>
+      <button class="again" id="menuBtn">Menu</button>
+    </div>
+  </section>
+
+  <footer>Built on <span>Ganita Manjari · Grade 9 · Chapter 1</span></footer>
+</div>
+
+<script>
+// ===================== GRID ENGINE =====================
+const SIZE=400,PAD=30,UNITS=13; // room needs up to ~12
+const span=SIZE-2*PAD;
+// origin at bottom-left region: we want full first quadrant visible for room,
+// but also negatives for general questions. Use symmetric-ish but shift origin.
+const NS="http://www.w3.org/2000/svg";
+function el(t,a){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;}
+
+// We support two coordinate framings via a config: xmin,xmax,ymin,ymax
+let VIEW={xmin:-6,xmax:13,ymin:-6,ymax:13};
+function sx(x){return PAD+ (x-VIEW.xmin)/(VIEW.xmax-VIEW.xmin)*span;}
+function sy(y){return SIZE-PAD-(y-VIEW.ymin)/(VIEW.ymax-VIEW.ymin)*span;}
+function ux(px){return VIEW.xmin+(px-PAD)/span*(VIEW.xmax-VIEW.xmin);}
+function uy(py){return VIEW.ymin+(SIZE-PAD-py)/span*(VIEW.ymax-VIEW.ymin);}
+
+const svg=document.getElementById('svg');
+function clearSvg(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+
+function drawGrid(){
+  const gx0=Math.ceil(VIEW.xmin),gx1=Math.floor(VIEW.xmax);
+  const gy0=Math.ceil(VIEW.ymin),gy1=Math.floor(VIEW.ymax);
+  for(let i=gx0;i<=gx1;i++){
+    svg.appendChild(el('line',{x1:sx(i),y1:sy(VIEW.ymin),x2:sx(i),y2:sy(VIEW.ymax),
+      class:'grid-line'+(i%5===0?' major':'')}));
+  }
+  for(let j=gy0;j<=gy1;j++){
+    svg.appendChild(el('line',{x1:sx(VIEW.xmin),y1:sy(j),x2:sx(VIEW.xmax),y2:sy(j),
+      class:'grid-line'+(j%5===0?' major':'')}));
+  }
+  // axes
+  svg.appendChild(el('line',{x1:sx(VIEW.xmin),y1:sy(0),x2:sx(VIEW.xmax),y2:sy(0),class:'axis-line'}));
+  svg.appendChild(el('line',{x1:sx(0),y1:sy(VIEW.ymin),x2:sx(0),y2:sy(VIEW.ymax),class:'axis-line'}));
+  svg.appendChild(el('path',{d:`M${sx(VIEW.xmax)},${sy(0)} l-7,-4 l0,8 z`,fill:'var(--axis)'}));
+  svg.appendChild(el('path',{d:`M${sx(0)},${sy(VIEW.ymax)} l-4,7 l8,0 z`,fill:'var(--axis)'}));
+  // ticks
+  const stepX = (VIEW.xmax-VIEW.xmin)>16?2:1;
+  const stepY = (VIEW.ymax-VIEW.ymin)>16?2:1;
+  for(let i=gx0;i<=gx1;i+=stepX){if(i===0)continue;
+    svg.appendChild(el('text',{x:sx(i),y:sy(0)+12,'text-anchor':'middle',class:'tick-num'})).textContent=i;}
+  for(let j=gy0;j<=gy1;j+=stepY){if(j===0)continue;
+    const t=el('text',{x:sx(0)-5,y:sy(j)+3,'text-anchor':'end',class:'tick-num'});t.textContent=j;svg.appendChild(t);}
+  svg.appendChild(el('text',{x:sx(VIEW.xmax)-2,y:sy(0)+14,class:'axis-label'})).textContent='x';
+  svg.appendChild(el('text',{x:sx(0)+6,y:sy(VIEW.ymax)+2,class:'axis-label'})).textContent='y';
+}
+
+function point(x,y,label,cls){
+  const g=el('g',{});
+  g.appendChild(el('circle',{cx:sx(x),cy:sy(y),r:6,class:'pt-dot'+(cls?' '+cls:'')}));
+  if(label){const t=el('text',{x:sx(x)+9,y:sy(y)-8,class:'pt-label'});t.textContent=label;g.appendChild(t);}
+  svg.appendChild(g);return g;
+}
+function ghost(x,y,label){
+  const g=el('g',{});
+  g.appendChild(el('circle',{cx:sx(x),cy:sy(y),r:6,class:'pt-dot ghost'}));
+  if(label){const t=el('text',{x:sx(x)+9,y:sy(y)-8,class:'pt-label',fill:'#7a879d'});t.textContent=label;g.appendChild(t);}
+  svg.appendChild(g);
+}
+function seg(x1,y1,x2,y2,cls){svg.appendChild(el('line',{x1:sx(x1),y1:sy(y1),x2:sx(x2),y2:sy(y2),class:cls||'seg'}));}
+function rect(x,y,w,h,label){
+  svg.appendChild(el('rect',{x:sx(x),y:sy(y+h),width:sx(x+w)-sx(x),height:sy(y)-sy(y+h),class:'furn'}));
+  if(label){const t=el('text',{x:sx(x+w/2),y:sy(y+h/2)+3,'text-anchor':'middle',class:'furn-lbl'});t.textContent=label;svg.appendChild(t);}
+}
+
+// draggable point returning unit coords (rounded to 0.5)
+function draggable(x0,y0,onMove){
+  const g=point(x0,y0,'?',null);
+  g.classList.add('point');
+  const pt=svg.createSVGPoint();
+  let drag=false;
+  function loc(e){const t=e.touches?e.touches[0]:e;pt.x=t.clientX;pt.y=t.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());}
+  function set(e){drag=true;e.preventDefault();}
+  function mv(e){if(!drag)return;const p=loc(e);
+    let X=Math.round(ux(p.x)),Y=Math.round(uy(p.y));
+    X=Math.max(VIEW.xmin,Math.min(VIEW.xmax,X));Y=Math.max(VIEW.ymin,Math.min(VIEW.ymax,Y));
+    g.querySelector('circle').setAttribute('cx',sx(X));
+    g.querySelector('circle').setAttribute('cy',sy(Y));
+    const t=g.querySelector('text');t.setAttribute('x',sx(X)+9);t.setAttribute('y',sy(Y)-8);
+    t.textContent=`(${X},${Y})`;
+    onMove(X,Y);}
+  function end(){drag=false;}
+  g.addEventListener('mousedown',set);g.addEventListener('touchstart',set,{passive:false});
+  svg.addEventListener('mousemove',mv);svg.addEventListener('touchmove',mv,{passive:false});
+  window.addEventListener('mouseup',end);window.addEventListener('touchend',end);
+  return g;
+}
+
+// ===================== QUESTION BANK =====================
+// Each q: {level, story, ask, view, draw(state), type, ...}
+// types: 'mc' (options+answer index), 'coord' (drag a point, correct=[x,y]),
+//        'num' (numeric input, answer, tol), 'quadrant' (pick I..IV/axis)
+
+const ROOM = ()=>{ // draw Reiaan's room shell
+  rect(0,0,12,10,null); // room 12x10
+  // relabel via corners
+  ghost(0,0,'O');ghost(12,0,'A');ghost(12,10,'B');ghost(0,10,'C');
+};
+
+const BANK = [
+  // 1 — easy: read a plotted point
+  { level:'easy',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"Shalini pins a marker at the top-right corner of Reiaan's room so he can feel where the far wall meets.",
+    ask:"What are the coordinates of corner B, shown on the grid?",
+    draw:()=>{ROOM();point(12,10,'B');},
+    type:'mc', options:["(10, 12)","(12, 10)","(0, 10)","(12, 0)"], answer:1,
+    explain:"B is 12 units right and 10 units up: <b>(12, 10)</b>. The x-coordinate always comes first."
+  },
+  // 2 — easy: plot a point by dragging
+  { level:'easy',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"Shalini marks a spot on the floor line for Reiaan: 7 steps along the wall from the corner, right at floor level.",
+    ask:"Drag the marker to the point (7, 0).",
+    draw:()=>{ROOM();},
+    type:'coord', correct:[7,0],
+    explain:"(7, 0) sits on the x-axis — its y-coordinate is 0, so it lies right on the floor line."
+  },
+  // 3 — easy: on which axis
+  { level:'easy',
+    view:{xmin:-6,xmax:12,ymin:-6,ymax:12},
+    story:"A point P has coordinates (0, 8).",
+    ask:"Where does P lie?",
+    draw:()=>{point(0,8,'P');},
+    type:'mc', options:["On the x-axis","On the y-axis","In Quadrant I","At the origin"], answer:1,
+    explain:"When the x-coordinate is 0, the point sits on the <b>y-axis</b>. Points of the form (0, y) always do."
+  },
+  // 4 — medium: quadrant identification
+  { level:'medium',
+    view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"On a bigger map of the whole house, the garden marker sits at (-5, 3).",
+    ask:"Which quadrant is the garden in?",
+    draw:()=>{point(-5,3,'G');},
+    type:'quadrant', answer:'II',
+    explain:"Negative x, positive y → <b>Quadrant II</b>. The sign pattern is (−, +)."
+  },
+  // 5 — medium: distance parallel to axis
+  { level:'medium',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"The wardrobe stretches along the floor from W₁(3, 0) to W₂(7, 0).",
+    ask:"How wide is the wardrobe (distance W₁W₂)?",
+    draw:()=>{ROOM();point(3,0,'W₁');point(7,0,'W₂');seg(3,0,7,0,'hyp');},
+    type:'num', answer:4, tol:0.01, unit:'units',
+    explain:"Both points are on the x-axis, so the distance is |7 − 3| = <b>4 units</b>."
+  },
+  // 6 — medium: find 4th corner of rectangle
+  { level:'medium',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"Reiaan's study table has three feet at (8, 9), (11, 9) and (11, 7). He wants the last foot placed so the table is a rectangle.",
+    ask:"Drag the marker to where the fourth foot goes.",
+    draw:()=>{ROOM();point(8,9,'');point(11,9,'');point(11,7,'');
+      seg(8,9,11,9);seg(11,9,11,7);
+      // dashed hint edges
+      seg(8,9,8,7,'helper leg-y');seg(8,7,11,7,'helper leg-x');},
+    type:'coord', correct:[8,7],
+    explain:"To close the rectangle, match x with the (8,9) corner and y with the (11,7) corner → <b>(8, 7)</b>."
+  },
+  // 7 — hard: distance via Pythagoras
+  { level:'hard',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"Shalini stretches a thread between two marked points, A(3, 4) and D(7, 1) — just like the triangle in the chapter's distance example.",
+    ask:"What is the length of thread AD?",
+    draw:()=>{point(3,4,'A');point(7,1,'D');seg(3,4,7,1,'hyp');
+      seg(3,4,7,4,'helper leg-x');seg(7,4,7,1,'helper leg-y');},
+    type:'num', answer:5, tol:0.05, unit:'units',
+    explain:"Δx = 4, Δy = 3. By Baudhāyana–Pythagoras: √(4² + 3²) = √25 = <b>5 units</b>."
+  },
+  // 8 — hard: reflection
+  { level:'hard',
+    view:{xmin:-9,xmax:9,ymin:-3,ymax:9},
+    story:"Point M(9, 6) is reflected across the y-axis to make its mirror image M′.",
+    ask:"Where does M′ land? Drag the marker there.",
+    draw:()=>{point(9,6,'M');seg(0,6,9,6,'helper leg-x');},
+    type:'coord', correct:[-9,6],
+    explain:"Reflecting in the y-axis flips the sign of x only: (9, 6) → <b>(−9, 6)</b>. Distances are preserved."
+  },
+  // 9 — hard: midpoint
+  { level:'hard',
+    view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"A rug's opposite corners sit at S(-3, 0) and T(3, 0). Reiaan wants a marker at the exact centre.",
+    ask:"Drag the marker to the midpoint of ST.",
+    draw:()=>{point(-3,0,'S');point(3,0,'T');seg(-3,0,3,0);},
+    type:'coord', correct:[0,0],
+    explain:"Midpoint = average of coordinates: ((−3+3)/2, (0+0)/2) = <b>(0, 0)</b> — the origin."
+  },
+  // 10 — hard: is it a square / distance reasoning
+  { level:'hard',
+    view:{xmin:-4,xmax:4,ymin:-4,ymax:4},
+    story:"Four floor tiles meet at A(2, 1), B(-1, 2), C(-2, -1) and D(1, -2), joined in order.",
+    ask:"What kind of shape is ABCD?",
+    draw:()=>{point(2,1,'A');point(-1,2,'B');point(-2,-1,'C');point(1,-2,'D');
+      seg(2,1,-1,2);seg(-1,2,-2,-1);seg(-2,-1,1,-2);seg(1,-2,2,1);},
+    type:'mc', options:["A rectangle (not square)","A square","A rhombus (not square)","No special shape"], answer:1,
+    explain:"Every side = √(3²+1²) = √10, and adjacent sides meet at right angles → it's a <b>square</b> of area 10."
+  },
+  // ---- extra items so quiz can pull a varied 5 ----
+  // 11 — easy quadrant
+  { level:'easy',
+    view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"A kite marker floats at (4, -5).",
+    ask:"Which quadrant?",
+    draw:()=>{point(4,-5,'K');},
+    type:'quadrant', answer:'IV',
+    explain:"Positive x, negative y → <b>Quadrant IV</b>, sign pattern (+, −)."
+  },
+  // 12 — medium vertical distance
+  { level:'medium',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"The bathroom door runs from B₁(0, 1.5) to B₂(0, 4) along the wall.",
+    ask:"How tall is the door opening (B₁B₂)?",
+    draw:()=>{ROOM();point(0,1.5,'B₁');point(0,4,'B₂');seg(0,1.5,0,4,'hyp');},
+    type:'num', answer:2.5, tol:0.01, unit:'units',
+    explain:"Both on the y-axis: |4 − 1.5| = <b>2.5 units</b>."
+  },
+  // 13 — hard distance non-trivial
+  { level:'hard',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"A thread runs from A(3, 4) to M(9, 6).",
+    ask:"Length of AM?",
+    draw:()=>{point(3,4,'A');point(9,6,'M');seg(3,4,9,6,'hyp');
+      seg(3,4,9,4,'helper leg-x');seg(9,4,9,6,'helper leg-y');},
+    type:'num', answer:6.32, tol:0.06, unit:'units (≈)',
+    explain:"Δx = 6, Δy = 2. √(36+4) = √40 ≈ <b>6.32 units</b>."
+  }
+];
+
+// ===================== CHALLENGE BANKS (exemplar-based, progressive) =====================
+// Set 1 = warm-up, Set 2 = medium, Set 3 = hard. Same 7 skills each, different questions.
+// 'vocab' shows a one-time synonym note (abscissa = x-coordinate, ordinate = y-coordinate).
+const VOCAB_ABS = "<b>Abscissa</b> = x-coordinate (distance from the y-axis). <b>Ordinate</b> = y-coordinate (distance from the x-axis).";
+
+const CH1 = [
+  { level:'set 1 · quadrant', view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"A marker is placed at (−3, 5).",
+    ask:"Which quadrant does it lie in?",
+    draw:()=>{point(-3,5,'');}, type:'quadrant', answer:'II',
+    explain:"Negative x, positive y → <b>Quadrant II</b>." },
+  { level:'set 1 · on an axis', view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"Consider the point (0, −7).",
+    ask:"Where does it lie?",
+    draw:()=>{point(0,-7,'');}, type:'mc',
+    options:["On the x-axis","In the second quadrant","On the y-axis","In the fourth quadrant"], answer:2,
+    explain:"x = 0 means the point sits on the <b>y-axis</b>, below the origin." },
+  { level:'set 1 · vocabulary', view:{xmin:-6,xmax:8,ymin:-6,ymax:8}, vocab:VOCAB_ABS,
+    story:"The point P (3, 4) is plotted.",
+    ask:"What is the abscissa of P?",
+    draw:()=>{point(3,4,'P');seg(0,4,3,4,'helper leg-x');}, type:'mc',
+    options:["3","4","5","7"], answer:0,
+    explain:"The <b>abscissa</b> is the x-coordinate — here <b>3</b>." },
+  { level:'set 1 · true / false', view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"Statement: “The point (3, 0) lies in the first quadrant.”",
+    ask:"True or False?",
+    draw:()=>{point(3,0,'');}, type:'tf', answer:false,
+    explain:"<b>False.</b> (3, 0) lies <b>on the x-axis</b>. Quadrant points need a non-zero y." },
+  { level:'set 1 · fourth vertex', view:{xmin:-2,xmax:8,ymin:-2,ymax:8},
+    story:"Three corners of a rectangle are at (2, 1), (6, 1) and (6, 5).",
+    ask:"Drag the marker to the fourth corner.",
+    draw:()=>{point(2,1,'');point(6,1,'');point(6,5,'');
+      seg(2,1,6,1);seg(6,1,6,5);seg(2,1,2,5,'helper leg-y');seg(2,5,6,5,'helper leg-x');},
+    type:'coord', correct:[2,5],
+    explain:"Match x with (2,1) and y with (6,5) → <b>(2, 5)</b>." },
+  { level:'set 1 · axis sorting', view:{xmin:-6,xmax:8,ymin:-6,ymax:8},
+    story:"Points Q(1, 0), R(0, 4) and O(0, 0) are plotted.",
+    ask:"Which point lies on the x-axis (and not the y-axis)?",
+    draw:()=>{point(1,0,'Q');point(0,4,'R');point(0,0,'O');}, type:'mc',
+    options:["R","Q","O","None"], answer:1,
+    explain:"Q(1, 0) has y = 0 but x ≠ 0 → on the <b>x-axis</b>. O is the origin; R is on the y-axis." },
+  { level:'set 1 · collinearity', view:{xmin:-2,xmax:7,ymin:-2,ymax:7},
+    story:"Three markers: (0, 0), (2, 2) and (5, 5).",
+    ask:"Do they lie on one straight line?",
+    draw:()=>{point(0,0,'');point(2,2,'');point(5,5,'');seg(0,0,5,5,'hyp');}, type:'tf', answer:true,
+    explain:"<b>True.</b> Every point satisfies y = x, so they are <b>collinear</b>." }
+];
+
+const CH2 = [
+  { level:'set 2 · quadrant', view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"The points (−5, 2) and (2, −5) are both plotted.",
+    ask:"Where do they lie, respectively?",
+    draw:()=>{point(-5,2,'A');point(2,-5,'B');}, type:'mc',
+    options:["Same quadrant","II and IV quadrants","II and III quadrants","IV and II quadrants"], answer:1,
+    explain:"(−5, 2) is (−,+) → Q II; (2, −5) is (+,−) → Q IV. So <b>II and IV</b>." },
+  { level:'set 2 · perpendicular distance', view:{xmin:-8,xmax:6,ymin:-8,ymax:6}, vocab:VOCAB_ABS,
+    story:"A point P is 5 units from the x-axis, and the foot of that perpendicular is on the negative x-axis.",
+    ask:"What can we say about P's coordinates?",
+    draw:()=>{point(-3,5,'P');point(-3,-5,"P'");seg(-3,5,-3,0,'helper leg-y');seg(-3,-5,-3,0,'helper leg-y');},
+    type:'mc',
+    options:["x-coordinate = −5","y-coordinate = 5 only","y-coordinate = −5 only","y-coordinate = 5 or −5"], answer:3,
+    explain:"Distance from the x-axis is the |ordinate|, so y = 5 or −5. Foot on negative x-axis fixes x < 0, but y can be either sign → <b>y = 5 or −5</b>." },
+  { level:'set 2 · read from figure', view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"Point E is plotted on the grid.",
+    ask:"What are the coordinates of E?",
+    draw:()=>{point(3,-1,'E');seg(0,-1,3,-1,'helper leg-x');seg(3,0,3,-1,'helper leg-y');}, type:'mc',
+    options:["(−1, 3)","(3, −1)","(−3, 1)","(1, −3)"], answer:1,
+    explain:"E is 3 right, 1 down → <b>(3, −1)</b>. Read x before y." },
+  { level:'set 2 · true / false', view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"Statement: “Points (1, −1) and (−1, 1) lie in the same quadrant.”",
+    ask:"True or False?",
+    draw:()=>{point(1,-1,'A');point(-1,1,'B');}, type:'tf', answer:false,
+    explain:"<b>False.</b> (1, −1) is (+,−) → Q IV, but (−1, 1) is (−,+) → Q II. Different quadrants." },
+  { level:'set 2 · fourth vertex', view:{xmin:-6,xmax:8,ymin:-6,ymax:8},
+    story:"Three vertices of a rectangle are A(3, 2), B(−4, 2) and C(−4, 5).",
+    ask:"Drag the marker to the fourth vertex D.",
+    draw:()=>{point(3,2,'A');point(-4,2,'B');point(-4,5,'C');
+      seg(3,2,-4,2);seg(-4,2,-4,5);seg(-4,5,3,5,'helper leg-x');seg(3,2,3,5,'helper leg-y');},
+    type:'coord', correct:[3,5],
+    explain:"D shares A's abscissa (3) and C's ordinate (5) → <b>(3, 5)</b>." },
+  { level:'set 2 · abscissa arithmetic', view:{xmin:-6,xmax:4,ymin:-2,ymax:8}, vocab:VOCAB_ABS,
+    story:"Two points: P(−2, 3) and Q(−3, 5).",
+    ask:"What is (abscissa of P) − (abscissa of Q)?",
+    draw:()=>{point(-2,3,'P');point(-3,5,'Q');}, type:'num', answer:1, tol:0.01, unit:'',
+    explain:"Abscissa of P = −2, of Q = −3. (−2) − (−3) = <b>1</b>." },
+  { level:'set 2 · collinearity', view:{xmin:-4,xmax:4,ymin:-5,ymax:5},
+    story:"Three markers: (1, 1), (2, −3) and (−1, −2).",
+    ask:"Are these three collinear?",
+    draw:()=>{point(1,1,'');point(2,-3,'');point(-1,-2,'');seg(1,1,2,-3);seg(2,-3,-1,-2);}, type:'tf', answer:false,
+    explain:"<b>False.</b> The slope from (1,1)→(2,−3) is −4, but (2,−3)→(−1,−2) is −⅓. Different slopes → not collinear." }
+];
+
+const CH3 = [
+  { level:'set 3 · sign reasoning', view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"Consider all points (other than the origin) whose abscissa equals their ordinate.",
+    ask:"In which quadrants do they lie?",
+    draw:()=>{point(3,3,'');point(-4,-4,'');seg(-6,-6,6,6,'hyp');}, type:'mc',
+    options:["I only","I and II","I and III","II and IV"], answer:2,
+    explain:"x = y is positive-positive (Q I) or negative-negative (Q III) → <b>I and III</b>." },
+  { level:'set 3 · different signs', view:{xmin:-8,xmax:8,ymin:-8,ymax:8},
+    story:"A point's abscissa and ordinate have opposite signs.",
+    ask:"Which quadrants can it lie in?",
+    draw:()=>{point(4,-3,'');point(-4,3,'');}, type:'mc',
+    options:["I and III","II and III","II and IV","I and II"], answer:2,
+    explain:"(+,−) is Q IV and (−,+) is Q II → <b>II and IV</b>." },
+  { level:'set 3 · square vertex', view:{xmin:-6,xmax:8,ymin:-6,ymax:6},
+    story:"A(5, 3), B(−2, 3) and D(5, −4) are three vertices of a square ABCD.",
+    ask:"Drag the marker to vertex C.",
+    draw:()=>{point(5,3,'A');point(-2,3,'B');point(5,-4,'D');
+      seg(5,3,-2,3);seg(5,3,5,-4);seg(-2,3,-2,-4,'helper leg-y');seg(5,-4,-2,-4,'helper leg-x');},
+    type:'coord', correct:[-2,-4],
+    explain:"C is opposite A: it takes B's abscissa (−2) and D's ordinate (−4) → <b>(−2, −4)</b>." },
+  { level:'set 3 · true / false', view:{xmin:-4,xmax:6,ymin:-2,ymax:6}, vocab:VOCAB_ABS,
+    story:"Statement: “The perpendicular distance of the point (4, 3) from the x-axis is 4.”",
+    ask:"True or False?",
+    draw:()=>{point(4,3,'');seg(4,0,4,3,'helper leg-y');}, type:'tf', answer:false,
+    explain:"<b>False.</b> Distance from the x-axis is the <b>ordinate</b> = 3, not 4. (4 would be the distance from the y-axis.)" },
+  { level:'set 3 · PQRS square', view:{xmin:-2,xmax:7,ymin:-2,ymax:6},
+    story:"P(1, 0), Q(4, 0) and S(1, 3) are given.",
+    ask:"Drag the marker to R so that PQRS is a square.",
+    draw:()=>{point(1,0,'P');point(4,0,'Q');point(1,3,'S');
+      seg(1,0,4,0);seg(1,0,1,3);seg(1,3,4,3,'helper leg-x');seg(4,0,4,3,'helper leg-y');},
+    type:'coord', correct:[4,3],
+    explain:"PQ runs 3 right, PS runs 3 up; R closes the square at <b>(4, 3)</b>." },
+  { level:'set 3 · classify figure', view:{xmin:-2,xmax:6,ymin:-2,ymax:6},
+    story:"Plot O(0, 0), A(3, 0), B(3, 4), C(0, 4) and join OA, AB, BC, CO.",
+    ask:"What figure is formed?",
+    draw:()=>{point(0,0,'O');point(3,0,'A');point(3,4,'B');point(0,4,'C');
+      seg(0,0,3,0);seg(3,0,3,4);seg(3,4,0,4);seg(0,4,0,0);}, type:'mc',
+    options:["Square","Rectangle","Trapezium","Rhombus"], answer:1,
+    explain:"Sides are 3 and 4 (unequal) with right angles → a <b>rectangle</b>, not a square." },
+  { level:'set 3 · point on line', view:{xmin:-2,xmax:6,ymin:-2,ymax:7},
+    story:"Segment AB joins A(1, 2) and B(5, 6). Its midpoint is one point that lies on the segment.",
+    ask:"Drag the marker to the midpoint of AB.",
+    draw:()=>{point(1,2,'A');point(5,6,'B');seg(1,2,5,6,'hyp');},
+    type:'coord', correct:[3,4],
+    explain:"Midpoint = averages: ((1+5)/2, (2+6)/2) = <b>(3, 4)</b> — it sits exactly on AB." }
+];
+
+const CHALLENGE={set1:CH1, set2:CH2, set3:CH3};
+
+// ===================== ENGINE =====================
+const PRACTICE_SET=[0,1,2,3,4,5,6,7,8,9];
+const QUIZ_SET=[0,3,4,6,9]; // easy → hard spread
+let mode=null, order=[], idx=0, correctCount=0, marks=[];
+let activeBank=BANK, currentSet=null;
+
+const $=id=>document.getElementById(id);
+
+function show(sec){['home','explore','setpick','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));}
+
+function startMode(m){
+  if(m==='explore'){show('explore');startExplore();return;}
+  if(m==='challenge'){showSetPicker();return;}
+  mode=m; idx=0; correctCount=0;
+  activeBank=BANK;
+  order = m==='practice'?PRACTICE_SET.map(i=>BANK[i]):QUIZ_SET.map(i=>BANK[i]);
+  marks = order.map(()=>null);
+  show('session');
+  renderPips();
+  loadQuestion();
+}
+
+// ---- challenge set picker ----
+const SET_META=[
+  {key:'set1', num:'Set 1', title:'Warm-up', desc:'Core recall — quadrants, axes, vocabulary, an easy fourth-vertex and collinearity check.', rungs:1},
+  {key:'set2', num:'Set 2', title:'Steady', desc:'Two-quadrant reasoning, perpendicular distance, reading from a figure, tougher collinearity.', rungs:2},
+  {key:'set3', num:'Set 3', title:'Exam pitch', desc:'Sign reasoning, square vertices, classify-the-figure, the classic distance-from-axis trap.', rungs:3}
+];
+const setBest={set1:null,set2:null,set3:null};
+function showSetPicker(){
+  const g=$('setGrid');g.innerHTML='';
+  SET_META.forEach(s=>{
+    const c=document.createElement('button');c.className='set-card';
+    const rungs=[0,1,2].map(i=>`<div class="rung${i<s.rungs?' on':''}"></div>`).join('');
+    const best=setBest[s.key]!=null?`best: ${setBest[s.key]}/${CHALLENGE[s.key].length}`:'not attempted';
+    c.innerHTML=`<div class="num">${s.num}</div><h3>${s.title}</h3><p>${s.desc}</p>`+
+      `<div class="rungs">${rungs}</div><div class="best">${best}</div>`;
+    c.onclick=()=>startChallenge(s.key);
+    g.appendChild(c);
+  });
+  show('setpick');
+}
+function startChallenge(setKey){
+  mode='challenge'; currentSet=setKey; idx=0; correctCount=0;
+  activeBank=CHALLENGE[setKey];
+  order=activeBank.map(q=>q);
+  marks=order.map(()=>null);
+  show('session');
+  renderPips();
+  loadQuestion();
+}
+
+function renderPips(){
+  const p=$('pips');p.innerHTML='';
+  order.forEach((_,i)=>{
+    const d=document.createElement('div');d.className='pip';
+    if(marks[i]==='ok')d.classList.add('done');
+    else if(marks[i]==='no')d.classList.add('wrong');
+    else if(i===idx)d.classList.add('now');
+    p.appendChild(d);
+  });
+  $('scoreLabel').textContent = (mode==='quiz'||mode==='challenge')
+    ?`Score ${correctCount}/${order.length}`:`Practice ${idx+1}/${order.length}`;
+}
+
+let answered=false;
+function loadQuestion(){
+  answered=false;
+  const q=order[idx];
+  VIEW=q.view;
+  clearSvg();drawGrid();q.draw();
+  $('qbadge').textContent=`Question ${idx+1} · ${q.level}`;
+  $('qstory').innerHTML=q.story;
+  $('qask').textContent=q.ask;
+  const fb=$('feedback');fb.className='feedback';fb.innerHTML='';
+  $('nextBtn').classList.add('hide');
+  $('nextBtn').textContent = idx===order.length-1?'See results →':'Next →';
+  buildAnswer(q);
+  renderPips();
+}
+
+function buildAnswer(q){
+  const area=$('answerArea');area.innerHTML='';
+  if(q.vocab){
+    const v=document.createElement('div');v.className='vocab';v.innerHTML=q.vocab;
+    area.appendChild(v);
+  }
+  if(q.type==='tf'){
+    const row=document.createElement('div');row.className='tf-row';
+    [['True',true],['False',false]].forEach(([label,val])=>{
+      const b=document.createElement('button');b.className='tf-btn';b.textContent=label;
+      b.onclick=()=>{
+        if(answered)return;
+        const ok=val===q.answer;
+        [...row.children].forEach(btn=>{btn.classList.add('locked');btn.disabled=true;});
+        row.children[q.answer?0:1].classList.add('correct');
+        if(!ok)b.classList.add('incorrect');
+        finish(ok,q);
+      };
+      row.appendChild(b);
+    });
+    area.appendChild(row);
+    return;
+  }
+  if(q.type==='mc'||q.type==='quadrant'){
+    const opts = q.type==='quadrant'
+      ? ["Quadrant I","Quadrant II","Quadrant III","Quadrant IV"]
+      : q.options;
+    const wrap=document.createElement('div');wrap.className='opts';
+    opts.forEach((o,i)=>{
+      const b=document.createElement('button');b.className='opt';b.textContent=o;
+      b.onclick=()=>{
+        if(answered)return;
+        let ok;
+        if(q.type==='quadrant'){const map=['I','II','III','IV'];ok=map[i]===q.answer;}
+        else ok=i===q.answer;
+        lockMC(wrap,i,q,ok);
+        finish(ok,q);
+      };
+      wrap.appendChild(b);
+    });
+    area.appendChild(wrap);
+  }
+  else if(q.type==='num'){
+    const row=document.createElement('div');row.className='numrow';
+    const inp=document.createElement('input');inp.type='number';inp.step='0.01';inp.placeholder='answer';
+    const unit=document.createElement('span');unit.textContent=q.unit||'';unit.style.cssText='font-family:ui-monospace,monospace;font-size:.8rem;color:#5a6b88';
+    row.appendChild(inp);row.appendChild(unit);area.appendChild(row);
+    const btn=document.createElement('button');btn.className='check';btn.textContent='Check';
+    btn.onclick=()=>{if(answered)return;
+      const v=parseFloat(inp.value);
+      if(isNaN(v))return;
+      const ok=Math.abs(v-q.answer)<=q.tol;
+      inp.style.borderColor= ok?'var(--good)':'var(--bad)';
+      finish(ok,q);};
+    area.appendChild(btn);
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+  }
+  else if(q.type==='coord'){
+    let cur=null;
+    const g=draggable(
+      Math.round((q.view.xmin+q.view.xmax)/2),
+      Math.round((q.view.ymin+q.view.ymax)/2),
+      (x,y)=>{cur=[x,y];btn.disabled=false;}
+    );
+    const hint=document.createElement('p');
+    hint.style.cssText='font-size:.85rem;color:#5a6b88;margin:0 0 8px';
+    hint.innerHTML='Drag the <b>?</b> marker on the grid, then lock in your answer.';
+    area.appendChild(hint);
+    const btn=document.createElement('button');btn.className='check';btn.textContent='Lock in';btn.disabled=true;
+    btn.onclick=()=>{if(answered||!cur)return;
+      const ok=cur[0]===q.correct[0]&&cur[1]===q.correct[1];
+      if(!ok)ghost(q.correct[0],q.correct[1],'✓');
+      finish(ok,q);};
+    area.appendChild(btn);
+  }
+}
+
+function lockMC(wrap,chosen,q,ok){
+  [...wrap.children].forEach((b,i)=>{
+    b.classList.add('locked');b.disabled=true;
+    let isCorrect;
+    if(q.type==='quadrant'){const map=['I','II','III','IV'];isCorrect=map[i]===q.answer;}
+    else isCorrect=i===q.answer;
+    if(isCorrect)b.classList.add('correct');
+    if(i===chosen&&!ok)b.classList.add('incorrect');
+  });
+}
+
+function finish(ok,q){
+  answered=true;
+  marks[idx]=ok?'ok':'no';
+  if(ok)correctCount++;
+  const fb=$('feedback');
+  fb.className='feedback show '+(ok?'ok':'no');
+  fb.innerHTML=(ok?'<b>Correct.</b> ':'<b>Not quite.</b> ')+q.explain;
+  // disable any check buttons
+  area_disable();
+  $('nextBtn').classList.remove('hide');
+  renderPips();
+}
+function area_disable(){
+  $('answerArea').querySelectorAll('.check').forEach(b=>b.disabled=true);
+}
+
+$('nextBtn').onclick=()=>{
+  if(idx<order.length-1){idx++;loadQuestion();}
+  else finishSession();
+};
+
+function finishSession(){
+  if(mode==='practice'){
+    $('resTitle').textContent='Practice complete';
+    $('resScore').textContent=`${correctCount} / ${order.length}`;
+    $('resMsg').textContent = correctCount===order.length
+      ? "Every one right — you've got the whole chapter in hand. Try the quiz to make it count."
+      : "Nice work exploring. Replay any time, or take the scored quiz when you're ready.";
+  } else if(mode==='challenge'){
+    const setName={set1:'Set 1 · Warm-up',set2:'Set 2 · Steady',set3:'Set 3 · Exam pitch'}[currentSet];
+    $('resTitle').textContent=`Challenge ${setName} complete`;
+    $('resScore').textContent=`${correctCount} / ${order.length}`;
+    if(setBest[currentSet]==null||correctCount>setBest[currentSet])setBest[currentSet]=correctCount;
+    const pct=correctCount/order.length;
+    const nextSet={set1:'set2',set2:'set3',set3:null}[currentSet];
+    $('resMsg').textContent = pct===1
+      ? (nextSet?"Perfect run. Ready to climb to the next set?":"Perfect run on the hardest set — you've mastered this chapter.")
+      : pct>=0.6 ? "Strong. Review the misses, then retry or move up a set."
+      : "Keep at it — the explanations show the reasoning. Retry this set when ready.";
+  } else {
+    $('resTitle').textContent='Quiz complete';
+    $('resScore').textContent=`${correctCount} / ${order.length}`;
+    const pct=correctCount/order.length;
+    $('resMsg').textContent = pct===1?"Flawless. You could teach this to Reiaan yourself."
+      : pct>=0.6?"Solid grasp — review the ones you missed and go again."
+      : "Good start. Try Practice mode to build up, then come back.";
+  }
+  const stars=Math.round((correctCount/order.length)*5);
+  $('resStars').textContent='★★★★★'.slice(0,stars)+'☆☆☆☆☆'.slice(0,5-stars);
+  show('results');
+}
+
+// ===================== EXPLORE SANDBOX (tabbed sub-views, furniture-based) =====================
+// Self-contained renderer on #svgX. One concept per tab; each tab shows only its own controls
+// and overlays. Tab strip + Prev/Next stepper share one `tab` state. The draggable objects are
+// Reiaan's actual furniture (bed, wardrobe, door), keeping the chapter's room framing.
+(function(){
+  const XVIEW={xmin:-8,xmax:13,ymin:-8,ymax:12};
+  const S=400,P=30,SP=S-2*P;
+  const xsvg=document.getElementById('svgX');
+  const XX=x=>P+(x-XVIEW.xmin)/(XVIEW.xmax-XVIEW.xmin)*SP;
+  const XY=y=>S-P-(y-XVIEW.ymin)/(XVIEW.ymax-XVIEW.ymin)*SP;
+  const XUx=px=>XVIEW.xmin+(px-P)/SP*(XVIEW.xmax-XVIEW.xmin);
+  const XUy=py=>XVIEW.ymin+(S-P-py)/SP*(XVIEW.ymax-XVIEW.ymin);
+  const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+  // Furniture: bottom-left reference corner (x,y) + size. The reference corner is the point
+  // whose coordinates we read / measure with. Sizes echo the chapter's Fig 1.3 room.
+  const FURN={
+    bed:      {label:'Bed',      x:3, y:5, w:6, h:3, color:'#1b6ca8'},
+    wardrobe: {label:'Wardrobe', x:3, y:0, w:4, h:2, color:'#b8892b'},
+    door:     {label:'Door',     x:7, y:0, w:2, h:0.4, color:'#c0392b'}
+  };
+  let selA='bed';       // primary selected piece (all tabs)
+  let selB='wardrobe';  // secondary piece (two-point tabs)
+  let started=false;
+
+  const TABS=[
+    {key:'coords',  title:'Coordinates', label:'Coordinates'},
+    {key:'quad',    title:'Quadrants',   label:'Quadrants'},
+    {key:'dist',    title:'Distance',    label:'Distance'},
+    {key:'mid',     title:'Midpoint',    label:'Midpoint'},
+    {key:'refl',    title:'Reflection',  label:'Reflection'}
+  ];
+  let tab='coords';
+
+  const corner=k=>({x:FURN[k].x, y:FURN[k].y});
+  function quadOf(x,y){
+    if(x===0||y===0)return null;
+    if(x>0&&y>0)return'I';if(x<0&&y>0)return'II';if(x<0&&y<0)return'III';return'IV';
+  }
+
+  // ---- grid ----
+  function grid(shadeQuadrants){
+    while(xsvg.firstChild)xsvg.removeChild(xsvg.firstChild);
+    if(shadeQuadrants){
+      const fills=[['rgba(46,139,87,.10)',0,0],['rgba(184,137,43,.12)',XVIEW.xmin,0],
+                   ['rgba(192,57,43,.10)',XVIEW.xmin,XVIEW.ymin],['rgba(27,108,168,.10)',0,XVIEW.ymin]];
+      fills.forEach(([c,x0,y0])=>{
+        const x1=x0<0?0:XVIEW.xmax, y1=y0<0?0:XVIEW.ymax;
+        xsvg.appendChild(mk('rect',{x:XX(Math.min(x0,x1)),y:XY(Math.max(y0,y1)),
+          width:Math.abs(XX(x1)-XX(x0)),height:Math.abs(XY(y1)-XY(y0)),fill:c}));
+      });
+      [['I',6,6],['II',-4,6],['III',-4,-4],['IV',6,-4]].forEach(([t,x,y])=>{
+        const e=mk('text',{x:XX(x),y:XY(y),'text-anchor':'middle','font-size':11,fill:'#8a97ad','font-style':'italic'});
+        e.textContent='Q'+t;xsvg.appendChild(e);
+      });
+    }
+    for(let i=Math.ceil(XVIEW.xmin);i<=Math.floor(XVIEW.xmax);i++)
+      xsvg.appendChild(mk('line',{x1:XX(i),y1:XY(XVIEW.ymin),x2:XX(i),y2:XY(XVIEW.ymax),
+        stroke:i%5===0?'#bcc6d6':'#d3dae6','stroke-width':1}));
+    for(let j=Math.ceil(XVIEW.ymin);j<=Math.floor(XVIEW.ymax);j++)
+      xsvg.appendChild(mk('line',{x1:XX(XVIEW.xmin),y1:XY(j),x2:XX(XVIEW.xmax),y2:XY(j),
+        stroke:j%5===0?'#bcc6d6':'#d3dae6','stroke-width':1}));
+    xsvg.appendChild(mk('line',{x1:XX(XVIEW.xmin),y1:XY(0),x2:XX(XVIEW.xmax),y2:XY(0),stroke:'#2f6f4f','stroke-width':2.5}));
+    xsvg.appendChild(mk('line',{x1:XX(0),y1:XY(XVIEW.ymin),x2:XX(0),y2:XY(XVIEW.ymax),stroke:'#2f6f4f','stroke-width':2.5}));
+    for(let i=Math.ceil(XVIEW.xmin);i<=Math.floor(XVIEW.xmax);i+=(XVIEW.xmax-XVIEW.xmin>16?2:1)){if(i===0)continue;
+      const t=mk('text',{x:XX(i),y:XY(0)+12,'text-anchor':'middle','font-size':8.5,fill:'#5a6b88','font-family':'ui-monospace,monospace'});t.textContent=i;xsvg.appendChild(t);}
+    for(let j=Math.ceil(XVIEW.ymin);j<=Math.floor(XVIEW.ymax);j+=(XVIEW.ymax-XVIEW.ymin>16?2:1)){if(j===0)continue;
+      const t=mk('text',{x:XX(0)-5,y:XY(j)+3,'text-anchor':'end','font-size':8.5,fill:'#5a6b88','font-family':'ui-monospace,monospace'});t.textContent=j;xsvg.appendChild(t);}
+    xsvg.appendChild(mk('text',{x:XX(XVIEW.xmax)-2,y:XY(0)+14,'font-size':11,fill:'#2f6f4f','font-style':'italic'})).textContent='x';
+    xsvg.appendChild(mk('text',{x:XX(0)+6,y:XY(XVIEW.ymax)+2,'font-size':11,fill:'#2f6f4f','font-style':'italic'})).textContent='y';
+  }
+
+  // ---- draw one furniture piece; returns its <g> (draggable if `drag`) ----
+  function piece(k,{drag,active}={}){
+    const f=FURN[k];
+    const g=mk('g',drag?{class:'furn-shape'}:{});
+    g.dataset.key=k;
+    g.appendChild(mk('rect',{x:XX(f.x),y:XY(f.y+f.h),width:XX(f.x+f.w)-XX(f.x),
+      height:XY(f.y)-XY(f.y+f.h),rx:3,fill:f.color,'fill-opacity':active?0.85:0.45,
+      stroke:f.color,'stroke-width':active?2.5:1.5,class:'furn-rect'}));
+    const lbl=mk('text',{x:XX(f.x+f.w/2),y:XY(f.y+f.h/2)+3,'text-anchor':'middle',class:'furn-name'});
+    lbl.textContent=f.label;g.appendChild(lbl);
+    xsvg.appendChild(g);
+    if(drag)attachDrag(g,f);
+    return g;
+  }
+  // mark a reference corner with a labelled dot
+  function refDot(k,label,color){
+    const f=FURN[k];
+    xsvg.appendChild(mk('circle',{cx:XX(f.x),cy:XY(f.y),r:5,fill:color}));
+    if(label){const t=mk('text',{x:XX(f.x)+9,y:XY(f.y)-7,'font-size':11,'font-weight':700,fill:'#1b2a4a'});t.textContent=label;xsvg.appendChild(t);}
+  }
+  function ghostCorner(x,y,label,color){
+    xsvg.appendChild(mk('circle',{cx:XX(x),cy:XY(y),r:5,fill:'none',stroke:color,'stroke-width':2}));
+    if(label){const t=mk('text',{x:XX(x)-9,y:XY(y)-7,'text-anchor':'end','font-size':11,'font-weight':700,fill:color});t.textContent=label;xsvg.appendChild(t);}
+  }
+  function seg(a,b,stroke,dash,w){
+    const o={x1:XX(a.x),y1:XY(a.y),x2:XX(b.x),y2:XY(b.y),stroke,'stroke-width':w||2};
+    if(dash)o['stroke-dasharray']=dash;xsvg.appendChild(mk('line',o));
+  }
+
+  function attachDrag(g,f){
+    const p=xsvg.createSVGPoint();let drag=false;
+    function loc(e){const t=e.touches?e.touches[0]:e;p.x=t.clientX;p.y=t.clientY;
+      return p.matrixTransform(xsvg.getScreenCTM().inverse());}
+    function start(e){selA=g.dataset.key;drag=true;e.preventDefault();render();}
+    function move(e){if(!drag)return;e.preventDefault();const q=loc(e);
+      // drag by the reference corner (bottom-left)
+      let nx=Math.round(XUx(q.x)), ny=Math.round(XUy(q.y));
+      nx=Math.max(XVIEW.xmin,Math.min(XVIEW.xmax-f.w,nx));
+      ny=Math.max(XVIEW.ymin,Math.min(XVIEW.ymax-f.h,ny));
+      f.x=nx;f.y=ny;render();}
+    function end(){drag=false;}
+    g.addEventListener('mousedown',start);g.addEventListener('touchstart',start,{passive:false});
+    xsvg.addEventListener('mousemove',move);xsvg.addEventListener('touchmove',move,{passive:false});
+    window.addEventListener('mouseup',end);window.addEventListener('touchend',end);
+  }
+
+  // ---- per-tab controls: furniture pickers only where needed ----
+  function renderControls(){
+    const box=document.getElementById('xControls');box.innerHTML='';
+    const twoPoint=(tab==='dist'||tab==='mid'||tab==='refl');
+
+    const hint=document.createElement('p');hint.style.cssText='font-size:.85rem;color:#5a6b88;margin:0 0 10px';
+    hint.innerHTML = twoPoint
+      ? 'Pick two pieces, then drag either one. We measure between their marked corners.'
+      : 'Pick a piece, then drag it. We read its marked corner’s coordinates.';
+    box.appendChild(hint);
+
+    box.appendChild(furnPicker('A', selA, k=>{selA=k;render();}, 'Piece'));
+    if(twoPoint) box.appendChild(furnPicker('B', selB, k=>{selB=k;render();}, 'Second piece'));
+  }
+  function furnPicker(slot, current, onPick, title){
+    const wrap=document.createElement('div');wrap.style.marginBottom='12px';
+    const t=document.createElement('div');t.className='twopt-head';t.textContent=title;
+    wrap.appendChild(t);
+    const row=document.createElement('div');row.className='furn-btns';
+    Object.keys(FURN).forEach(k=>{
+      const b=document.createElement('button');b.className='furn-btn';
+      b.setAttribute('aria-pressed', k===current);
+      b.innerHTML=`<span class="swatch" style="background:${FURN[k].color}"></span>${FURN[k].label}`;
+      b.onclick=()=>onPick(k);
+      row.appendChild(b);
+    });
+    wrap.appendChild(row);
+    return wrap;
+  }
+
+  // ---- the one shared renderer, branching on tab ----
+  function render(){
+    const twoPoint=(tab==='dist'||tab==='mid'||tab==='refl');
+    grid(tab==='quad');
+
+    if(!twoPoint){
+      // draw all pieces faintly, the selected one active + its corner
+      Object.keys(FURN).forEach(k=>{ if(k!==selA) piece(k,{drag:true,active:false}); });
+      piece(selA,{drag:true,active:true});
+      const c=corner(selA);
+      if(tab==='coords'){
+        seg({x:0,y:c.y},c,'#1b6ca8','4 3',1.5);   // x leg
+        seg({x:c.x,y:0},c,'#c0392b','4 3',1.5);   // y leg
+      }
+      refDot(selA,'',(tab==='quad'?'#1b2a4a':'#1b2a4a'));
+    } else {
+      // ensure A and B differ; if same, nudge B to another piece
+      if(selB===selA){ selB=Object.keys(FURN).find(k=>k!==selA); renderControls(); }
+      // draw non-selected faint, then A and B active
+      Object.keys(FURN).forEach(k=>{ if(k!==selA&&k!==selB) piece(k,{drag:true,active:false}); });
+      piece(selA,{drag:true,active:true});
+      piece(selB,{drag:true,active:true});
+      const a=corner(selA), b=corner(selB);
+
+      if(tab==='dist'){
+        const cor={x:b.x,y:a.y};
+        seg(a,cor,'#1b6ca8','4 3',1.5);
+        seg(cor,b,'#c0392b','4 3',1.5);
+        seg(a,b,'#b8892b',null,2.5);
+      } else if(tab==='mid'){
+        seg(a,b,'#b8892b',null,2.5);
+      } else if(tab==='refl'){
+        const r={x:-a.x,y:a.y};
+        seg(a,r,'#8a97ad','3 3',1.2);
+        ghostCorner(r.x,r.y,"A'",'#2f7d4f');
+      }
+      refDot(selA,'A','#1b2a4a');
+      if(tab!=='refl') refDot(selB,'B','#1b2a4a');
+      if(tab==='mid'){
+        const m={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+        xsvg.appendChild(mk('circle',{cx:XX(m.x),cy:XY(m.y),r:5,fill:'#2f7d4f'}));
+        const t=mk('text',{x:XX(m.x)+9,y:XY(m.y)-7,'font-size':11,'font-weight':700,fill:'#2f7d4f'});t.textContent='M';xsvg.appendChild(t);
+      }
+    }
+    updateReadout();
+  }
+
+  function updateReadout(){
+    const R=document.getElementById('readoutX');
+    const E=document.getElementById('explainX');
+    const a=corner(selA), fa=FURN[selA];
+    if(tab==='coords'){
+      const q=quadOf(a.x,a.y);
+      R.innerHTML=
+        `<div class="row"><span class="k">${fa.label} corner</span><span class="v">(${a.x}, ${a.y})</span></div>`+
+        `<div class="row"><span class="k">x-coordinate</span><span class="v">${a.x}</span></div>`+
+        `<div class="row"><span class="k">y-coordinate</span><span class="v">${a.y}</span></div>`+
+        `<div class="row"><span class="k">size (w × h)</span><span class="v">${fa.w} × ${fa.h}</span></div>`;
+      let m;
+      if(a.x===0&&a.y===0)m=`The ${fa.label.toLowerCase()}’s corner is at the <b>origin (0, 0)</b>.`;
+      else if(a.x===0)m=`The corner sits on the <b>y-axis</b> (x = 0) — form (0, y).`;
+      else if(a.y===0)m=`The corner sits on the <b>x-axis</b> (y = 0) — the floor line, form (x, 0).`;
+      else m=`Blue leg = x-coordinate (distance from the y-axis); red leg = y-coordinate (distance from the x-axis).`;
+      E.innerHTML=m;
+    }
+    else if(tab==='quad'){
+      const q=quadOf(a.x,a.y);
+      R.innerHTML=
+        `<div class="row"><span class="k">${fa.label} corner</span><span class="v">(${a.x}, ${a.y})</span></div>`+
+        `<div class="row"><span class="k">signs</span><span class="v">${a.x===0||a.y===0?'—':`(${a.x>0?'+':'−'}, ${a.y>0?'+':'−'})`}</span></div>`+
+        `<div class="row"><span class="k">region</span><span class="v">${q?('Quadrant '+q):'on an axis'}</span></div>`;
+      let m;
+      if(!q)m="On an axis, the corner belongs to <b>no quadrant</b>. Drag it off both axes to enter one.";
+      else if(q==='I')m="Both coordinates positive → <b>Quadrant I</b> (+, +) — where the room sits.";
+      else if(q==='II')m="Negative x, positive y → <b>Quadrant II</b> (−, +).";
+      else if(q==='III')m="Both negative → <b>Quadrant III</b> (−, −).";
+      else m="Positive x, negative y → <b>Quadrant IV</b> (+, −).";
+      E.innerHTML=m;
+    }
+    else {
+      const b=corner(selB), fb=FURN[selB];
+      if(tab==='dist'){
+        const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy);
+        R.innerHTML=
+          `<div class="row"><span class="k">${fa.label} (A)</span><span class="v">(${a.x}, ${a.y})</span></div>`+
+          `<div class="row"><span class="k">${fb.label} (B)</span><span class="v">(${b.x}, ${b.y})</span></div>`+
+          `<div class="row"><span class="k">Δx, Δy</span><span class="v">${Math.abs(dx)}, ${Math.abs(dy)}</span></div>`+
+          `<div class="row"><span class="k">distance AB</span><span class="v">${d.toFixed(2)}</span></div>`;
+        E.innerHTML=`The legs form a right triangle, so AB = √(Δx² + Δy²) = √(${Math.abs(dx)}² + ${Math.abs(dy)}²) = <b>${d.toFixed(2)}</b> — the Baudhāyana–Pythagoras theorem.`;
+      } else if(tab==='mid'){
+        const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+        R.innerHTML=
+          `<div class="row"><span class="k">${fa.label} (A)</span><span class="v">(${a.x}, ${a.y})</span></div>`+
+          `<div class="row"><span class="k">${fb.label} (B)</span><span class="v">(${b.x}, ${b.y})</span></div>`+
+          `<div class="row"><span class="k">midpoint M</span><span class="v">(${mx}, ${my})</span></div>`;
+        E.innerHTML=`M is the average of the corners: ((${a.x}+${b.x})/2, (${a.y}+${b.y})/2) = <b>(${mx}, ${my})</b>.`;
+      } else if(tab==='refl'){
+        R.innerHTML=
+          `<div class="row"><span class="k">${fa.label} corner (A)</span><span class="v">(${a.x}, ${a.y})</span></div>`+
+          `<div class="row"><span class="k">A′ (in y-axis)</span><span class="v">(${-a.x}, ${a.y})</span></div>`;
+        E.innerHTML=`Reflecting A across the y-axis flips the sign of x only → <b>(${-a.x}, ${a.y})</b>. Distances from the axis are preserved.`;
+      }
+    }
+  }
+
+  function renderTabs(){
+    const strip=document.getElementById('xtabs');strip.innerHTML='';
+    TABS.forEach(t=>{
+      const b=document.createElement('button');b.className='xtab';
+      b.setAttribute('aria-selected', t.key===tab);b.textContent=t.label;
+      b.onclick=()=>setTab(t.key);
+      strip.appendChild(b);
+    });
+    const i=TABS.findIndex(t=>t.key===tab);
+    document.getElementById('xTitle').textContent=TABS[i].title;
+    document.getElementById('xModeLabel').textContent='Explore · '+TABS[i].title;
+    document.getElementById('xCount').textContent=`${i+1} / ${TABS.length}`;
+    document.getElementById('xPrev').disabled=(i===0);
+    document.getElementById('xNext').disabled=(i===TABS.length-1);
+  }
+  function setTab(key){ tab=key; renderTabs();renderControls();render(); }
+
+  window.startExplore=function(){
+    if(!started){
+      document.getElementById('xPrev').addEventListener('click',()=>{
+        const i=TABS.findIndex(t=>t.key===tab);if(i>0)setTab(TABS[i-1].key);
+      });
+      document.getElementById('xNext').addEventListener('click',()=>{
+        const i=TABS.findIndex(t=>t.key===tab);if(i<TABS.length-1)setTab(TABS[i+1].key);
+      });
+      started=true;
+    }
+    // reset furniture to their room positions each entry
+    FURN.bed.x=3;FURN.bed.y=5; FURN.wardrobe.x=3;FURN.wardrobe.y=0; FURN.door.x=7;FURN.door.y=0;
+    selA='bed';selB='wardrobe';tab='coords';
+    renderTabs();renderControls();render();
+  };
+})();
+
+// nav
+document.querySelectorAll('.mode-card').forEach(c=>c.onclick=()=>startMode(c.dataset.mode));
+$('quitBtn').onclick=()=>show('home');
+$('quitBtnX').onclick=()=>show('home');
+$('menuBtn').onclick=()=>{ if(mode==='challenge')showSetPicker(); else show('home'); };
+$('quitBtnS').onclick=()=>show('home');
+$('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
+</script>
+</body>
+</html>
