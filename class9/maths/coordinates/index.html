@@ -222,6 +222,34 @@
     .sidenav-eyebrow{display:none}
     .sidenav-list{flex-direction:row;flex-wrap:wrap}
   }
+
+  /* ===== deep dives ===== */
+  .set-card .tier{display:inline-block;margin-top:12px;font-family:ui-monospace,monospace;
+    font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+  .tier.easy{background:rgba(47,125,79,.14);color:var(--good)}
+  .tier.medium{background:rgba(184,137,43,.16);color:#8a6410}
+  .tier.hard{background:rgba(192,57,43,.12);color:var(--bad)}
+  .set-card .ncert{font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba;float:right}
+  .ddbtns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .ddbtn{font-family:ui-monospace,monospace;font-size:.74rem;letter-spacing:.02em;padding:8px 12px;
+    border:1.5px solid var(--ink);border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer;transition:.12s}
+  .ddbtn:hover{background:var(--ink);color:var(--paper)}
+  .ddbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .ddbtn.ghost{border-color:var(--line);color:#5a6b88}
+  .ddbtn.ghost:hover{border-color:var(--ink);background:var(--gold);color:#fff}
+  .sliderrow{display:flex;align-items:center;gap:10px;margin-bottom:12px;
+    font-family:ui-monospace,monospace;font-size:.78rem;color:#3a4a68}
+  .sliderrow label{white-space:nowrap}
+  .sliderrow input[type=range]{flex:1;accent-color:var(--ink)}
+  .sliderrow .val{min-width:52px;text-align:right;font-weight:700;color:var(--ink)}
+  .verdict{display:inline-block;font-family:ui-monospace,monospace;font-weight:700;
+    font-size:.8rem;padding:2px 10px;border-radius:20px}
+  .verdict.vin{background:rgba(27,108,168,.15);color:var(--pt2)}
+  .verdict.von{background:rgba(47,125,79,.16);color:var(--good)}
+  .verdict.vout{background:rgba(192,57,43,.12);color:var(--bad)}
+  .dd-node{cursor:pointer}
+  .dd-hint{font-size:.85rem;color:#5a6b88;margin:0 0 10px}
+  .dd-hint b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -255,6 +283,11 @@
         <p>Exemplar-level sets built as a ladder. Set 1 warms up, Set 3 pushes hard — including True/False with reasoning, just like the exam.</p>
         <span class="tag">3 sets · progressive</span>
       </button>
+      <button class="mode-card" data-mode="deepdive">
+        <h3>Deep Dives</h3>
+        <p>Six standalone interactives for the deeper end-of-chapter ideas: city grids, pixel screens, circles, collinearity, midpoints and the reverse-midpoint puzzle.</p>
+        <span class="tag">6 activities · explore the hard bits</span>
+      </button>
     </div>
   </section>
 
@@ -267,6 +300,35 @@
     </div>
     <p class="sub" style="margin:0 0 18px">Same concepts, rising difficulty. Each set has fresh numbers, so you can retake without repeating answers.</p>
     <div class="setgrid" id="setGrid"></div>
+  </section>
+
+  <!-- DEEP-DIVE PICKER -->
+  <section id="ddpick" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnDP">← Menu</button>
+      <div class="score">Deep dives · pick an activity</div>
+      <div></div>
+    </div>
+    <p class="sub" style="margin:0 0 18px">Standalone interactives for the deeper material the four tiers skim over. Each is self-contained — drag, tap, and read the live values. Ordered easy → hard.</p>
+    <div class="setgrid" id="ddGrid"></div>
+  </section>
+
+  <!-- DEEP-DIVE ACTIVITY -->
+  <section id="deepdive" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnD">← Deep dives</button>
+      <div class="score" id="ddLabel">Deep dive</div>
+      <div></div>
+    </div>
+    <div class="qstage">
+      <div class="plot-card"><svg id="svgD" viewBox="0 0 400 400"></svg></div>
+      <div class="qbox">
+        <h2 id="ddTitle" style="font-size:1.1rem;margin:0 0 12px"></h2>
+        <div id="ddControls"></div>
+        <div class="readout-x" id="ddReadout"></div>
+        <div class="explain-x" id="ddExplain"></div>
+      </div>
+    </div>
   </section>
 
   <!-- EXPLORE -->
@@ -552,6 +614,25 @@ const BANK = [
       seg(3,4,9,4,'helper leg-x');seg(9,4,9,6,'helper leg-y');},
     type:'num', answer:6.32, tol:0.06, unit:'units (≈)',
     explain:"Δx = 6, Δy = 2. √(36+4) = √40 ≈ <b>6.32 units</b>."
+  },
+  // 14 — hard: point on a circle (distance from origin) → C1-3.6
+  { level:'hard',
+    view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"A circular clock face is centred at the origin O with radius 5. A speck of dust sits at P(3, 4).",
+    ask:"Where is P relative to the circle of radius 5?",
+    draw:()=>{point(0,0,'O');point(3,4,'P');seg(0,0,3,4,'hyp');
+      seg(0,0,3,0,'helper leg-x');seg(3,0,3,4,'helper leg-y');},
+    type:'mc', options:["On the circle","Inside the circle","Outside the circle","At the centre"], answer:0,
+    explain:"|OP| = √(3² + 4²) = √25 = 5 = the radius, so P lies <b>on the circle</b>."
+  },
+  // 15 — medium: ordered pair (x,y) vs (y,x) → C1-1.4b
+  { level:'medium',
+    view:{xmin:-2,xmax:8,ymin:-2,ymax:8},
+    story:"Reiaan claims the points (3, 5) and (5, 3) mark the very same spot on his grid.",
+    ask:"Is (3, 5) the same point as (5, 3)?",
+    draw:()=>{point(3,5,'(3,5)');point(5,3,'(5,3)');},
+    type:'tf', answer:false,
+    explain:"<b>False.</b> Order matters — (3, 5) and (5, 3) are different points. They coincide only when x = y."
   }
 ];
 
@@ -644,7 +725,12 @@ const CH2 = [
     story:"Three markers: (1, 1), (2, −3) and (−1, −2).",
     ask:"Are these three collinear?",
     draw:()=>{point(1,1,'');point(2,-3,'');point(-1,-2,'');seg(1,1,2,-3);seg(2,-3,-1,-2);}, type:'tf', answer:false,
-    explain:"<b>False.</b> The slope from (1,1)→(2,−3) is −4, but (2,−3)→(−1,−2) is −⅓. Different slopes → not collinear." }
+    explain:"<b>False.</b> The slope from (1,1)→(2,−3) is −4, but (2,−3)→(−1,−2) is −⅓. Different slopes → not collinear." },
+  { level:'set 2 · find the endpoint', view:{xmin:-19,xmax:5,ymin:-6,ymax:8},
+    story:"M(−7, 1) is the exact midpoint of segment AB, and one end is A(3, −4).",
+    ask:"Drag the marker to the other endpoint B.",
+    draw:()=>{point(3,-4,'A');point(-7,1,'M');seg(3,-4,-7,1,'hyp');}, type:'coord', correct:[-17,6],
+    explain:"Working the midpoint backwards: B = 2M − A = (2·(−7)−3, 2·1−(−4)) = <b>(−17, 6)</b>." }
 ];
 
 const CH3 = [
@@ -691,24 +777,49 @@ const CH3 = [
     ask:"Drag the marker to the midpoint of AB.",
     draw:()=>{point(1,2,'A');point(5,6,'B');seg(1,2,5,6,'hyp');},
     type:'coord', correct:[3,4],
-    explain:"Midpoint = averages: ((1+5)/2, (2+6)/2) = <b>(3, 4)</b> — it sits exactly on AB." }
+    explain:"Midpoint = averages: ((1+5)/2, (2+6)/2) = <b>(3, 4)</b> — it sits exactly on AB." },
+  { level:'set 3 · on the circle?', view:{xmin:-9,xmax:9,ymin:-9,ymax:9},
+    story:"A(1, −8), B(−4, 7) and C(−7, −4) all lie on a circle centred at the origin (radius √65 ≈ 8.06).",
+    ask:"Where does E(0, 9) lie relative to that circle?",
+    draw:()=>{point(0,0,'O');point(1,-8,'A');point(-4,7,'B');point(-7,-4,'C');point(0,9,'E');seg(0,0,0,9,'hyp');},
+    type:'mc', options:["Inside","On the circle","Outside","At the centre"], answer:2,
+    explain:"|OE| = √(0² + 9²) = 9 = √81, which is greater than the radius √65 ≈ 8.06 → E is <b>outside</b>." },
+  { level:'set 3 · reverse midpoints', view:{xmin:-4,xmax:9,ymin:-4,ymax:8},
+    story:"The midpoints of the sides of triangle ABC are D(5, 1) = mid AB, E(6, 5) = mid BC and F(0, 3) = mid CA.",
+    ask:"Drag the marker to vertex A.",
+    draw:()=>{point(5,1,'D');point(6,5,'E');point(0,3,'F');}, type:'coord', correct:[-1,-1],
+    explain:"Vertex from midpoints: A = D + F − E = (5+0−6, 1+3−5) = <b>(−1, −1)</b>. (Then B = D+E−F = (11,3), C = E+F−D = (1,7).)" }
 ];
 
 const CHALLENGE={set1:CH1, set2:CH2, set3:CH3};
 
+// NCERT coverage-map IDs per activity — the data-ncert hook for later book↔activity linking.
+// Index-aligned with each bank; attached onto the question objects so loadQuestion can tag the DOM.
+const NCERT={
+  BANK:['C1-1.3c','C1-1.3b','C1-1.3b','C1-1.4a','C1-2.1','C1-1.4c','C1-2.2','C1-2.3','C1-3.5','C1-3.10','C1-1.4a','C1-2.1','C1-2.2','C1-3.6','C1-1.4b'],
+  set1:['C1-1.4a','C1-1.3b','C1-1.3a','C1-1.3b','C1-1.4c','C1-1.3b','C1-3.3'],
+  set2:['C1-1.4a','C1-1.3b','C1-1.3c','C1-1.4a','C1-1.4c','C1-1.3a','C1-3.3','C1-3.5'],
+  set3:['C1-1.4b','C1-1.4a','C1-3.10','C1-1.3b','C1-3.10','C1-3.10','C1-3.5','C1-3.6','C1-3.7']
+};
+BANK.forEach((q,i)=>q.ncert=NCERT.BANK[i]);
+CH1.forEach((q,i)=>q.ncert=NCERT.set1[i]);
+CH2.forEach((q,i)=>q.ncert=NCERT.set2[i]);
+CH3.forEach((q,i)=>q.ncert=NCERT.set3[i]);
+
 // ===================== ENGINE =====================
-const PRACTICE_SET=[0,1,2,3,4,5,6,7,8,9];
-const QUIZ_SET=[0,3,4,6,9]; // easy → hard spread
+const PRACTICE_SET=[0,1,2,3,4,5,6,7,8,9,14,13]; // idx14=ordered-pair (C1-1.4b), idx13=circle (C1-3.6)
+const QUIZ_SET=[3,2,6,7,13]; // quadrant → axis → distance → reflection → circle(C1-3.6)
 let mode=null, order=[], idx=0, correctCount=0, marks=[];
 let activeBank=BANK, currentSet=null;
 
 const $=id=>document.getElementById(id);
 
-function show(sec){['home','explore','setpick','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));}
+function show(sec){['home','explore','setpick','ddpick','deepdive','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));}
 
 function startMode(m){
   if(m==='explore'){show('explore');startExplore();return;}
   if(m==='challenge'){showSetPicker();return;}
+  if(m==='deepdive'){window.showDDPicker();return;}
   mode=m; idx=0; correctCount=0;
   activeBank=BANK;
   order = m==='practice'?PRACTICE_SET.map(i=>BANK[i]):QUIZ_SET.map(i=>BANK[i]);
@@ -766,6 +877,7 @@ function loadQuestion(){
   answered=false;
   const q=order[idx];
   VIEW=q.view;
+  $('session').dataset.ncert=q.ncert||'';
   clearSvg();drawGrid();q.draw();
   $('qbadge').textContent=`Question ${idx+1} · ${q.level}`;
   $('qstory').innerHTML=q.story;
@@ -943,11 +1055,11 @@ function finishSession(){
   let started=false;
 
   const TABS=[
-    {key:'coords',  title:'Coordinates', label:'Coordinates'},
-    {key:'quad',    title:'Quadrants',   label:'Quadrants'},
-    {key:'dist',    title:'Distance',    label:'Distance'},
-    {key:'mid',     title:'Midpoint',    label:'Midpoint'},
-    {key:'refl',    title:'Reflection',  label:'Reflection'}
+    {key:'coords',  title:'Coordinates', label:'Coordinates', ncert:'C1-1.3a'},
+    {key:'quad',    title:'Quadrants',   label:'Quadrants',   ncert:'C1-1.4a'},
+    {key:'dist',    title:'Distance',    label:'Distance',    ncert:'C1-2.2'},
+    {key:'mid',     title:'Midpoint',    label:'Midpoint',    ncert:'C1-3.5'},
+    {key:'refl',    title:'Reflection',  label:'Reflection',  ncert:'C1-2.3'}
   ];
   let tab='coords';
 
@@ -1185,7 +1297,7 @@ function finishSession(){
     document.getElementById('xPrev').disabled=(i===0);
     document.getElementById('xNext').disabled=(i===TABS.length-1);
   }
-  function setTab(key){ tab=key; renderTabs();renderControls();render(); }
+  function setTab(key){ tab=key; document.getElementById('explore').dataset.ncert=(TABS.find(t=>t.key===key)||{}).ncert||''; renderTabs();renderControls();render(); }
 
   window.startExplore=function(){
     if(!started){
@@ -1200,6 +1312,7 @@ function finishSession(){
     // reset furniture to their room positions each entry
     FURN.bed.x=3;FURN.bed.y=5; FURN.wardrobe.x=3;FURN.wardrobe.y=0; FURN.door.x=7;FURN.door.y=0;
     selA='bed';selB='wardrobe';tab='coords';
+    document.getElementById('explore').dataset.ncert=TABS[0].ncert;
     renderTabs();renderControls();render();
   };
 })();
@@ -1208,9 +1321,428 @@ function finishSession(){
 document.querySelectorAll('.mode-card').forEach(c=>c.onclick=()=>startMode(c.dataset.mode));
 $('quitBtn').onclick=()=>show('home');
 $('quitBtnX').onclick=()=>show('home');
+$('quitBtnDP').onclick=()=>show('home');
+$('quitBtnD').onclick=()=>window.showDDPicker();
 $('menuBtn').onclick=()=>{ if(mode==='challenge')showSetPicker(); else show('home'); };
 $('quitBtnS').onclick=()=>show('home');
 $('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
+</script>
+<script>
+// ===================== DEEP DIVES =====================
+// Six standalone interactives for the [gap] end-of-chapter material. All six share
+// ONE grid/axis helper (Grid) and ONE pointer pipeline (Drag) rather than each
+// re-implementing axis rendering — per BUILD-SPEC's "factor a shared helper".
+(function(){
+  const NSx="http://www.w3.org/2000/svg";
+  const E=(t,a)=>{const e=document.createElementNS(NSx,t);for(const k in a)if(a[k]!=null)e.setAttribute(k,a[k]);return e;};
+  const SIZE=400,PAD=30,SPAN=SIZE-2*PAD;
+
+  // ---- shared grid helper: one axis/grid renderer for every deep-dive ----
+  function Grid(svg,view){
+    const sx=x=>PAD+(x-view.xmin)/(view.xmax-view.xmin)*SPAN;
+    const sy=y=>SIZE-PAD-(y-view.ymin)/(view.ymax-view.ymin)*SPAN;
+    const ux=px=>view.xmin+(px-PAD)/SPAN*(view.xmax-view.xmin);
+    const uy=py=>view.ymin+(SIZE-PAD-py)/SPAN*(view.ymax-view.ymin);
+    const scaleX=SPAN/(view.xmax-view.xmin);
+    const add=n=>{svg.appendChild(n);return n;};
+    const clear=()=>{while(svg.firstChild)svg.removeChild(svg.firstChild);};
+    function grid({step=1,tickStep=step*2}={}){
+      const gx0=Math.ceil(view.xmin/step)*step, gx1=Math.floor(view.xmax/step)*step;
+      for(let x=gx0;x<=gx1+1e-9;x+=step)
+        add(E('line',{x1:sx(x),y1:sy(view.ymin),x2:sx(x),y2:sy(view.ymax),stroke:'#d3dae6','stroke-width':1}));
+      const gy0=Math.ceil(view.ymin/step)*step, gy1=Math.floor(view.ymax/step)*step;
+      for(let y=gy0;y<=gy1+1e-9;y+=step)
+        add(E('line',{x1:sx(view.xmin),y1:sy(y),x2:sx(view.xmax),y2:sy(y),stroke:'#d3dae6','stroke-width':1}));
+      add(E('line',{x1:sx(view.xmin),y1:sy(0),x2:sx(view.xmax),y2:sy(0),stroke:'#2f6f4f','stroke-width':2.5}));
+      add(E('line',{x1:sx(0),y1:sy(view.ymin),x2:sx(0),y2:sy(view.ymax),stroke:'#2f6f4f','stroke-width':2.5}));
+      for(let x=Math.ceil(view.xmin/tickStep)*tickStep;x<=view.xmax+1e-9;x+=tickStep){
+        if(Math.abs(x)<1e-9)continue;
+        const t=E('text',{x:sx(x),y:sy(0)+12,'text-anchor':'middle','font-size':8.5,fill:'#5a6b88','font-family':'ui-monospace,monospace'});t.textContent=+x.toFixed(2);add(t);}
+      for(let y=Math.ceil(view.ymin/tickStep)*tickStep;y<=view.ymax+1e-9;y+=tickStep){
+        if(Math.abs(y)<1e-9)continue;
+        const t=E('text',{x:sx(0)-5,y:sy(y)+3,'text-anchor':'end','font-size':8.5,fill:'#5a6b88','font-family':'ui-monospace,monospace'});t.textContent=+y.toFixed(2);add(t);}
+      add(E('text',{x:sx(view.xmax)-2,y:sy(0)+14,'font-size':11,fill:'#2f6f4f','font-style':'italic'})).textContent='x';
+      add(E('text',{x:sx(0)+6,y:sy(view.ymax)+2,'font-size':11,fill:'#2f6f4f','font-style':'italic'})).textContent='y';
+    }
+    const dot=(x,y,{r=6,fill='#c0392b',stroke,sw}={})=>add(E('circle',{cx:sx(x),cy:sy(y),r,fill,stroke,'stroke-width':sw}));
+    function label(x,y,text,{dx=9,dy=-8,fill='#1b2a4a',anchor='start',size=11,weight=700}={}){
+      const t=E('text',{x:sx(x)+dx,y:sy(y)+dy,'text-anchor':anchor,'font-size':size,'font-weight':weight,fill});t.textContent=text;return add(t);}
+    const line=(x1,y1,x2,y2,{stroke='#1b2a4a',w=2,dash}={})=>add(E('line',{x1:sx(x1),y1:sy(y1),x2:sx(x2),y2:sy(y2),stroke,'stroke-width':w,'stroke-dasharray':dash}));
+    const ring=(cx,cy,rU,{stroke='#b8892b',w=2,dash,fill='none'}={})=>add(E('circle',{cx:sx(cx),cy:sy(cy),r:rU*scaleX,fill,stroke,'stroke-width':w,'stroke-dasharray':dash}));
+    const rectPx=(x,y,w,h,attrs)=>add(E('rect',Object.assign({x:sx(x),y:sy(y+h),width:sx(x+w)-sx(x),height:sy(y)-sy(y+h)},attrs)));
+    return {svg,view,sx,sy,ux,uy,scaleX,E,add,clear,grid,dot,label,line,ring,rectPx};
+  }
+
+  // ---- shared drag manager: one pointer pipeline per grid; handles register on it ----
+  function Drag(g){
+    const svg=g.svg,pt=svg.createSVGPoint();let active=null;
+    const loc=e=>{const t=e.touches?e.touches[0]:e;pt.x=t.clientX;pt.y=t.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse());};
+    function mv(e){if(!active)return;e.preventDefault();const p=loc(e);
+      const s=active.snap||1;
+      let X=Math.round(g.ux(p.x)/s)*s, Y=Math.round(g.uy(p.y)/s)*s;
+      X=Math.max(g.view.xmin,Math.min(g.view.xmax,X));
+      Y=Math.max(g.view.ymin,Math.min(g.view.ymax,Y));
+      active.onMove(+X.toFixed(4),+Y.toFixed(4));}
+    function up(){active=null;}
+    svg.addEventListener('mousemove',mv);svg.addEventListener('touchmove',mv,{passive:false});
+    window.addEventListener('mouseup',up);window.addEventListener('touchend',up);
+    return {handle(x,y,{label,fill='#c0392b',snap=1,onMove}){
+      const gel=g.E('g',{class:'dd-node'});
+      gel.appendChild(g.E('circle',{cx:g.sx(x),cy:g.sy(y),r:6.5,fill}));
+      gel.appendChild(g.E('circle',{cx:g.sx(x),cy:g.sy(y),r:14,fill:'transparent'})); // ≥44px effective tap target
+      if(label){const t=g.E('text',{x:g.sx(x)+9,y:g.sy(y)-8,'font-size':11,'font-weight':700,fill:'#1b2a4a'});t.textContent=label;gel.appendChild(t);}
+      g.svg.appendChild(gel);
+      const down=e=>{active={onMove,snap};e.preventDefault();};
+      gel.addEventListener('mousedown',down);gel.addEventListener('touchstart',down,{passive:false});
+      return gel;}};
+  }
+
+  // ---- small shared control: labelled slider ----
+  function slider(labelText,min,max,val,onInput,fmt){
+    fmt=fmt||(v=>v);
+    const wrap=document.createElement('div');wrap.className='sliderrow';
+    const lab=document.createElement('label');lab.textContent=labelText;
+    const inp=document.createElement('input');inp.type='range';inp.min=min;inp.max=max;inp.step=1;inp.value=val;
+    const v=document.createElement('span');v.className='val';v.textContent=fmt(val);
+    inp.oninput=()=>{v.textContent=fmt(+inp.value);onInput(+inp.value);};
+    wrap.appendChild(lab);wrap.appendChild(inp);wrap.appendChild(v);
+    return wrap;
+  }
+  const mid=(p,q)=>({x:(p.x+q.x)/2,y:(p.y+q.y)/2});
+  const near=(p,q,t)=>Math.abs(p.x-q.x)<(t||0.001)&&Math.abs(p.y-q.y)<(t||0.001);
+  const ddbtn=(txt,fn,ghost)=>{const b=document.createElement('button');b.className='ddbtn'+(ghost?' ghost':'');b.textContent=txt;b.onclick=fn;return b;};
+  const btnRow=(...b)=>{const r=document.createElement('div');r.className='ddbtns';b.forEach(x=>r.appendChild(x));return r;};
+  const hintP=html=>{const p=document.createElement('p');p.className='dd-hint';p.innerHTML=html;return p;};
+
+  // ================= C1-3.8 · city street grid =================
+  function cityGrid(root){
+    const N=6, view={xmin:-0.7,xmax:N+0.7,ymin:-0.7,ymax:N+0.7};
+    const g=Grid(root.svg,view);
+    let sel=null, hi=[];
+    function render(){
+      g.clear();g.grid({step:1,tickStep:1});
+      for(let i=0;i<=N;i++)for(let j=0;j<=N;j++){
+        const gel=g.E('g',{class:'dd-node'});
+        const isSel=sel&&sel[0]===i&&sel[1]===j, h=hi.find(p=>p.x===i&&p.y===j);
+        const color=h?h.color:(isSel?'#1b2a4a':'#9aa6ba');
+        gel.appendChild(g.E('circle',{cx:g.sx(i),cy:g.sy(j),r:(isSel||h)?5.5:3.2,fill:color}));
+        gel.appendChild(g.E('circle',{cx:g.sx(i),cy:g.sy(j),r:14,fill:'transparent'}));
+        gel.addEventListener('click',()=>{sel=[i,j];hi=[];render();});
+        root.svg.appendChild(gel);
+      }
+      if(sel)g.label(sel[0],sel[1],`(${sel[0]}, ${sel[1]})`,{fill:'#1b2a4a'});
+      hi.forEach(h=>g.label(h.x,h.y,`(${h.x}, ${h.y})`,{fill:h.color}));
+      readout();
+    }
+    function readout(){
+      root.readout.innerHTML=sel
+        ?`<div class="row"><span class="k">selected crossing</span><span class="v">(${sel[0]}, ${sel[1]})</span></div>`+
+         `<div class="row"><span class="k">N–S street</span><span class="v">${sel[0]}</span></div>`+
+         `<div class="row"><span class="k">E–W street</span><span class="v">${sel[1]}</span></div>`
+        :`<div class="row"><span class="k">selected crossing</span><span class="v">— tap a node —</span></div>`;
+    }
+    root.controls.appendChild(hintP('A city’s streets form a grid. Each crossing has one name <b>(N–S, E–W)</b>. Tap any crossing to read it.'));
+    root.controls.appendChild(btnRow(
+      ddbtn('How many crossings are (4,3)?',()=>{sel=[4,3];hi=[{x:4,y:3,color:'#2f7d4f'}];render();
+        root.explain.innerHTML='<b>Exactly one.</b> A name fixes <i>both</i> streets — the 4th N–S road and 3rd E–W road meet at a single crossing, never several.';},true),
+      ddbtn('Why is (4,3) ≠ (3,4)?',()=>{sel=null;hi=[{x:4,y:3,color:'#1b6ca8'},{x:3,y:4,color:'#c0392b'}];render();
+        root.explain.innerHTML='<b>Order matters.</b> (4,3) is the blue crossing, (3,4) the red one — swapping the numbers lands you at a different corner. An ordered pair names one unique point.';},true)
+    ));
+    root.explain.innerHTML='Tap two crossings like (2,5) and (5,2) to feel how the order changes where you land.';
+    render();
+  }
+
+  // ================= C1-3.9 · pixel screen =================
+  function pixelScreen(root){
+    const W=800,H=600, view={xmin:-40,xmax:840,ymin:-40,ymax:840};
+    const g=Grid(root.svg,view), drag=Drag(g);
+    const circ={A:{x:100,y:150,r:80,color:'#1b6ca8'},B:{x:250,y:230,r:100,color:'#c0392b'}};
+    const offEdges=c=>{const e=[];if(c.x-c.r<0)e.push('left');if(c.x+c.r>W)e.push('right');if(c.y-c.r<0)e.push('bottom');if(c.y+c.r>H)e.push('top');return e;};
+    function render(){
+      g.clear();g.grid({step:100,tickStep:200});
+      g.rectPx(0,0,W,H,{fill:'rgba(27,42,74,.04)',stroke:'#1b2a4a','stroke-width':2});
+      g.label(0,0,'O',{dx:-13,dy:14});
+      ['A','B'].forEach(k=>{const c=circ[k];g.ring(c.x,c.y,c.r,{stroke:c.color,w:2.5,fill:c.color+'22'});});
+      g.line(circ.A.x,circ.A.y,circ.B.x,circ.B.y,{stroke:'#b8892b',w:1.5,dash:'4 3'});
+      ['A','B'].forEach(k=>{const c=circ[k];drag.handle(c.x,c.y,{label:k,fill:c.color,snap:10,onMove:(x,y)=>{c.x=Math.max(0,Math.min(W,x));c.y=Math.max(0,Math.min(H,y));render();}});});
+      readout();
+    }
+    function readout(){
+      const A=circ.A,B=circ.B,eA=offEdges(A),eB=offEdges(B),d=Math.hypot(B.x-A.x,B.y-A.y),hit=d<A.r+B.r;
+      root.readout.innerHTML=
+       `<div class="row"><span class="k">Circle A</span><span class="v">(${A.x}, ${A.y}) r=${A.r}</span></div>`+
+       `<div class="row"><span class="k">A fits?</span><span class="v">${eA.length?'off: '+eA.join(', '):'fully on'}</span></div>`+
+       `<div class="row"><span class="k">Circle B</span><span class="v">(${B.x}, ${B.y}) r=${B.r}</span></div>`+
+       `<div class="row"><span class="k">B fits?</span><span class="v">${eB.length?'off: '+eB.join(', '):'fully on'}</span></div>`+
+       `<div class="row"><span class="k">distance A→B</span><span class="v">${d.toFixed(1)}</span></div>`+
+       `<div class="row"><span class="k">rA + rB</span><span class="v">${A.r+B.r}</span></div>`+
+       `<div class="row"><span class="k">overlap?</span><span class="v"><span class="verdict ${hit?'von':'vout'}">${hit?'intersect':'apart'}</span></span></div>`;
+      root.explain.innerHTML=`Circles intersect when the centre-distance &lt; rA+rB → ${d.toFixed(1)} ${hit?'&lt;':'≥'} ${A.r+B.r}, so <b>${hit?'they intersect':'they stay apart'}</b>. Off-screen check uses true pixels (x∈[0,800], y∈[0,600]), not the scaled drawing.`;
+    }
+    function buildControls(){
+      root.controls.innerHTML='';
+      root.controls.appendChild(hintP('Origin is bottom-left, like a real screen. Drag each circle’s centre; set radii below.'));
+      root.controls.appendChild(slider('radius A',0,300,circ.A.r,v=>{circ.A.r=v;render();}));
+      root.controls.appendChild(slider('radius B',0,300,circ.B.r,v=>{circ.B.r=v;render();}));
+      root.controls.appendChild(btnRow(ddbtn('Snap to book values',()=>{circ.A={x:100,y:150,r:80,color:'#1b6ca8'};circ.B={x:250,y:230,r:100,color:'#c0392b'};buildControls();render();},true)));
+    }
+    buildControls();render();
+  }
+
+  // ================= C1-3.6 · points on a circle / distance from origin =================
+  function circleDistance(root){
+    const view={xmin:-10,xmax:10,ymin:-10,ymax:10};
+    const g=Grid(root.svg,view), drag=Drag(g), TOL=0.05;
+    let r=5, P={x:3,y:4}, fixed=[];
+    const verdict=(x,y)=>{const d=Math.hypot(x,y);return Math.abs(d-r)<=TOL?['on','von']:(d<r?['inside','vin']:['outside','vout']);};
+    function render(){
+      g.clear();g.grid({step:1,tickStep:2});
+      g.ring(0,0,r,{stroke:'#b8892b',w:2,dash:'5 4'});
+      g.dot(0,0,{r:4,fill:'#1b2a4a'});g.label(0,0,'O',{dx:-13,dy:14});
+      fixed.forEach(f=>{const c=verdict(f.x,f.y)[1],col=c==='von'?'#2f7d4f':c==='vin'?'#1b6ca8':'#c0392b';
+        g.dot(f.x,f.y,{r:5,fill:col});g.label(f.x,f.y,f.label,{fill:col});});
+      g.line(0,0,P.x,P.y,{stroke:'#5a6b88',w:1.2,dash:'3 3'});
+      drag.handle(P.x,P.y,{label:'P',fill:'#c0392b',onMove:(x,y)=>{P={x,y};render();}});
+      readout();
+    }
+    function readout(){
+      const d=Math.hypot(P.x,P.y),[v,cls]=verdict(P.x,P.y);
+      root.readout.innerHTML=
+       `<div class="row"><span class="k">P</span><span class="v">(${P.x}, ${P.y})</span></div>`+
+       `<div class="row"><span class="k">|OP| = √(x²+y²)</span><span class="v">${d.toFixed(3)}</span></div>`+
+       `<div class="row"><span class="k">radius r</span><span class="v">${r.toFixed(2)}</span></div>`+
+       `<div class="row"><span class="k">verdict</span><span class="v"><span class="verdict ${cls}">${v}</span></span></div>`;
+      root.explain.innerHTML=`A point is <b>on</b> the circle when its distance from O equals r, <b>inside</b> when less, <b>outside</b> when more. Here |OP| = ${d.toFixed(3)} vs r = ${r.toFixed(2)}.`;
+    }
+    function buildControls(){
+      root.controls.innerHTML='';
+      root.controls.appendChild(hintP('Drag <b>P</b> and set the radius. Distance from the origin is a point’s "radius" — equal distances trace a circle.'));
+      root.controls.appendChild(slider('radius',1,95,Math.round(r*10),v=>{r=v/10;render();},v=>(v/10).toFixed(1)));
+      root.controls.appendChild(btnRow(
+        ddbtn('Load book problem',()=>{r=Math.sqrt(65);P={x:-5,y:6};
+          fixed=[{x:1,y:-8,label:'A'},{x:-4,y:7,label:'B'},{x:-7,y:-4,label:'C'},{x:0,y:9,label:'E'}];
+          buildControls();render();
+          root.explain.innerHTML='Book Q12: A, B, C all sit on the circle of radius √65 ≈ 8.06 (all <b>on</b>). P is at D(−5,6) — <b>inside</b> (√61 ≈ 7.81); E(0,9) is <b>outside</b> (9).';},true),
+        ddbtn('Reset',()=>{r=5;P={x:3,y:4};fixed=[];buildControls();render();},true)
+      ));
+    }
+    buildControls();render();
+  }
+
+  // ================= C1-3.3 · collinearity without plotting =================
+  function collinearity(root){
+    const view={xmin:-8,xmax:8,ymin:-13,ymax:9};
+    const g=Grid(root.svg,view), drag=Drag(g);
+    let A={x:-3,y:-4},B={x:0,y:0},C={x:6,y:8};
+    const cross=()=>(B.x-A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y);
+    const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;};
+    function slopeStr(p,q){const dx=q.x-p.x,dy=q.y-p.y;if(dx===0)return dy===0?'—':'undefined (vertical)';
+      const gg=gcd(dy,dx);let n=dy/gg,d=dx/gg;if(d<0){n=-n;d=-d;}return d===1?`${n}`:`${n}/${d}`;}
+    function render(){
+      g.clear();g.grid({step:1,tickStep:2});
+      const col=cross()===0;
+      g.line(A.x,A.y,C.x,C.y,{stroke:col?'#2f7d4f':'#9aa6ba',w:col?2.5:1.5,dash:col?null:'5 4'});
+      if(!col){g.line(A.x,A.y,B.x,B.y,{stroke:'#c0392b',w:1.5});g.line(B.x,B.y,C.x,C.y,{stroke:'#1b6ca8',w:1.5});}
+      drag.handle(A.x,A.y,{label:'A',fill:'#c0392b',onMove:(x,y)=>{A={x,y};render();}});
+      drag.handle(B.x,B.y,{label:'B',fill:'#b8892b',onMove:(x,y)=>{B={x,y};render();}});
+      drag.handle(C.x,C.y,{label:'C',fill:'#1b6ca8',onMove:(x,y)=>{C={x,y};render();}});
+      readout();
+    }
+    function readout(){
+      const X=cross(),col=X===0,area=Math.abs(X)/2;
+      root.readout.innerHTML=
+       `<div class="row"><span class="k">A, B, C</span><span class="v">(${A.x},${A.y}) (${B.x},${B.y}) (${C.x},${C.y})</span></div>`+
+       `<div class="row"><span class="k">slope AB</span><span class="v">${slopeStr(A,B)}</span></div>`+
+       `<div class="row"><span class="k">slope BC</span><span class="v">${slopeStr(B,C)}</span></div>`+
+       `<div class="row"><span class="k">triangle area</span><span class="v">${area}</span></div>`+
+       `<div class="row"><span class="k">verdict</span><span class="v"><span class="verdict ${col?'von':'vout'}">${col?'collinear':'not collinear'}</span></span></div>`;
+      root.explain.innerHTML=col
+        ?'Equal slopes (and zero area) → the three points lie on <b>one straight line</b>. Test: (xB−xA)(yC−yA) − (xC−xA)(yB−yA) = 0.'
+        :'Slopes differ, so triangle ABC has non-zero area → <b>not collinear</b>. The cross-product test never divides, so vertical lines don’t crash it.';
+    }
+    root.controls.appendChild(hintP('Drag A, B, C. Collinear when slope AB = slope BC — equivalently when the triangle’s area is 0. No plotting needed.'));
+    root.controls.appendChild(btnRow(
+      ddbtn('Load collinear set',()=>{A={x:-3,y:-4};B={x:0,y:0};C={x:6,y:8};render();},true),
+      ddbtn('Load tricky set',()=>{A={x:-5,y:-1};B={x:-2,y:-5};C={x:4,y:-12};render();},true)
+    ));
+    render();
+  }
+
+  // ================= C1-3.5 · midpoint & trisection (discovery) =================
+  function midpoint(root){
+    const view={xmin:-9,xmax:9,ymin:-9,ymax:9};
+    const g=Grid(root.svg,view), drag=Drag(g);
+    let sub='discover', explainHTML='';
+    let S={x:-4,y:-2},T={x:6,y:4},M={x:0,y:0},tries=0,revealed=false;
+    let rS={x:3,y:-4},rM={x:-1,y:1},rT={x:0,y:0};
+    const trip=()=>({P:{x:S.x+(T.x-S.x)/3,y:S.y+(T.y-S.y)/3},Q:{x:S.x+2*(T.x-S.x)/3,y:S.y+2*(T.y-S.y)/3}});
+    function render(){
+      g.clear();g.grid({step:1,tickStep:2});
+      if(sub==='discover'){
+        if(revealed)M=mid(S,T);
+        g.line(S.x,S.y,T.x,T.y,{stroke:'#b8892b',w:2.5});
+        drag.handle(S.x,S.y,{label:'S',fill:'#1b6ca8',snap:0.5,onMove:(x,y)=>{S={x,y};render();}});
+        drag.handle(T.x,T.y,{label:'T',fill:'#1b6ca8',snap:0.5,onMove:(x,y)=>{T={x,y};render();}});
+        if(revealed){g.dot(M.x,M.y,{r:6,fill:'#c0392b'});g.label(M.x,M.y,'M',{fill:'#c0392b'});}
+        else drag.handle(M.x,M.y,{label:'M',fill:'#c0392b',snap:0.5,onMove:(x,y)=>{M={x,y};render();}});
+      } else if(sub==='trisection'){
+        const {P,Q}=trip();
+        g.line(S.x,S.y,T.x,T.y,{stroke:'#b8892b',w:2.5});
+        g.dot(P.x,P.y,{r:5,fill:'#2f7d4f'});g.label(P.x,P.y,'P',{fill:'#2f7d4f'});
+        g.dot(Q.x,Q.y,{r:5,fill:'#2f7d4f'});g.label(Q.x,Q.y,'Q',{fill:'#2f7d4f'});
+        drag.handle(S.x,S.y,{label:'S',fill:'#1b6ca8',onMove:(x,y)=>{S={x,y};render();}});
+        drag.handle(T.x,T.y,{label:'T',fill:'#1b6ca8',onMove:(x,y)=>{T={x,y};render();}});
+      } else {
+        g.line(rS.x,rS.y,rM.x,rM.y,{stroke:'#b8892b',w:2.5,dash:'4 3'});
+        g.dot(rS.x,rS.y,{r:5,fill:'#1b6ca8'});g.label(rS.x,rS.y,'A',{fill:'#1b6ca8'});
+        g.dot(rM.x,rM.y,{r:5,fill:'#c0392b'});g.label(rM.x,rM.y,'M',{fill:'#c0392b'});
+        drag.handle(rT.x,rT.y,{label:'B?',fill:'#2f7d4f',onMove:(x,y)=>{rT={x,y};render();}});
+      }
+      readout();
+    }
+    function readout(){
+      if(sub==='discover'){
+        const ex=mid(S,T);
+        root.readout.innerHTML=
+         `<div class="row"><span class="k">S</span><span class="v">(${S.x}, ${S.y})</span></div>`+
+         `<div class="row"><span class="k">your M</span><span class="v">(${M.x}, ${M.y})</span></div>`+
+         `<div class="row"><span class="k">T</span><span class="v">(${T.x}, ${T.y})</span></div>`+
+         (revealed?`<div class="row"><span class="k">avg of S,T</span><span class="v">(${ex.x}, ${ex.y})</span></div>`:'');
+        root.explain.innerHTML=revealed
+          ?`Midpoint = average of the ends: ((${S.x}+${T.x})/2, (${S.y}+${T.y})/2) = <b>(${ex.x}, ${ex.y})</b>. Drag S or T — M stays exactly halfway.`
+          :explainHTML;
+      } else if(sub==='trisection'){
+        const {P,Q}=trip();
+        root.readout.innerHTML=
+         `<div class="row"><span class="k">S</span><span class="v">(${S.x}, ${S.y})</span></div>`+
+         `<div class="row"><span class="k">P (⅓ from S)</span><span class="v">(${+P.x.toFixed(2)}, ${+P.y.toFixed(2)})</span></div>`+
+         `<div class="row"><span class="k">Q (⅔ from S)</span><span class="v">(${+Q.x.toFixed(2)}, ${+Q.y.toFixed(2)})</span></div>`+
+         `<div class="row"><span class="k">T</span><span class="v">(${T.x}, ${T.y})</span></div>`;
+        root.explain.innerHTML='P and Q split S–T into three equal parts: P = S + (T−S)/3, Q = S + 2(T−S)/3.';
+      } else {
+        const c={x:2*rM.x-rS.x,y:2*rM.y-rS.y};
+        root.readout.innerHTML=
+         `<div class="row"><span class="k">A (known end)</span><span class="v">(${rS.x}, ${rS.y})</span></div>`+
+         `<div class="row"><span class="k">M (midpoint)</span><span class="v">(${rM.x}, ${rM.y})</span></div>`+
+         `<div class="row"><span class="k">your B</span><span class="v">(${rT.x}, ${rT.y})</span></div>`;
+        root.explain.innerHTML=explainHTML||'If M is the midpoint of A and B, then B = 2M − A. Drag B? there and check.';
+      }
+    }
+    function checkDiscover(){
+      const ex=mid(S,T);
+      if(near(M,ex)){revealed=true;render();}
+      else{tries++;
+        if(tries>=3){revealed=true;M=ex;render();}
+        else{explainHTML=`Not exactly halfway yet (try ${tries}/3). Make M the same distance from S as from T.`;readout();}
+      }
+    }
+    function checkReverse(){
+      const c={x:2*rM.x-rS.x,y:2*rM.y-rS.y};
+      explainHTML=near(rT,c)
+        ?`Yes! B = 2M − A = (2·${rM.x}−${rS.x}, 2·${rM.y}−${rS.y}) = <b>(${c.x}, ${c.y})</b>. Doubling the midpoint and subtracting the known end recovers the other.`
+        :`Not there yet. The other end satisfies B = 2M − A. Keep dragging B?.`;
+      readout();
+    }
+    function buildControls(){
+      root.controls.innerHTML='';
+      const seg=document.createElement('div');seg.className='ddbtns';
+      [['discover','Discover'],['trisection','Trisection'],['reverse','Reverse']].forEach(([k,lab])=>{
+        const b=document.createElement('button');b.className='ddbtn';b.setAttribute('aria-pressed',k===sub);b.textContent=lab;
+        b.onclick=()=>{sub=k;revealed=false;tries=0;explainHTML='';buildControls();render();};
+        seg.appendChild(b);
+      });
+      root.controls.appendChild(seg);
+      if(sub==='discover'){
+        root.controls.appendChild(hintP('Drag <b>M</b> to where you think the exact middle of S–T sits, then check. Look at the numbers before the rule appears.'));
+        explainHTML=explainHTML||'Place M by feel first — this activity wants you to <i>notice</i> the pattern, not be told it.';
+        root.controls.appendChild(btnRow(ddbtn('Check my M',checkDiscover,true)));
+      } else if(sub==='trisection'){
+        root.controls.appendChild(hintP('P and Q cut S–T into thirds. Drag S or T and watch them follow.'));
+      } else {
+        root.controls.appendChild(hintP('Only midpoint <b>M</b> and one end <b>A</b> are known. Drag <b>B?</b> to the other end, then check.'));
+        root.controls.appendChild(btnRow(ddbtn('Check B',checkReverse,true)));
+      }
+    }
+    buildControls();render();
+  }
+
+  // ================= C1-3.7 · vertices from midpoints (capstone) =================
+  function vertices(root){
+    const view={xmin:-4,xmax:13,ymin:-4,ymax:9};
+    const g=Grid(root.svg,view), drag=Drag(g);
+    const D={x:5,y:1},Ee={x:6,y:5},F={x:0,y:3}; // D=mid AB, E=mid BC, F=mid CA
+    let A={x:2,y:0},B={x:9,y:0},C={x:2,y:6}, explainHTML='';
+    function render(){
+      g.clear();g.grid({step:1,tickStep:2});
+      g.line(A.x,A.y,B.x,B.y,{stroke:'#9aa6ba',w:1.5});
+      g.line(B.x,B.y,C.x,C.y,{stroke:'#9aa6ba',w:1.5});
+      g.line(C.x,C.y,A.x,A.y,{stroke:'#9aa6ba',w:1.5});
+      [['D',D,mid(A,B)],['E',Ee,mid(B,C)],['F',F,mid(C,A)]].forEach(([lab,tgt,got])=>{
+        const ok=near(tgt,got);
+        g.dot(tgt.x,tgt.y,{r:8,fill:'none',stroke:ok?'#2f7d4f':'#c0392b',sw:2});
+        g.label(tgt.x,tgt.y,lab,{fill:ok?'#2f7d4f':'#c0392b',dx:-10,anchor:'end'});
+        g.dot(got.x,got.y,{r:3.5,fill:ok?'#2f7d4f':'#b8892b'});
+      });
+      drag.handle(A.x,A.y,{label:'A',fill:'#c0392b',onMove:(x,y)=>{A={x,y};render();}});
+      drag.handle(B.x,B.y,{label:'B',fill:'#1b6ca8',onMove:(x,y)=>{B={x,y};render();}});
+      drag.handle(C.x,C.y,{label:'C',fill:'#b8892b',onMove:(x,y)=>{C={x,y};render();}});
+      readout();
+    }
+    function readout(){
+      const mAB=mid(A,B),mBC=mid(B,C),mCA=mid(C,A);
+      const ok=near(mAB,D)&&near(mBC,Ee)&&near(mCA,F);
+      root.readout.innerHTML=
+       `<div class="row"><span class="k">mid AB → D(${D.x},${D.y})</span><span class="v">(${mAB.x},${mAB.y}) ${near(mAB,D)?'✓':'✗'}</span></div>`+
+       `<div class="row"><span class="k">mid BC → E(${Ee.x},${Ee.y})</span><span class="v">(${mBC.x},${mBC.y}) ${near(mBC,Ee)?'✓':'✗'}</span></div>`+
+       `<div class="row"><span class="k">mid CA → F(${F.x},${F.y})</span><span class="v">(${mCA.x},${mCA.y}) ${near(mCA,F)?'✓':'✗'}</span></div>`+
+       `<div class="row"><span class="k">solved?</span><span class="v"><span class="verdict ${ok?'von':'vout'}">${ok?'all match!':'not yet'}</span></span></div>`;
+      root.explain.innerHTML=ok
+        ?`Solved! A(${A.x},${A.y}), B(${B.x},${B.y}), C(${C.x},${C.y}) — every side’s midpoint lands on D, E, F.`
+        :(explainHTML||'Position A, B, C so the midpoints of the sides (small dots) land inside the rings D, E, F.');
+    }
+    root.controls.appendChild(hintP('Midpoints <b>D</b>=mid AB, <b>E</b>=mid BC, <b>F</b>=mid CA are fixed. Drag vertices A, B, C until each side’s midpoint lands on its ring.'));
+    root.controls.appendChild(btnRow(
+      ddbtn('Hint',()=>{explainHTML='The midpoint of two vertices is their average, so mid(A,B)=D means A+B = 2D. Three such equations pin down A, B, C — can you work backwards?';readout();},true),
+      ddbtn('Solve it for me',()=>{A={x:D.x+F.x-Ee.x,y:D.y+F.y-Ee.y};B={x:D.x+Ee.x-F.x,y:D.y+Ee.y-F.y};C={x:Ee.x+F.x-D.x,y:Ee.y+F.y-D.y};render();
+        root.explain.innerHTML=`A = D+F−E = (${A.x},${A.y}); B = D+E−F = (${B.x},${B.y}); C = E+F−D = (${C.x},${C.y}). Adding A+B=2D, B+C=2E, C+A=2F and solving gives each vertex.`;},true),
+      ddbtn('Reset',()=>{A={x:2,y:0};B={x:9,y:0};C={x:2,y:6};explainHTML='';render();},true)
+    ));
+    render();
+  }
+
+  // ---- registry, picker, launcher ----
+  const DEEPDIVES=[
+    {id:'city-grid',   ncert:'C1-3.8',tier:'easy',  title:'City street grid',     blurb:'Every crossing has one name (N–S, E–W). Tap to name it; see why (4,3) ≠ (3,4).',build:cityGrid},
+    {id:'pixel-screen',ncert:'C1-3.9',tier:'easy',  title:'Pixel screen',         blurb:'An 800×600 screen, origin bottom-left. Do the circles fit? Do they overlap?',build:pixelScreen},
+    {id:'circle',      ncert:'C1-3.6',tier:'medium',title:'Points on a circle',   blurb:'Distance from the origin is a point’s radius. Classify inside / on / outside.',build:circleDistance},
+    {id:'collinearity',ncert:'C1-3.3',tier:'medium',title:'Collinearity',         blurb:'Are three points on one line? Discover the test that needs no plotting.',build:collinearity},
+    {id:'midpoint',    ncert:'C1-3.5',tier:'hard',  title:'Midpoint & trisection',blurb:'Place the midpoint by feel, then discover it’s just the average. Plus trisection.',build:midpoint},
+    {id:'vertices',    ncert:'C1-3.7',tier:'hard',  title:'Vertices from midpoints',blurb:'The reverse puzzle: given three midpoints, rebuild the triangle’s corners.',build:vertices}
+  ];
+  window.DEEPDIVE_IDS=DEEPDIVES.map(d=>d.ncert); // for coverage bookkeeping
+  window.showDDPicker=function(){
+    const grid=document.getElementById('ddGrid');grid.innerHTML='';
+    DEEPDIVES.forEach(dd=>{
+      const c=document.createElement('button');c.className='set-card';
+      c.innerHTML=`<div class="num">Deep dive <span class="ncert">${dd.ncert}</span></div><h3>${dd.title}</h3><p>${dd.blurb}</p><span class="tier ${dd.tier}">${dd.tier}</span>`;
+      c.onclick=()=>openDeepDive(dd);
+      grid.appendChild(c);
+    });
+    show('ddpick');
+  };
+  function openDeepDive(dd){
+    const old=document.getElementById('svgD');
+    const fresh=old.cloneNode(false);old.parentNode.replaceChild(fresh,old); // drop old listeners
+    document.getElementById('ddTitle').textContent=dd.title;
+    document.getElementById('ddLabel').textContent='Deep dive · '+dd.title;
+    document.getElementById('deepdive').dataset.ncert=dd.ncert;
+    const controls=document.getElementById('ddControls');controls.innerHTML='';
+    const readout=document.getElementById('ddReadout');readout.innerHTML='';
+    const explain=document.getElementById('ddExplain');explain.innerHTML='';
+    show('deepdive');
+    dd.build({svg:fresh,controls,readout,explain});
+  }
+})();
 </script>
 <script>
 fetch('../chapters_nav.html').then(r=>r.text()).then(html=>{
