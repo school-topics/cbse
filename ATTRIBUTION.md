@@ -15,8 +15,16 @@ India.
 - The question wording, worked examples, exercise values and figures are © NCERT.
   **All rights in the original text and figures remain with NCERT.**
 
-The PDF and quoted questions are reproduced here **solely for non-commercial,
-educational use**. If you are the rights holder and would prefer the file be
+**The World of Numbers (`class9/maths/number-systems/`)**
+- Source: **_Ganita Manjari_, Grade 9 — Chapter 3, "The World of Numbers"**, NCERT.
+- The bundled PDF `class9/maths/number-systems/iemh103.pdf` is NCERT's original
+  chapter file, freely available from NCERT at <https://ncert.nic.in>
+  (textbook PDF: <https://ncert.nic.in/textbook/pdf/iemh103.pdf>).
+- The question wording, worked examples, exercise values and figures are © NCERT.
+  **All rights in the original text and figures remain with NCERT.**
+
+The PDFs and quoted questions are reproduced here **solely for non-commercial,
+educational use**. If you are the rights holder and would prefer a file be
 removed, please open an issue.
 
 ## Other content

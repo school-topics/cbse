@@ -213,16 +213,164 @@
     .sidenav-eyebrow{display:none}
     .sidenav-list{flex-direction:row;flex-wrap:wrap}
   }
+
+  /* ===== deep dives ===== */
+  .set-card .tier{display:inline-block;margin-top:12px;font-family:ui-monospace,monospace;
+    font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+  .tier.easy{background:rgba(47,125,79,.14);color:var(--good)}
+  .tier.medium{background:rgba(184,137,43,.16);color:#8a6410}
+  .tier.hard{background:rgba(192,57,43,.12);color:var(--bad)}
+  .set-card .ncert{font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba;float:right}
+  .ddbtns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .ddbtn{font-family:ui-monospace,monospace;font-size:.74rem;letter-spacing:.02em;padding:8px 12px;
+    border:1.5px solid var(--ink);border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer;transition:.12s}
+  .ddbtn:hover{background:var(--ink);color:var(--paper)}
+  .ddbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .ddbtn.ghost{border-color:var(--line);color:#5a6b88}
+  .ddbtn.ghost:hover{border-color:var(--ink);background:var(--gold);color:#fff}
+  .sliderrow{display:flex;align-items:center;gap:10px;margin-bottom:12px;
+    font-family:ui-monospace,monospace;font-size:.78rem;color:#3a4a68}
+  .sliderrow label{white-space:nowrap}
+  .sliderrow input[type=range]{flex:1;accent-color:var(--ink)}
+  .sliderrow .val{min-width:56px;text-align:right;font-weight:700;color:var(--ink)}
+  .verdict{display:inline-block;font-family:ui-monospace,monospace;font-weight:700;
+    font-size:.8rem;padding:2px 10px;border-radius:20px}
+  .verdict.vok{background:rgba(47,125,79,.16);color:var(--good)}
+  .verdict.vno{background:rgba(192,57,43,.12);color:var(--bad)}
+  .verdict.virr{background:rgba(122,62,168,.14);color:var(--irr)}
+  .dd-hint{font-size:.85rem;color:#5a6b88;margin:0 0 10px}
+  .dd-hint b{color:var(--ink)}
+  .dd-digits{font-family:ui-monospace,monospace;font-size:1.4rem;letter-spacing:.12em;font-weight:700;
+    color:var(--ink);text-align:center;margin:6px 0}
+  .dd-digits .hot{color:var(--gold)}
+
+  /* ===== section-first shell ===== */
+  .set-card.cumulative{border-style:dashed;background:linear-gradient(0deg,rgba(184,137,43,.06),rgba(184,137,43,.06)),var(--card)}
+  .set-card .book{font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba;float:right;letter-spacing:.04em}
+  .set-card .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+  .chip{font-family:ui-monospace,monospace;font-size:.6rem;letter-spacing:.03em;text-transform:uppercase;
+    padding:3px 8px;border-radius:20px;background:rgba(27,42,74,.06);color:#5a6b88}
+  .sect-intro{color:#3a4a68;max-width:62ch;margin:0 0 18px;font-size:1rem}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:680px){.tiles{grid-template-columns:1fr}}
+  .tile{display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;
+    background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px;transition:.14s;color:var(--ink)}
+  .tile:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 16px rgba(27,42,74,.1)}
+  .tile .t-ico{font-size:1.2rem;line-height:1}
+  .tile h4{margin:2px 0 0;font-size:1.05rem;font-weight:600}
+  .tile p{margin:0;font-size:.82rem;color:#3a4a68}
+  .tile .t-meta{margin-top:6px;font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba}
+  .tile.learn{border-color:var(--gold);background:rgba(184,137,43,.05)}
+  .tile.learn:hover{border-color:var(--gold)}
+  .learn-card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:0 10px 10px 0;padding:16px 18px;margin-bottom:12px}
+  .learn-card h4{margin:0 0 6px;font-size:1.08rem}
+  .learn-card p{margin:0 0 12px;color:#3a4a68;font-size:.95rem;line-height:1.55}
+  .learn-card .try{font-family:ui-monospace,monospace;font-size:.74rem;padding:8px 14px;border:none;
+    border-radius:8px;background:var(--ink);color:var(--paper);cursor:pointer}
+  .learn-card .try:hover{background:var(--gold)}
+  /* textbook questions + PDF */
+  #tbGrid .set-card,#cumGrid .set-card{width:100%}
+  .tq-group{margin:24px 0 4px;font-family:ui-monospace,monospace;font-size:.72rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--gold);border-bottom:1.5px solid var(--line);padding-bottom:6px}
+  .tq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+  .tq-src{font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba;margin-bottom:4px;letter-spacing:.03em}
+  .tq-q{font-size:.98rem;margin-bottom:10px;line-height:1.5}
+  .tq-btns{display:flex;flex-wrap:wrap;gap:8px}
+  .tq-btn{font-family:ui-monospace,monospace;font-size:.72rem;padding:7px 12px;border:1.5px solid var(--line);
+    border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer;transition:.12s}
+  .tq-btn:hover{border-color:var(--ink)}
+  .tq-btn[aria-expanded="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tq-reveal{margin-top:10px;padding:11px 14px;border-radius:8px;font-size:.9rem;line-height:1.55;display:none}
+  .tq-reveal.show{display:block}
+  .tq-reveal.hint{background:rgba(184,137,43,.10);border-left:3px solid var(--gold)}
+  .tq-reveal.approach{background:rgba(27,108,168,.08);border-left:3px solid var(--rat)}
+  .tq-reveal.answer{background:rgba(47,125,79,.10);border-left:3px solid var(--good)}
+  .tq-reveal b{color:var(--ink)}
+  .wrap.wide{max-width:1320px}
+  .tb-layout{display:flex;gap:18px;align-items:flex-start}
+  .tb-questions{flex:1 1 440px;max-width:560px;min-width:0}
+  .tb-pdf{flex:2 1 0;min-width:0;position:sticky;top:12px}
+  .tb-pdf iframe{width:100%;height:82vh;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .tb-credit{font-family:ui-monospace,monospace;font-size:.6rem;color:#9aa6ba;margin-top:6px;text-align:center}
+  .tb-pdf.hide-pdf{display:none}
+  .tb-layout:has(.tb-pdf.hide-pdf) .tb-questions{max-width:none}
+  @media(max-width:900px){
+    .tb-layout{flex-direction:column}
+    .tb-pdf{width:100%;position:static}
+    .tb-pdf iframe{height:65vh}
+    .tb-questions{max-width:none}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <!-- HOME -->
-  <section id="home">
+  <!-- SECTION HOME (landing) -->
+  <section id="secthome">
     <p class="eyebrow">Grade 9 · The World of Numbers</p>
     <h1>Brahmagupta's Ledger</h1>
     <div class="rule"></div>
-    <p class="sub">Travel the number line the way mathematicians built it — from counting pebbles to zero, debts and fortunes, fractions, and the restless irrationals like √2 and π. Drag a point, watch which family it belongs to, and put Brahmagupta's rules to the test.</p>
+    <p class="sub">Travel the number line the way mathematicians built it — from counting pebbles to zero, debts and fortunes, fractions, and the restless irrationals. Work through it section by section: each has an interactive explainer, then its own practice, quiz, challenge and deep dives.</p>
+    <div style="height:20px"></div>
+    <div class="setgrid" id="sectGrid"></div>
+    <div style="height:16px"></div>
+    <div id="tbGrid" style="margin-bottom:12px"></div>
+    <div id="cumGrid"></div>
+  </section>
+
+  <!-- SECTION DETAIL -->
+  <section id="sectview" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnSect">← Sections</button>
+      <div class="score" id="sectLabel"></div>
+      <div></div>
+    </div>
+    <h2 id="sectTitle" style="font-size:1.5rem;margin:0 0 6px"></h2>
+    <p class="sect-intro" id="sectIntro"></p>
+    <div class="tiles" id="tileGrid"></div>
+  </section>
+
+  <!-- LEARN (guided concept explainer) -->
+  <section id="learn" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnLearn">← Back</button>
+      <div class="score" id="learnLabel">Learn</div>
+      <div></div>
+    </div>
+    <h2 id="learnTitle" style="font-size:1.4rem;margin:0 0 6px"></h2>
+    <p class="sect-intro" id="learnIntro"></p>
+    <div id="learnBody"></div>
+  </section>
+
+  <!-- TEXTBOOK QUESTIONS -->
+  <section id="textbook" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnTB">← Sections</button>
+      <div class="score">Textbook questions</div>
+      <button class="backlink" id="tbPdfToggle">📄 Hide book</button>
+    </div>
+    <h2 style="font-size:1.5rem;margin:0 0 6px">Every question in the chapter</h2>
+    <p class="sect-intro">All the worked examples, exercises, Think-and-Reflect prompts and end-of-chapter problems from the book. Reveal a <b>Hint</b>, check your <b>Approach</b> before you compute, then the full <b>Answer &amp; reasoning</b> — each on click. Scroll the book alongside for any figure a question refers to.</p>
+    <div class="tb-layout" id="tbLayout">
+      <div class="tb-questions"><div id="tbBody"></div></div>
+      <aside class="tb-pdf" id="tbPdf">
+        <iframe id="tbPdfFrame" title="Ganita Manjari — Grade 9, Chapter 3"></iframe>
+        <div class="tb-credit">Source: <i>Ganita Manjari</i>, Grade 9, Ch. 3 · © NCERT (ncert.nic.in) — reproduced for non-commercial educational use</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- HOME (whole-chapter cumulative menu) -->
+  <section id="home" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnHome">← Sections</button>
+      <div class="score">Whole-chapter test · all topics mixed</div>
+      <div></div>
+    </div>
+    <p class="eyebrow">Grade 9 · The World of Numbers</p>
+    <h1>Whole-chapter test</h1>
+    <div class="rule"></div>
+    <p class="sub">The full chapter, all topics mixed together — for cumulative, exam-style practice across everything from counting to the irrationals.</p>
     <div style="height:22px"></div>
     <div class="modes">
       <button class="mode-card" data-mode="explore">
@@ -245,6 +393,11 @@
         <p>Exemplar-level sets built as a ladder — classification, rationalising denominators, laws of exponents, and True/False with reasoning, just like the exam.</p>
         <span class="tag">3 sets · progressive</span>
       </button>
+      <button class="mode-card" data-mode="deepdive">
+        <h3>Deep Dives</h3>
+        <p>Standalone interactives for the deeper ideas: placing p/q on the line, density, cyclic 142857, the terminating/repeating predictor, decimal↔fraction, the √n spiral, and debt/fortune jumps.</p>
+        <span class="tag">7 activities · explore the hard bits</span>
+      </button>
     </div>
   </section>
 
@@ -257,6 +410,35 @@
     </div>
     <p class="sub" style="margin:0 0 18px">Same skills, rising difficulty. Each set uses fresh numbers, so you can retake it to build mastery rather than memory.</p>
     <div class="setgrid" id="setGrid"></div>
+  </section>
+
+  <!-- DEEP-DIVE PICKER -->
+  <section id="ddpick" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnDP">← Menu</button>
+      <div class="score">Deep dives · pick an activity</div>
+      <div></div>
+    </div>
+    <p class="sub" style="margin:0 0 18px">Standalone interactives for the deeper number-line ideas. Each is self-contained — drag, tap, and read the live values. Ordered easy → hard.</p>
+    <div class="setgrid" id="ddGrid"></div>
+  </section>
+
+  <!-- DEEP-DIVE ACTIVITY -->
+  <section id="deepdive" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnD">← Deep dives</button>
+      <div class="score" id="ddLabel">Deep dive</div>
+      <div></div>
+    </div>
+    <div class="qstage">
+      <div class="plot-card"><svg id="svgD" viewBox="0 0 440 260"></svg></div>
+      <div class="qbox">
+        <h2 id="ddTitle" style="font-size:1.1rem;margin:0 0 12px"></h2>
+        <div id="ddControls"></div>
+        <div class="readout-x" id="ddReadout"></div>
+        <div class="explain-x" id="ddExplain"></div>
+      </div>
+    </div>
   </section>
 
   <!-- EXPLORE -->
@@ -349,7 +531,7 @@
     </div>
   </section>
 
-  <footer>Built on <span>Ganita Manjari · Grade 9 · The World of Numbers</span></footer>
+  <footer>Built on <span>Ganita Manjari · Grade 9 · The World of Numbers</span> · © NCERT, used for educational purposes</footer>
 </div>
 <script>
 // ===================== NUMBER-LINE ENGINE =====================
@@ -580,7 +762,86 @@ const BANK = [
     ask:"Is this number rational?",
     draw:()=>{ point(1.01,'≈1.01','irr'); },
     type:'tf', answer:false,
-    explain:"<b>No.</b> The digits never settle into a fixed repeating block, so it is non-terminating and non-repeating → <b>irrational</b>." }
+    explain:"<b>No.</b> The digits never settle into a fixed repeating block, so it is non-terminating and non-repeating → <b>irrational</b>." },
+
+  // ---- extra authentic book items (mined from Ganita Manjari Ch.3) ----
+  // 14 — equivalent fractions (Ex 3.3 Q1) → C3-4.1
+  { level:'easy', view:{min:0,max:1}, den:6,
+    story:"Equivalent fractions name the same point: dividing numerator and denominator by a common factor does not move it.",
+    ask:"Is 2/3 equal to 4/6?",
+    draw:()=>{ point(2/3,'2/3','rat'); },
+    type:'tf', answer:true,
+    explain:"<b>Yes.</b> 4/6 = 2/3 (divide both by 2) — the same point. 2/3 is its lowest-terms name." },
+  // 15 — sum of rationals (Ex 3.3 Q2) → C3-4.2
+  { level:'medium', view:{min:0,max:1}, den:10,
+    story:"To add rationals, first give them a common denominator.",
+    ask:"Compute 2/5 + 3/10 (enter as a decimal).",
+    draw:()=>{ point(0.7,'?','rat'); },
+    type:'num', answer:0.7, tol:0.001, unit:'',
+    explain:"2/5 = 4/10, so 4/10 + 3/10 = 7/10 = <b>0.7</b>." },
+  // 16 — absolute value (Example 1) → C3-4.3
+  { level:'easy', view:{min:-3,max:3}, den:3,
+    story:"The absolute value |x| is the distance of x from 0 — always non-negative.",
+    ask:"What is |−5/3| (as a decimal, 3 dp)?",
+    draw:()=>{ point(-5/3,'−5/3','neg'); point(5/3,'5/3','rat'); span(-5/3,0); },
+    type:'num', answer:1.667, tol:0.01, unit:'',
+    explain:"|−5/3| = 5/3 ≈ <b>1.667</b>. Distance from 0 ignores the sign." },
+  // 17 — density between 2/5 and 3/5 (EOC Q6) → C3-4.4
+  { level:'medium', view:{min:0,max:1}, den:10,
+    story:"Between any two rationals lies another — for instance, their average.",
+    ask:"Drag the point to a rational strictly between 2/5 and 3/5. (Snap = tenths.)",
+    draw:()=>{ point(0.4,'2/5','rat'); point(0.6,'3/5','rat'); },
+    type:'coord', correct:0.5, den:10,
+    explain:"The average (2/5 + 3/5)/2 = 1/2 = <b>0.5</b> lands exactly between them." },
+  // 18 — 3/8 terminating decimal (Example 2) → C3-6.2
+  { level:'easy', view:{min:0,max:1}, den:8,
+    story:"Dividing 3 by 8 gives a decimal that stops.",
+    ask:"What is 3/8 as a decimal?",
+    draw:()=>{ point(0.375,'3/8','rat'); },
+    type:'num', answer:0.375, tol:0.001, unit:'',
+    explain:"3/8 = <b>0.375</b>. Since 8 = 2³ (only 2s), the decimal terminates." },
+  // 19 — classify √81 (Ex 3.5 Q3) → C3-6.4
+  { level:'medium', view:{min:0,max:12}, den:1,
+    story:"A square root can still be rational — if the number under it is a perfect square.",
+    ask:"Is √81 rational or irrational?",
+    draw:()=>{ point(9,'√81=9','rat'); },
+    type:'mc', options:["Rational","Irrational"], answer:0,
+    explain:"√81 = <b>9</b>, a whole number — rational. Only non-perfect-squares (like √2, √12) give irrationals." },
+  // 20 — prime pattern on the Ishango bone (Ex 3.1 Q2) → C3-1.4
+  { level:'easy', view:{min:9,max:24}, den:1, labelStep:2,
+    story:"On the Ishango bone, one column of tallies reads 11, 13, 17, 19.",
+    ask:"What do these numbers have in common?",
+    draw:()=>{ point(11,'11','nat'); point(13,'13','nat'); point(17,'17','nat'); point(19,'19','nat'); },
+    type:'mc', options:["Odd multiples of 3","The primes between 10 and 20","Perfect squares","Fibonacci numbers"], answer:1,
+    explain:"They are the <b>primes between 10 and 20</b>. The next three primes are 23, 29, 31." },
+  // 21 — integer division sign rule (Ex 3.2 Q3) → C3-3.2
+  { level:'medium', view:{min:-8,max:4}, den:1,
+    story:"Division follows the same sign rule as multiplication: a debt shared into positive parts stays a debt.",
+    ask:"Compute (−20) ÷ 4.",
+    draw:()=>{ point(-5,'?','neg'); },
+    type:'num', answer:-5, tol:0.001, unit:'',
+    explain:"(−20) ÷ 4 = <b>−5</b>. A debt of 20 split into 4 equal shares is a debt of 5 each." },
+  // 22 — represent 3/4 on the line (§3.4.1) → C3-4.3
+  { level:'medium', view:{min:0,max:2}, den:4,
+    story:"To place 3/4, divide the unit into 4 equal parts and step across 3.",
+    ask:"Drag the point to 3/4. (Snap = quarters.)",
+    draw:()=>{ ghost(0,'0'); ghost(1,'1'); },
+    type:'coord', correct:0.75, den:4,
+    explain:"Cut [0, 1] into 4 equal parts; 3 parts across is <b>3/4 = 0.75</b>." },
+  // 23 — 0.35 to a fraction (Example 4) → C3-6.1
+  { level:'medium', view:{min:0,max:1}, den:20,
+    story:"A terminating decimal is straightforward to write as p/q.",
+    ask:"0.35 equals which fraction in lowest terms?",
+    draw:()=>{ point(0.35,'0.35','rat'); },
+    type:'mc', options:["35/10","7/20","3/5","7/25"], answer:1,
+    explain:"0.35 = 35/100 = <b>7/20</b> (divide top and bottom by 5)." },
+  // 24 — a + b = 0 ⇒ sign of ab (EOC Q9) → C3-4.2
+  { level:'hard', view:{min:-5,max:5}, den:1,
+    story:"Let a and b be non-zero rationals with a + b = 0, so b = −a.",
+    ask:"Is the product ab positive or negative?",
+    draw:()=>{ point(3,'a','rat'); point(-3,'b=−a','neg'); },
+    type:'mc', options:["Positive","Negative","Zero","Cannot tell"], answer:1,
+    explain:"b = −a, so ab = −a². A square is positive and a ≠ 0, so −a² is <b>negative</b>." }
 ];
 // ===================== CHALLENGE BANKS (exemplar-based, progressive) =====================
 // Set 1 warm-up → Set 3 exam pitch. Same skill spine, fresh numbers each set.
@@ -752,6 +1013,19 @@ const CH3 = [
 ];
 
 const CHALLENGE={set1:CH1, set2:CH2, set3:CH3};
+
+// NCERT coverage-map IDs per activity — index-aligned; attached so loadQuestion can tag the DOM.
+const NCERT={
+  BANK:['C3-1.4','C3-3.1','C3-3.2','C3-3.4','C3-4.4','C3-4.3','C3-6.2','C3-5.1','C3-5.3','C3-6.6','C3-3.2','C3-6.1','C3-6.4',
+        'C3-4.1','C3-4.2','C3-4.3','C3-4.4','C3-6.2','C3-6.4','C3-1.4','C3-3.2','C3-4.3','C3-6.1','C3-4.2'],
+  set1:['C3-4.1','C3-4.4','C3-5.1','C3-5.1','C3-5.1','C3-4.4','C3-6.4'],
+  set2:['C3-5.1','C3-5.1','C3-6.6','C3-5.1','C3-4.4','C3-6.1','C3-5.1'],
+  set3:['C3-5.1','C3-5.1','C3-5.1','C3-5.1','C3-5.1','C3-5.1','C3-5.1']
+};
+BANK.forEach((q,i)=>q.ncert=NCERT.BANK[i]);
+CH1.forEach((q,i)=>q.ncert=NCERT.set1[i]);
+CH2.forEach((q,i)=>q.ncert=NCERT.set2[i]);
+CH3.forEach((q,i)=>q.ncert=NCERT.set3[i]);
 // ===================== ENGINE (drives every bank) =====================
 const PRACTICE_SET=[0,1,2,3,4,5,6,7,8,9];
 const QUIZ_SET=[1,4,6,7,9]; // spread: integer sets, density, distance, √2, 0.999
@@ -759,16 +1033,35 @@ let mode=null, order=[], idx=0, correctCount=0, marks=[];
 let activeBank=BANK, currentSet=null;
 
 const $=id=>document.getElementById(id);
-function show(sec){['home','explore','setpick','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));}
+function show(sec){
+  ['secthome','sectview','learn','textbook','home','explore','setpick','ddpick','deepdive','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));
+  const wrap=document.querySelector('.wrap'); if(wrap)wrap.classList.toggle('wide',sec==='textbook');
+}
+
+// where "back / menu" returns to, and how to replay the last scored run (set per launch)
+let backTarget='home', lastRun=null, runResultTitle=null;
+
+// Generic launcher: run an arbitrary list of question objects (used by per-section tiles).
+function runSet(items, m, opts){
+  opts=opts||{};
+  if(window.stopExplore)window.stopExplore();
+  mode=m; activeBank=items; order=items.slice(); marks=order.map(()=>null); idx=0; correctCount=0;
+  backTarget=opts.back||'sectview'; runResultTitle=opts.title||null;
+  lastRun=()=>runSet(items,m,opts);
+  show('session'); renderPips(); loadQuestion();
+}
 
 function startMode(m){
   if(window.stopExplore)window.stopExplore();
+  backTarget='home'; runResultTitle=null;
   if(m==='explore'){show('explore');startExplore();return;}
   if(m==='challenge'){showSetPicker();return;}
+  if(m==='deepdive'){window.showDDPicker(null);return;}
   mode=m; idx=0; correctCount=0;
   activeBank=BANK;
   order = m==='practice'?PRACTICE_SET.map(i=>BANK[i]):QUIZ_SET.map(i=>BANK[i]);
   marks = order.map(()=>null);
+  lastRun=()=>startMode(m);
   show('session'); renderPips(); loadQuestion();
 }
 
@@ -797,6 +1090,7 @@ function startChallenge(setKey){
   activeBank=CHALLENGE[setKey];
   order=activeBank.map(q=>q);
   marks=order.map(()=>null);
+  backTarget='setpick'; runResultTitle=null; lastRun=()=>startChallenge(setKey);
   show('session'); renderPips(); loadQuestion();
 }
 
@@ -818,6 +1112,7 @@ function loadQuestion(){
   answered=false;
   const q=order[idx];
   VIEW=q.view;
+  $('session').dataset.ncert=q.ncert||'';
   clearSvg();
   drawLine(q.labelStep);
   if(q.den && q.den>1) subTicks(q.den);
@@ -957,6 +1252,7 @@ function finishSession(){
       : pct>=0.6?"Solid grasp — review the ones you missed and go again."
       : "Good start. Try Practice mode to build up, then come back.";
   }
+  if(runResultTitle)$('resTitle').textContent=runResultTitle;
   const stars=Math.round((correctCount/order.length)*5);
   $('resStars').textContent='★★★★★'.slice(0,stars)+'☆☆☆☆☆'.slice(0,5-stars);
   show('results');
@@ -989,6 +1285,7 @@ function finishSession(){
   };
 
   let tab='sets';
+  let activeTabs=TABS;  // may be narrowed to a section's tabs via startExplore(tabKeys)
   let den=2;           // fractions tab denominator q
   let val=1.5;         // draggable rational value (multiple of 1/den)
   let irr='r2';        // irrationals tab: r2|r3|r5|pi
@@ -1289,18 +1586,20 @@ function finishSession(){
     else piStop();
   }
 
+  const TAB_NCERT={sets:'C3-3.1',frac:'C3-4.3',irr:'C3-5.1',dec:'C3-6.2',dist:'C3-4.3'};
   function setTab(t){
     tab=t;
+    document.getElementById('explore').dataset.ncert=TAB_NCERT[t]||'';
     document.querySelectorAll('#xtabs .xtab').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab===t));
     document.getElementById('xTitle').textContent=TAB_META[t].title;
     document.getElementById('xLead').textContent=TAB_META[t].lead;
     document.getElementById('denRow').classList.toggle('hide', t!=='frac');
     document.getElementById('irrPick').classList.toggle('hide', t!=='irr');
     document.getElementById('twoptRow').classList.toggle('hide', t!=='dist');
-    const i=TABS.indexOf(t);
-    document.getElementById('xStepLabel').textContent=(i+1)+' / '+TABS.length;
+    const i=activeTabs.indexOf(t);
+    document.getElementById('xStepLabel').textContent=(i+1)+' / '+activeTabs.length;
     document.getElementById('xPrev').disabled=(i===0);
-    document.getElementById('xNext').disabled=(i===TABS.length-1);
+    document.getElementById('xNext').disabled=(i===activeTabs.length-1);
     piSyncAnim();          // start/stop π animation based on the new tab
     if(!(tab==='irr'&&irr==='pi')) render();  // π path renders via piStart
   }
@@ -1316,11 +1615,11 @@ function finishSession(){
     render();
   }
 
-  window.startExplore=function(){
+  window.startExplore=function(tabKeys,startKey){
     if(!started){
       document.querySelectorAll('#xtabs .xtab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
-      document.getElementById('xPrev').addEventListener('click',()=>{const i=TABS.indexOf(tab);if(i>0)setTab(TABS[i-1]);});
-      document.getElementById('xNext').addEventListener('click',()=>{const i=TABS.indexOf(tab);if(i<TABS.length-1)setTab(TABS[i+1]);});
+      document.getElementById('xPrev').addEventListener('click',()=>{const i=activeTabs.indexOf(tab);if(i>0)setTab(activeTabs[i-1]);});
+      document.getElementById('xNext').addEventListener('click',()=>{const i=activeTabs.indexOf(tab);if(i<activeTabs.length-1)setTab(activeTabs[i+1]);});
       document.querySelectorAll('#irrPick .seg-btn').forEach(b=>b.addEventListener('click',()=>pickIrr(b.dataset.irr)));
       document.querySelectorAll('#segPick .seg-btn').forEach(b=>b.addEventListener('click',()=>pickTP(b.dataset.tp)));
       const sl=document.getElementById('denSlider');
@@ -1333,18 +1632,644 @@ function finishSession(){
       });
       started=true;
     }
-    setTab('sets');
+    activeTabs=(tabKeys&&tabKeys.length)?TABS.filter(t=>tabKeys.includes(t)):TABS;
+    if(!activeTabs.length)activeTabs=TABS;
+    document.querySelectorAll('#xtabs .xtab').forEach(b=>b.classList.toggle('hide', !activeTabs.includes(b.dataset.tab)));
+    setTab(startKey&&activeTabs.includes(startKey)?startKey:activeTabs[0]);
   };
   window.stopExplore=function(){ piStop(); };
 })();
 
 // ===================== NAV =====================
 document.querySelectorAll('.mode-card').forEach(c=>c.onclick=()=>startMode(c.dataset.mode));
-$('quitBtn').onclick=()=>show('home');
-$('quitBtnX').onclick=()=>{ if(window.stopExplore)window.stopExplore(); show('home'); };
+$('quitBtn').onclick=()=>show(backTarget);
+$('quitBtnX').onclick=()=>{ if(window.stopExplore)window.stopExplore(); show(backTarget); };
 $('quitBtnS').onclick=()=>show('home');
-$('menuBtn').onclick=()=>{ if(mode==='challenge')showSetPicker(); else show('home'); };
-$('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
+$('quitBtnDP').onclick=()=>show(backTarget);
+$('quitBtnD').onclick=()=>{ if(backTarget==='learn')show('learn'); else window.showDDPicker(); };
+$('quitBtnHome').onclick=()=>show('secthome');
+$('quitBtnSect').onclick=()=>show('secthome');
+$('quitBtnLearn').onclick=()=>show('sectview');
+$('quitBtnTB').onclick=()=>show('secthome');
+$('tbPdfToggle').onclick=()=>{ const p=$('tbPdf'),hidden=p.classList.toggle('hide-pdf'); $('tbPdfToggle').textContent=hidden?'📄 Show book':'📄 Hide book'; };
+$('menuBtn').onclick=()=>{ if(mode==='challenge'&&backTarget==='setpick')showSetPicker(); else show(backTarget); };
+$('retryBtn').onclick=()=>{ if(lastRun)lastRun(); else if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
+</script>
+<script>
+// ===================== DEEP DIVES =====================
+// Seven standalone number-line interactives for the [gap] rows. All share ONE
+// number-line helper (NL) and ONE pointer pipeline (Drag) — no duplicated axis code.
+(function(){
+  const NSx="http://www.w3.org/2000/svg";
+  const E=(t,a)=>{const e=document.createElementNS(NSx,t);for(const k in a)if(a[k]!=null)e.setAttribute(k,a[k]);return e;};
+  const W=440,H=260,PADX=30,AXY=180,SPAN=W-2*PADX;
+  const gcdN=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;};
+  const frac=(n,d)=>{if(d===0)return'∞';const g=gcdN(n,d)||1;let nn=n/g,dd=d/g;if(dd<0){dd=-dd;nn=-nn;}return dd===1?String(nn):nn+'/'+dd;};
+
+  // ---- shared number-line helper ----
+  function NL(svg,view){
+    const sx=v=>PADX+(v-view.min)/(view.max-view.min)*SPAN;
+    const ux=px=>view.min+(px-PADX)/SPAN*(view.max-view.min);
+    const unit=()=>sx(1)-sx(0);
+    const add=n=>{svg.appendChild(n);return n;};
+    const clear=()=>{while(svg.firstChild)svg.removeChild(svg.firstChild);};
+    function axis({labelStep=1,subDen=0}={}){
+      add(E('line',{x1:sx(view.min),y1:AXY,x2:sx(view.max),y2:AXY,stroke:'#1b2a4a','stroke-width':2.5}));
+      add(E('path',{d:`M${sx(view.max)},${AXY} l-8,-4 l0,8 z`,fill:'#1b2a4a'}));
+      add(E('path',{d:`M${sx(view.min)},${AXY} l8,-4 l0,8 z`,fill:'#1b2a4a'}));
+      if(subDen>1){const lo=Math.ceil(view.min*subDen),hi=Math.floor(view.max*subDen);
+        for(let k=lo;k<=hi;k++){if(k%subDen===0)continue;const v=k/subDen;
+          add(E('line',{x1:sx(v),y1:AXY-4,x2:sx(v),y2:AXY+4,stroke:'#c3ccdb','stroke-width':1}));}}
+      const lo=Math.ceil(view.min),hi=Math.floor(view.max);
+      for(let i=lo;i<=hi;i++){const major=(i===0);
+        add(E('line',{x1:sx(i),y1:AXY-(major?9:6),x2:sx(i),y2:AXY+(major?9:6),stroke:major?'#1b2a4a':'#8a97ad','stroke-width':major?1.6:1}));
+        if(i%labelStep===0){const t=E('text',{x:sx(i),y:AXY+22,'text-anchor':'middle','font-size':9,fill:'#5a6b88','font-family':'ui-monospace,monospace'});t.textContent=i;add(t);}}
+    }
+    const dot=(v,label,{cls,r=6,fill,dy=-13}={})=>{const g=E('g',{});
+      g.appendChild(E('circle',{cx:sx(v),cy:AXY,r,fill:fill||(cls==='nat'?'#2f6f4f':cls==='neg'?'#c0392b':cls==='irr'?'#7a3ea8':'#1b6ca8')}));
+      if(label!=null){const t=E('text',{x:sx(v),y:AXY+dy,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#1b2a4a','font-family':'ui-monospace,monospace'});t.textContent=label;g.appendChild(t);}
+      add(g);return g;};
+    const seg=(a,b,{stroke='#b8892b',w=3,dash,y=AXY}={})=>add(E('line',{x1:sx(a),y1:y,x2:sx(b),y2:y,stroke,'stroke-width':w,'stroke-dasharray':dash}));
+    return {svg,view,sx,ux,unit,clear,axis,dot,seg,E,add,AXY};
+  }
+
+  // ---- shared drag: register 1-D handles ----
+  function Drag(nl){
+    const svg=nl.svg,pt=svg.createSVGPoint();let active=null;
+    const loc=e=>{const t=e.touches?e.touches[0]:e;pt.x=t.clientX;pt.y=t.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse());};
+    function mv(e){if(!active)return;e.preventDefault();const p=loc(e);const s=active.snap||1;
+      let v=Math.round(nl.ux(p.x)*s)/s;v=Math.max(nl.view.min,Math.min(nl.view.max,v));active.onMove(+v.toFixed(6));}
+    function up(){active=null;}
+    svg.addEventListener('mousemove',mv);svg.addEventListener('touchmove',mv,{passive:false});
+    window.addEventListener('mouseup',up);window.addEventListener('touchend',up);
+    return {handle(v,{label,fill='#1b6ca8',snap=1,shape='circle',onMove}){
+      const g=E('g',{class:'point'});
+      if(shape==='diamond')g.appendChild(E('path',{d:`M${nl.sx(v)},${nl.AXY-9} L${nl.sx(v)+8},${nl.AXY} L${nl.sx(v)},${nl.AXY+9} L${nl.sx(v)-8},${nl.AXY} Z`,fill,stroke:'#fff','stroke-width':1}));
+      else g.appendChild(E('circle',{cx:nl.sx(v),cy:nl.AXY,r:6.5,fill,stroke:'#fff','stroke-width':1.2}));
+      g.appendChild(E('circle',{cx:nl.sx(v),cy:nl.AXY,r:16,fill:'transparent'}));
+      if(label!=null){const t=E('text',{x:nl.sx(v),y:nl.AXY-14,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#1b2a4a','font-family':'ui-monospace,monospace'});t.textContent=label;g.appendChild(t);}
+      nl.svg.appendChild(g);
+      const down=e=>{active={onMove,snap};e.preventDefault();};
+      g.addEventListener('mousedown',down);g.addEventListener('touchstart',down,{passive:false});
+      return g;}};
+  }
+
+  function slider(labelText,min,max,val,onInput,fmt){
+    fmt=fmt||(v=>v);
+    const wrap=document.createElement('div');wrap.className='sliderrow';
+    const lab=document.createElement('label');lab.textContent=labelText;
+    const inp=document.createElement('input');inp.type='range';inp.min=min;inp.max=max;inp.step=1;inp.value=val;
+    const v=document.createElement('span');v.className='val';v.textContent=fmt(val);
+    inp.oninput=()=>{v.textContent=fmt(+inp.value);onInput(+inp.value);};
+    wrap.appendChild(lab);wrap.appendChild(inp);wrap.appendChild(v);return wrap;
+  }
+  const ddbtn=(txt,fn,ghost)=>{const b=document.createElement('button');b.className='ddbtn'+(ghost?' ghost':'');b.textContent=txt;b.onclick=fn;return b;};
+  const btnRow=(...b)=>{const r=document.createElement('div');r.className='ddbtns';b.forEach(x=>r.appendChild(x));return r;};
+  const hintP=html=>{const p=document.createElement('p');p.className='dd-hint';p.innerHTML=html;return p;};
+  // long division → decimal string with (repeating) block + terminating flag
+  function longDecimal(p,q){
+    const sign=(p<0)!==(q<0)?'-':''; p=Math.abs(p);q=Math.abs(q);
+    const ip=Math.floor(p/q); let r=p%q;
+    if(r===0)return{str:sign+ip,terminating:true,rep:''};
+    const digits=[],seen={}; let repStart=-1;
+    while(r!==0){ if(seen[r]!==undefined){repStart=seen[r];break;} seen[r]=digits.length; r*=10; digits.push(Math.floor(r/q)); r%=q; }
+    if(r===0)return{str:sign+ip+'.'+digits.join(''),terminating:true,rep:''};
+    const nonRep=digits.slice(0,repStart).join(''),rep=digits.slice(repStart).join('');
+    return{str:sign+ip+'.'+nonRep+'('+rep+')',terminating:false,rep,nonRep};
+  }
+
+  // ================= C3-3.2 · integer jumps (fortunes & debts) =================
+  function integerJumps(root){
+    const view={min:-12,max:12};
+    const nl=NL(root.svg,view), drag=Drag(nl);
+    let a=3, b=4, op='+';
+    const result=()=>op==='+'?a+b:a-b;
+    function render(){
+      nl.clear(); nl.axis({labelStep:2});
+      const r=result(), right=r>=a, col=right?'#2f6f4f':'#c0392b';
+      nl.seg(a,r,{stroke:col,w:2.5,dash:'4 3',y:nl.AXY-24});
+      root.svg.appendChild(nl.E('path',{d:right?`M${nl.sx(r)},${nl.AXY-24} l-7,-4 l0,8 z`:`M${nl.sx(r)},${nl.AXY-24} l7,-4 l0,8 z`,fill:col}));
+      nl.dot(0,'0',{fill:'#8a97ad',r:4});
+      nl.dot(r,String(r),{cls:r>0?'nat':r<0?'neg':'nat',dy:24});
+      drag.handle(a,{label:'a='+a,fill:'#1b6ca8',snap:1,onMove:v=>{a=Math.round(v);render();}});
+      readout();
+    }
+    function readout(){
+      const r=result();
+      const kind = op==='+'
+        ? (b>=0?`adding a fortune of ${b} → jump ${b} right`:`adding a debt of ${b} → jump ${Math.abs(b)} left`)
+        : (b>=0?`subtracting a fortune of ${b} → jump ${b} left`:`subtracting a debt of ${Math.abs(b)} → jump ${Math.abs(b)} right`);
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">a</span><span class="v">${a}</span></div>`+
+        `<div class="row"><span class="k">operation</span><span class="v">a ${op} (${b})</span></div>`+
+        `<div class="row"><span class="k">result</span><span class="v">${r}</span></div>`;
+      root.explain.innerHTML=`<b>${a} ${op} (${b}) = ${r}.</b> On the line, ${kind}. Brahmagupta pictured positives as fortunes (dhana) and negatives as debts (ṛiṇa) — subtracting a debt is the same as adding a fortune.`;
+    }
+    root.controls.appendChild(hintP('Drag <b>a</b>, choose the operation and the second number <b>b</b>, and watch the jump. Note how subtracting a debt jumps right.'));
+    const seg=document.createElement('div');seg.className='ddbtns';
+    [['+','a + b'],['-','a − b']].forEach(([k,lab])=>{const btn=document.createElement('button');btn.className='ddbtn';btn.setAttribute('aria-pressed',k===op);btn.textContent=lab;btn.onclick=()=>{op=k;[...seg.children].forEach(c=>c.setAttribute('aria-pressed',c.textContent===lab));render();};seg.appendChild(btn);});
+    root.controls.appendChild(seg);
+    root.controls.appendChild(slider('b',-9,9,b,v=>{b=v;render();}));
+    render();
+  }
+
+  // ================= C3-6.2 · cyclic number 142857 =================
+  function cyclic(root){
+    const view={min:0,max:1};
+    const nl=NL(root.svg,view);
+    let k=1; const C=142857;
+    function render(){
+      nl.clear(); nl.axis({labelStep:1,subDen:7});
+      for(let i=1;i<7;i++) nl.dot(i/7,'',{fill:'#c3ccdb',r:3});
+      nl.dot(k/7, String(k)+'/7', {cls:'rat',dy:24});
+      readout();
+    }
+    function readout(){
+      const prod=C*k, s=String(prod).padStart(6,'0');
+      root.controls.querySelector('.dd-digits').innerHTML='142857 × '+k+' = <span class="hot">'+s+'</span>';
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">142857 × ${k}</span><span class="v">${prod}</span></div>`+
+        `<div class="row"><span class="k">${k}/7 as decimal</span><span class="v">0.${s}…</span></div>`;
+      root.explain.innerHTML=`The repeating block of ${k}/7 is <b>${s}</b> — the very same six digits as 1/7 (142857), just rotated. 142857 is a <b>cyclic number</b>: multiplying by 1–6 only shifts its digits around a circle.`;
+    }
+    root.controls.appendChild(hintP('1/7 = 0.<b>142857</b>… — a cyclic number. Multiply the block by 1–6 and watch the digits rotate.'));
+    const digits=document.createElement('div');digits.className='dd-digits';root.controls.appendChild(digits);
+    const row=document.createElement('div');row.className='ddbtns';
+    for(let i=1;i<=6;i++){const b=ddbtn('× '+i,()=>{k=i;[...row.children].forEach((c,j)=>c.setAttribute('aria-pressed',j===i-1));render();},true);b.setAttribute('aria-pressed',i===1);row.appendChild(b);}
+    root.controls.appendChild(row);
+    render();
+  }
+
+  // ================= C3-4.3 · rational on the number line =================
+  function rationalLine(root){
+    const view={min:0,max:4};
+    const nl=NL(root.svg,view), drag=Drag(nl);
+    let q=4, v=0.75;
+    function render(){
+      nl.clear(); nl.axis({labelStep:1,subDen:q});
+      const base=Math.floor(v);
+      // emphasise the current unit interval split into q parts
+      for(let j=0;j<=q;j++){const x=base+j/q; if(x<view.min||x>view.max)continue;
+        const end=(j===0||j===q);
+        root.svg.appendChild(nl.E('line',{x1:nl.sx(x),y1:nl.AXY-(end?12:8),x2:nl.sx(x),y2:nl.AXY+(end?12:8),stroke:'#1b6ca8','stroke-width':end?1.6:1,'stroke-dasharray':end?'':'2 2'}));}
+      const p=Math.round((v-base)*q);
+      if(p>0) nl.seg(base,v,{stroke:'#1b6ca8',w:1.4,y:nl.AXY-18});
+      drag.handle(v,{label:frac(Math.round(v*q),q),fill:'#1b6ca8',snap:q,onMove:x=>{v=x;render();}});
+      readout();
+    }
+    function readout(){
+      const num=Math.round(v*q),base=Math.floor(v),p=Math.round((v-base)*q);
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">value</span><span class="v">${frac(num,q)}</span></div>`+
+        `<div class="row"><span class="k">as decimal</span><span class="v">${(num/q).toFixed(4).replace(/0+$/,'').replace(/\.$/,'')}</span></div>`+
+        `<div class="row"><span class="k">construction</span><span class="v">${p}/${q} past ${base}</span></div>`;
+      root.explain.innerHTML=`To place <b>p/q</b>: cut the unit from ${base} to ${base+1} into <b>${q}</b> equal parts, then step <b>${p}</b> parts across — giving <b>${frac(num,q)}</b>. That is exactly the §3.4.1 construction.`;
+    }
+    root.controls.appendChild(hintP('Choose the denominator <b>q</b> — the unit splits into q equal parts — then drag the point. It snaps to multiples of 1/q.'));
+    root.controls.appendChild(slider('parts q',1,10,q,val=>{q=val;v=Math.round(v*q)/q;render();},val=>'q='+val));
+    render();
+  }
+
+  // ================= C3-4.4 · density (average between two) =================
+  function density(root){
+    const view={min:0,max:4};
+    const nl=NL(root.svg,view), drag=Drag(nl);
+    let a=1,b=3,pts=[1,3];
+    const reset=()=>{pts=[a,b].sort((x,y)=>x-y);};
+    function render(){
+      nl.clear(); nl.axis({labelStep:1});
+      nl.seg(Math.min(a,b),Math.max(a,b),{stroke:'#e4d3ad',w:2,y:nl.AXY});
+      pts.forEach(x=>{ if(x!==a&&x!==b) nl.dot(x,'',{cls:'rat',r:3.5}); });
+      drag.handle(a,{label:'a',fill:'#2f6f4f',snap:1,onMove:v=>{a=Math.round(v);reset();render();}});
+      drag.handle(b,{label:'b',fill:'#c0392b',snap:1,onMove:v=>{b=Math.round(v);reset();render();}});
+      readout();
+    }
+    function insert(){
+      const s=[...pts].sort((x,y)=>x-y),out=[];
+      for(let i=0;i<s.length-1;i++){out.push(s[i]);out.push((s[i]+s[i+1])/2);}
+      out.push(s[s.length-1]); pts=out; render();
+    }
+    function readout(){
+      const between=pts.filter(x=>x>Math.min(a,b)&&x<Math.max(a,b)).length;
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">a, b</span><span class="v">${a}, ${b}</span></div>`+
+        `<div class="row"><span class="k">rationals between</span><span class="v">${between}</span></div>`;
+      root.explain.innerHTML=`Each step inserts the <b>average</b> of every neighbouring pair — always a rational strictly between them. Keep going and the count grows without limit: between any two numbers there are <b>infinitely many</b> rationals (they are <i>dense</i>).`;
+    }
+    root.controls.appendChild(hintP('Drag <b>a</b> and <b>b</b>. Then insert averages: every gap gets its midpoint, again and again — the line never fills up.'));
+    root.controls.appendChild(btnRow(ddbtn('Insert averages',insert,true),ddbtn('Reset',()=>{reset();render();},true)));
+    reset();render();
+  }
+
+  // ================= C3-6.2 · terminating-or-repeating predictor =================
+  function predictor(root){
+    const view={min:0,max:1};
+    const nl=NL(root.svg,view);
+    let p=7,q=20;
+    const facts=n=>{const f=[];for(const pr of [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47]){while(n%pr===0){f.push(pr);n/=pr;}}if(n>1)f.push(n);return f;};
+    function render(){
+      nl.clear();
+      const val=p/q, vmax=Math.max(1,Math.ceil(val)); view.max=vmax; view.min=0;
+      nl.axis({labelStep:1});
+      nl.dot(Math.min(val,vmax),(p/q).toFixed(3).replace(/0+$/,'').replace(/\.$/,''),{cls:'rat',dy:24});
+      readout();
+    }
+    function readout(){
+      const g=gcdN(p,q),P=p/g,Q=q/g;
+      let t=Q;while(t%2===0)t/=2;while(t%5===0)t/=5;
+      const term=(t===1), dec=longDecimal(P,Q), pf=facts(Q);
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">${p}/${q} in lowest terms</span><span class="v">${frac(P,Q)}</span></div>`+
+        `<div class="row"><span class="k">denominator</span><span class="v">${Q} = ${pf.join('×')||Q}</span></div>`+
+        `<div class="row"><span class="k">decimal</span><span class="v">${dec.str}</span></div>`+
+        `<div class="row"><span class="k">verdict</span><span class="v"><span class="verdict ${term?'vok':'vno'}">${term?'terminating':'repeating'}</span></span></div>`;
+      root.explain.innerHTML=term
+        ?`The denominator ${Q} factors as ${pf.join(' × ')||Q} — <b>only 2s and 5s</b>. So p/q can be scaled to a power of ten and its decimal <b>terminates</b>.`
+        :`The denominator ${Q} = ${pf.join(' × ')} keeps a prime other than 2 or 5, so no power of ten clears it — the decimal <b>repeats</b> (block ${dec.rep}).`;
+    }
+    root.controls.appendChild(hintP('Set p and q. The predictor factors the denominator — <b>only 2s and 5s ⇒ terminating</b>, anything else ⇒ repeating — then verifies by long division.'));
+    root.controls.appendChild(slider('numerator p',1,30,p,v=>{p=v;render();}));
+    root.controls.appendChild(slider('denominator q',2,40,q,v=>{q=v;render();}));
+    root.controls.appendChild(btnRow(
+      ddbtn('7/20',()=>{p=7;q=20;render();},true),
+      ddbtn('4/15',()=>{p=4;q=15;render();},true),
+      ddbtn('13/250',()=>{p=13;q=250;q=250;render();},true),
+      ddbtn('1/7',()=>{p=1;q=7;render();},true)
+    ));
+    render();
+  }
+
+  // ================= C3-6.1 · decimal → fraction =================
+  function decToFrac(root){
+    const view={min:0,max:3};
+    const nl=NL(root.svg,view);
+    // presets: {ip, nonRep, rep}
+    let cur={ip:0,nonRep:'',rep:'6'};
+    function compute(c){
+      const m=c.nonRep.length,n=c.rep.length;
+      const A=parseInt((''+c.ip)+c.nonRep||'0',10);            // digits before the repeat
+      const B=parseInt((''+c.ip)+c.nonRep+c.rep||'0',10);       // through one repeat
+      const num=B-A, den=Math.pow(10,m+n)-Math.pow(10,m);
+      const g=gcdN(num,den)||1;
+      return {num:num/g,den:den/g,m,n,A,B,val:num/den};
+    }
+    function render(){
+      nl.clear(); const r=compute(cur); view.max=Math.max(1,Math.ceil(r.val)); nl.axis({labelStep:1});
+      nl.dot(Math.min(r.val,view.max), frac(r.num,r.den), {cls:'rat',dy:24});
+      readout(r);
+    }
+    function readout(r){
+      const label=cur.ip+'.'+cur.nonRep+'('+cur.rep+')';
+      const shift1=r.m+r.n, shift2=r.m;
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">decimal</span><span class="v">${label}</span></div>`+
+        `<div class="row"><span class="k">as fraction</span><span class="v">${frac(r.num,r.den)}</span></div>`+
+        `<div class="row"><span class="k">≈</span><span class="v">${r.val.toFixed(6).replace(/0+$/,'').replace(/\.$/,'')}</span></div>`;
+      root.explain.innerHTML=
+        `Let x = ${label}. Multiply by 10<sup>${shift1}</sup> to move a full cycle, and by 10<sup>${shift2}</sup> to move just the non-repeating part; subtract to cancel the tail: `+
+        `(10<sup>${shift1}</sup> − 10<sup>${shift2}</sup>)·x = ${r.B} − ${r.A} = ${r.B-r.A}, so x = <b>${frac(r.num,r.den)}</b>.`;
+    }
+    root.controls.appendChild(hintP('Pick a repeating decimal. The panel runs the 10ⁿx − x algebra (Examples 5–9) to recover its exact fraction.'));
+    root.controls.appendChild(btnRow(
+      ddbtn('0.6̄',()=>{cur={ip:0,nonRep:'',rep:'6'};render();},true),
+      ddbtn('0.4̄5̄',()=>{cur={ip:0,nonRep:'',rep:'45'};render();},true),
+      ddbtn('0.16̄',()=>{cur={ip:0,nonRep:'1',rep:'6'};render();},true),
+      ddbtn('2.357̄',()=>{cur={ip:2,nonRep:'35',rep:'7'};render();},true),
+      ddbtn('2.4̄5̄3̄7̄',()=>{cur={ip:2,nonRep:'45',rep:'37'};render();},true)
+    ));
+    render();
+  }
+
+  // ================= C3-5.3 · square-root spiral =================
+  function spiral(root){
+    let n=6;
+    function render(){
+      const svg=root.svg;while(svg.firstChild)svg.removeChild(svg.firstChild);
+      const cx=210,cy=150,scale=26;
+      // build spiral vertices: V_k at radius √k, cumulative angle
+      const pts=[{x:cx,y:cy}]; let ang=0;
+      for(let k=1;k<=n;k++){
+        const rr=Math.sqrt(k)*scale;
+        pts.push({x:cx+rr*Math.cos(ang), y:cy-rr*Math.sin(ang), rad:Math.sqrt(k)});
+        ang+=Math.atan(1/Math.sqrt(k));
+      }
+      // draw triangles: O-V_k-V_{k+1}
+      for(let k=1;k<n;k++){
+        const A=pts[k],B=pts[k+1];
+        svg.appendChild(E('line',{x1:cx,y1:cy,x2:A.x,y2:A.y,stroke:'#c3ccdb','stroke-width':1}));
+        svg.appendChild(E('line',{x1:A.x,y1:A.y,x2:B.x,y2:B.y,stroke:'#7a3ea8','stroke-width':1.3}));
+      }
+      // final spoke = current hypotenuse √n, highlighted
+      const last=pts[n];
+      svg.appendChild(E('line',{x1:cx,y1:cy,x2:last.x,y2:last.y,stroke:'#b8892b','stroke-width':2.5}));
+      svg.appendChild(E('circle',{cx,cy,r:3,fill:'#1b2a4a'}));
+      const lbl=E('text',{x:(cx+last.x)/2,y:(cy+last.y)/2-4,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#b8892b','font-family':'ui-monospace,monospace'});
+      lbl.textContent='√'+n;svg.appendChild(lbl);
+      readout();
+    }
+    function readout(){
+      root.readout.innerHTML=
+        `<div class="row"><span class="k">triangles</span><span class="v">${n-1}</span></div>`+
+        `<div class="row"><span class="k">current hypotenuse</span><span class="v">√${n} ≈ ${Math.sqrt(n).toFixed(4)}</span></div>`;
+      root.explain.innerHTML=`Each right triangle adds a leg of length 1 on the previous hypotenuse, so the hypotenuses are <b>√2, √3, √4, …, √${n}</b> in turn (the square-root spiral of Theodorus). Perfect squares like √4, √9 come out rational; the rest are irrational.`;
+    }
+    root.controls.appendChild(hintP('Grow the spiral. Triangle k has legs √k and 1, so its hypotenuse is √(k+1) — an easy way to construct every √n.'));
+    root.controls.appendChild(slider('up to √n',2,17,n,v=>{n=v;render();},v=>'√'+v));
+    render();
+  }
+
+  // ---- registry, picker, launcher ----
+  const DEEPDIVES=[
+    {id:'int-jumps',  ncert:'C3-3.2',tier:'easy',  title:'Fortunes & debts',       blurb:'Add and subtract integers as jumps on the line — Brahmagupta’s sign rules made visible.',build:integerJumps},
+    {id:'cyclic',     ncert:'C3-6.2',tier:'easy',  title:'The cyclic 142857',      blurb:'1/7’s repeating block. Multiply by 1–6 and watch the digits rotate.',build:cyclic},
+    {id:'rational',   ncert:'C3-4.3',tier:'medium',title:'Rational on the line',   blurb:'Pick q, split the unit into q parts, step p — place any p/q exactly.',build:rationalLine},
+    {id:'density',    ncert:'C3-4.4',tier:'medium',title:'Density: averages',      blurb:'Insert the average of every pair, again and again — infinitely many rationals between any two.',build:density},
+    {id:'predictor',  ncert:'C3-6.2',tier:'medium',title:'Terminating or repeating?',blurb:'Factor the denominator to predict the decimal type, then verify by long division.',build:predictor},
+    {id:'dec2frac',   ncert:'C3-6.1',tier:'hard',  title:'Decimal → fraction',     blurb:'Run the 10ⁿx − x algebra to turn a repeating decimal back into p/q.',build:decToFrac},
+    {id:'spiral',     ncert:'C3-5.3',tier:'hard',  title:'Square-root spiral',     blurb:'Build √2, √3, √4, … as the hypotenuses of a spiral of right triangles.',build:spiral}
+  ];
+  let lastFilter=null;
+  window.showDDPicker=function(filter){
+    if(filter!==undefined)lastFilter=filter;
+    const list=lastFilter?DEEPDIVES.filter(d=>lastFilter.includes(d.id)):DEEPDIVES;
+    const grid=document.getElementById('ddGrid');grid.innerHTML='';
+    list.forEach(dd=>{
+      const c=document.createElement('button');c.className='set-card';
+      c.innerHTML=`<div class="num">Deep dive <span class="ncert">${dd.ncert}</span></div><h3>${dd.title}</h3><p>${dd.blurb}</p><span class="tier ${dd.tier}">${dd.tier}</span>`;
+      c.onclick=()=>openDeepDive(dd);
+      grid.appendChild(c);
+    });
+    show('ddpick');
+  };
+  window.openDeepDiveById=function(id){const dd=DEEPDIVES.find(d=>d.id===id);if(dd)openDeepDive(dd);};
+  function openDeepDive(dd){
+    const old=document.getElementById('svgD');
+    const fresh=old.cloneNode(false);old.parentNode.replaceChild(fresh,old); // drop old listeners
+    document.getElementById('ddTitle').textContent=dd.title;
+    document.getElementById('ddLabel').textContent='Deep dive · '+dd.title;
+    document.getElementById('deepdive').dataset.ncert=dd.ncert;
+    const controls=document.getElementById('ddControls');controls.innerHTML='';
+    const readout=document.getElementById('ddReadout');readout.innerHTML='';
+    const explain=document.getElementById('ddExplain');explain.innerHTML='';
+    show('deepdive');
+    dd.build({svg:fresh,controls,readout,explain});
+  }
+})();
+</script>
+<script>
+// ===================== SECTION-FIRST SHELL =====================
+(function(){
+  const SECTIONS=[
+    { id:'counting', num:'Section 1', book:'§3.1–3.3', title:'Counting, Zero & Integers',
+      blurb:'Natural numbers, the birth of zero, and Brahmagupta’s debts & fortunes — the integers ℤ.',
+      chips:['naturals','zero','integers'],
+      intro:'From matching pebbles to cattle (the natural numbers) to Brahmagupta’s śhūnya and negative numbers: meet ℕ and ℤ, and the sign rules for adding and multiplying debts and fortunes.',
+      ncert:['C3-1.1','C3-1.4','C3-2.3','C3-3.1','C3-3.2','C3-3.3','C3-3.4'],
+      tabs:['sets'], deepdives:['int-jumps'],
+      learn:[
+        {h:'Counting: the natural numbers', tab:'sets', p:'Matching one pebble per cow gave the natural numbers ℕ = {1, 2, 3, …}. They are closed under addition but not subtraction — 3 − 5 leaves the naturals behind.'},
+        {h:'Zero — Brahmagupta’s śhūnya', tab:'sets', p:'Brahmagupta turned “nothing” into a number with rules: a+0=a, a−0=a, a×0=0. Zero is the origin of the number line.'},
+        {h:'Integers: debts & fortunes', dd:'int-jumps', p:'Extending left of zero gives the integers ℤ. Brahmagupta pictured negatives as debts (ṛiṇa) and positives as fortunes (dhana).'},
+        {h:'The sign rules', dd:'int-jumps', p:'A debt plus a debt is a debt; a debt times a debt is a fortune (− × − = +); subtracting a debt is the same as adding a fortune.'}
+      ] },
+    { id:'rationals', num:'Section 2', book:'§3.4', title:'Rational Numbers',
+      blurb:'Fractions p/q, equivalent forms, placing them on the line, distance, and density.',
+      chips:['fractions','number line','density'],
+      intro:'Rational numbers ℚ fill the gaps between integers. Build p/q by cutting the unit into q parts, measure distance with |a − b|, and discover that between any two rationals lies another — forever.',
+      ncert:['C3-4.1','C3-4.2','C3-4.3','C3-4.4'],
+      tabs:['frac','dist'], deepdives:['rational','density'],
+      learn:[
+        {h:'Rational numbers p/q', tab:'frac', p:'A rational number is any p/q with integers p, q and q ≠ 0. Equivalent fractions (2/3 = 4/6) name the same point; lowest terms is the canonical name.'},
+        {h:'Placing p/q on the line', dd:'rational', p:'Cut the unit interval into q equal parts and step across p — that is exactly how any fraction lands on the number line.'},
+        {h:'Distance & absolute value', tab:'dist', p:'|x| is the distance of x from 0; the distance between a and b is |a − b|, always non-negative.'},
+        {h:'Density of rationals', dd:'density', p:'The average (a + b)/2 always lies strictly between a and b, so between any two rationals there are infinitely many more.'}
+      ] },
+    { id:'reals', num:'Section 3', book:'§3.5–3.6', title:'Irrationals & Real Numbers',
+      blurb:'√2 and the irrationals, constructing √n, decimal expansions, cyclic numbers, and the real line.',
+      chips:['√2','decimals','cyclic'],
+      intro:'Some lengths — like the diagonal √2 — are no fraction at all. Construct √n, see why decimals terminate or repeat, meet the cyclic 142857, and complete the real number line ℝ.',
+      ncert:['C3-5.1','C3-5.3','C3-6.1','C3-6.2','C3-6.4','C3-6.6'],
+      tabs:['irr','dec'], deepdives:['cyclic','predictor','dec2frac','spiral'],
+      learn:[
+        {h:'Irrational numbers (√2)', tab:'irr', p:'The diagonal of a unit square is √2. Hippasus’ proof by contradiction shows it is no fraction p/q — its decimal never terminates or repeats.'},
+        {h:'Constructing √n', dd:'spiral', p:'A right triangle with legs √k and 1 has hypotenuse √(k+1). Chaining these makes the square-root spiral, placing √2, √3, √4, … exactly.'},
+        {h:'Terminating vs repeating decimals', tab:'dec', p:'A fraction p/q (lowest terms) terminates exactly when q’s only prime factors are 2 and 5; otherwise it repeats — because a remainder must eventually recur.'},
+        {h:'Decimal → fraction', dd:'dec2frac', p:'Every terminating or repeating decimal is rational. The 10ⁿx − x trick cancels the repeating tail and recovers p/q.'},
+        {h:'Cyclic numbers', dd:'cyclic', p:'The repeating block of 1/7, 142857, is cyclic: multiplying by 1–6 just rotates its digits — a pattern hidden in a simple fraction.'}
+      ] },
+    { id:'history', num:'Context', book:'§3.1–3.7', title:'History & Context',
+      blurb:'Tally bones, śhūnya, Brahmagupta, Mādhava’s series for π, and the road to imaginary numbers.',
+      chips:['reading','history'], reading:true,
+      intro:'Numbers grew over millennia: tally marks on the Lebombo and Ishango bones; India’s powers of ten and the philosophical śhūnya that became zero; Brahmagupta’s debts and fortunes; Mādhava’s infinite series for π; and finally the leap off the line to imaginary numbers.',
+      ncert:['C3-1.2','C3-1.3','C3-2.1','C3-2.2','C3-5.4','C3-7.1','C3-7.2'] }
+  ];
+  const rank={easy:0,medium:1,hard:2};
+  const bank = ns => { const s=new Set(ns); return BANK.filter(q=>s.has(q.ncert)); };
+  const chal = ns => { const s=new Set(ns); return [...CH1,...CH2,...CH3].filter(q=>s.has(q.ncert)); };
+
+  function card(sec){
+    const c=document.createElement('button');c.className='set-card';
+    c.innerHTML=`<div class="num">${sec.num} <span class="book">${sec.book}</span></div>`+
+      `<h3>${sec.title}</h3><p>${sec.blurb}</p>`+
+      `<div class="chips">${sec.chips.map(x=>`<span class="chip">${x}</span>`).join('')}</div>`;
+    c.onclick=()=>openSection(sec);return c;
+  }
+  function tile(ico,title,desc,meta,cls,onClick){
+    const t=document.createElement('button');t.className='tile'+(cls?(' '+cls):'');
+    t.innerHTML=`<span class="t-ico">${ico}</span><h4>${title}</h4><p>${desc}</p>`+(meta?`<span class="t-meta">${meta}</span>`:'');
+    t.onclick=onClick;return t;
+  }
+  function openLearn(sec){
+    document.getElementById('learnTitle').textContent=sec.title+' — Learn';
+    document.getElementById('learnLabel').textContent=sec.num+' · Learn';
+    document.getElementById('learnIntro').textContent=sec.intro;
+    const body=document.getElementById('learnBody');body.innerHTML='';
+    sec.learn.forEach(c=>{
+      const d=document.createElement('div');d.className='learn-card';
+      d.innerHTML=`<h4>${c.h}</h4><p>${c.p}</p>`;
+      const b=document.createElement('button');b.className='try';
+      b.textContent=c.tab?'Open the number line →':'Try the interactive →';
+      b.onclick=()=>{ backTarget='learn';
+        if(c.tab){show('explore');window.startExplore(sec.tabs||[c.tab], c.tab);}
+        else window.openDeepDiveById(c.dd);
+      };
+      d.appendChild(b);body.appendChild(d);
+    });
+    show('learn');
+  }
+  function openSection(sec){
+    document.getElementById('sectTitle').textContent=sec.title;
+    document.getElementById('sectLabel').textContent=sec.num+' · '+sec.book;
+    document.getElementById('sectIntro').textContent=sec.intro;
+    const grid=document.getElementById('tileGrid');grid.innerHTML='';
+    if(sec.reading){
+      grid.style.gridTemplateColumns='1fr';
+      const p=document.createElement('div');p.className='tile learn';p.style.cursor='default';
+      p.innerHTML=`<span class="t-ico">📜</span><h4>Read: the story of numbers</h4><p>${sec.intro}</p>`;
+      grid.appendChild(p);show('sectview');return;
+    }
+    grid.style.gridTemplateColumns='';
+    const P=bank(sec.ncert);
+    const quiz=[...P].sort((a,b)=>(rank[a.level]||1)-(rank[b.level]||1)).slice(0,5);
+    let C=chal(sec.ncert);
+    if(C.length<3) C=C.concat(P.filter(q=>q.level==='hard'));
+    C=C.slice(0,8);
+    if(sec.learn&&sec.learn.length)
+      grid.appendChild(tile('🧭','Learn','Guided walk-through of each idea, each with a link into the matching interactive.',
+        sec.learn.length+' guided ideas','learn',()=>openLearn(sec)));
+    if(P.length)
+      grid.appendChild(tile('✏️','Practice','Guided questions with a worked explanation every time. Unscored.',
+        P.length+' questions',null,()=>runSet(P,'practice',{back:'sectview',title:sec.title+' · Practice'})));
+    if(quiz.length)
+      grid.appendChild(tile('✅','Quiz','A short scored check on this section, easy → hard.',
+        quiz.length+' questions · scored',null,()=>runSet(quiz,'quiz',{back:'sectview',title:sec.title+' · Quiz'})));
+    if(C.length)
+      grid.appendChild(tile('🏆','Challenge','Tougher, exam-style items for this section. Scored.',
+        C.length+' questions · scored',null,()=>runSet(C,'quiz',{back:'sectview',title:sec.title+' · Challenge'})));
+    if(sec.deepdives&&sec.deepdives.length)
+      grid.appendChild(tile('🔬','Deep dives','Standalone interactives for the deeper ideas here.',
+        sec.deepdives.length+' activit'+(sec.deepdives.length>1?'ies':'y'),null,
+        ()=>{backTarget='sectview';window.showDDPicker(sec.deepdives);}));
+    show('sectview');
+  }
+  // ---- Textbook Questions: every question in the chapter (IDs mirror spec/02-questions-map.md) ----
+  const TEXTBOOK=[
+    {group:"Worked examples", items:[
+      {id:"WE-1",src:"Example 1 · §3.4.1",q:"Absolute values: |5/3|, |−5/3|, |0|.",approach:"|x| is the distance of x from 0 — drop the sign.",answer:"|5/3| = 5/3, |−5/3| = 5/3, |0| = 0. The absolute value is always ≥ 0."},
+      {id:"WE-2",src:"§3.5 · Fig 3.10",q:"A unit square has each side 1. Show its diagonal has length √2.",hint:"Use the Baudhāyana–Pythagoras theorem on legs 1 and 1.",approach:"d² = 1² + 1².",answer:"d² = 1 + 1 = 2, so the diagonal d = <b>√2</b>."},
+      {id:"WE-3",src:"§3.5.1",q:"Prove that √2 is irrational.",hint:"Assume √2 = p/q in lowest terms and derive a contradiction.",approach:"Square both sides, deduce p is even, then q is even — so both share a factor 2, contradicting lowest terms.",answer:"√2 = p/q ⇒ 2q² = p² ⇒ p² even ⇒ p even (p = 2k) ⇒ 2q² = 4k² ⇒ q² = 2k² ⇒ q even. Both even contradicts co-primeness, so <b>√2 is irrational</b>."},
+      {id:"WE-4",src:"§3.5.2 · Fig 3.11",q:"Construct a length √2 and mark it on the number line.",approach:"Build a right triangle with legs 1 and 1; its hypotenuse is √2. Swing that length onto the line with a compass.",answer:"OA = 1, AB = 1 ⟂ OA ⇒ OB = √2. An arc centred at O with radius OB meets the line at P, so <b>P = √2</b>."},
+      {id:"WE-5",src:"Example 2 · §3.6.1",q:"Write 3/8 as a decimal.",approach:"Divide 3 by 8, or note 8 = 2³ so it scales to a power of ten.",answer:"3/8 = <b>0.375</b> — it terminates (8 has only the prime factor 2)."},
+      {id:"WE-6",src:"Example 3 · §3.6.1",q:"Write 5/11 as a decimal.",approach:"Long-divide; watch the remainders start repeating.",answer:"5/11 = 0.454545… = <b>0.(45)</b>, a repeating decimal."},
+      {id:"WE-7",src:"§3.6.1",q:"Predict the decimal type of 3/20 from the prime factors of 20.",approach:"Factor the denominator: 20 = 2² × 5.",answer:"Only 2s and 5s, so multiply by 5: 3/20 = 15/100 = <b>0.15</b> — terminating."},
+      {id:"WE-8",src:"Example 4 · §3.6.1",q:"Convert 0.35 to the form p/q.",approach:"Write over a power of ten, then reduce.",answer:"0.35 = 35/100 = <b>7/20</b>."},
+      {id:"WE-9",src:"Example 5 · §3.6.1",q:"Convert 0.6̄ to the form p/q.",approach:"Let x = 0.6̄; one digit repeats, so multiply by 10 and subtract.",answer:"10x = 6.6̄, so 10x − x = 6 ⇒ 9x = 6 ⇒ x = 6/9 = <b>2/3</b>."},
+      {id:"WE-10",src:"Example 6 · §3.6.1",q:"Convert 0.4̄5̄ to the form p/q.",approach:"Two digits repeat, so multiply by 100 and subtract.",answer:"100x = 45.45̄ ⇒ 99x = 45 ⇒ x = 45/99 = <b>5/11</b>."},
+      {id:"WE-11",src:"Example 7 · §3.6.1",q:"Convert 0.16̄ to the form p/q.",approach:"One non-repeating digit then a 1-digit repeat: ×10, then ×10 again, subtract.",answer:"10x = 1.6̄, 100x = 16.6̄ ⇒ 90x = 15 ⇒ x = 15/90 = <b>1/6</b>."},
+      {id:"WE-12",src:"Example 8 · §3.6.1",q:"Convert 2.357̄ to the form p/q.",approach:"‘35’ is non-repeating (×100); ‘7’ repeats (×10 more); subtract.",answer:"100x = 235.7̄, 1000x = 2357.7̄ ⇒ 900x = 2122 ⇒ x = 2122/900 = <b>1061/450</b>."},
+      {id:"WE-13",src:"Example 9 · §3.6.1",q:"Convert 2.45̄3̄7̄ (‘45’ then ‘37’ repeating) to the form p/q.",approach:"‘45’ non-repeating (×100); ‘37’ repeats 2 digits (×100 more); subtract.",answer:"100x = 245.37̄, 10000x = 24537.37̄ ⇒ 9900x = 24292 ⇒ x = 24292/9900 = <b>6073/2475</b>."},
+      {id:"WE-14",src:"§3.6.2",q:"Multiply 142857 by 1, 2, 3, 4, 5, 6. What do you notice?",approach:"Compute each product and compare the digit order.",answer:"142857, 285714, 428571, 571428, 714285, 857142 — the <b>same six digits, cyclically rotated</b>. 142857 is a cyclic number."},
+      {id:"WE-15",src:"§3.6.1",q:"Why does 1/7 produce a repeating decimal?",approach:"Track the possible remainders in the long division by 7.",answer:"Dividing by 7, the non-zero remainders can only be 1–6. With finitely many choices, a remainder must recur; once it does, the digits loop — a <b>repeating decimal</b>."}
+    ]},
+    {group:"Think & Reflect", items:[
+      {id:"TR-1",src:"§3.3.1",q:"Why does a negative times a negative equal a positive?",approach:"Read multiplying by a negative as removing that many debts.",answer:"Removing 4 debts of ₹3 (i.e. −4 × −3) leaves you ₹12 richer, so <b>(−3) × (−4) = +12</b>."},
+      {id:"TR-2",src:"§3.4",q:"Why do we need q ≠ 0 in the definition of a rational number p/q?",approach:"Ask what p/0 could mean.",answer:"Division by 0 is undefined — p/0 names no number — so a rational number must have <b>q ≠ 0</b>."},
+      {id:"TR-3",src:"§3.4",q:"When adding rationals with different denominators, how do you make the denominators equal?",approach:"Use a common multiple of the denominators.",answer:"Rewrite each fraction with the LCM of the denominators, then add or subtract the numerators."},
+      {id:"TR-4",src:"§3.4",q:"Verify the distributive law for rational numbers.",approach:"Pick rationals p, q, r and check p(q + r) = pq + pr.",answer:"e.g. ½(⅓ + ¼) = ½ · 7/12 = 7/24, and ½·⅓ + ½·¼ = 1/6 + 1/8 = 7/24. ✓ Equal — it holds in general."},
+      {id:"TR-5",src:"§3.4.1",q:"Represent 8/5 and −7/4 on a number line.",approach:"Divide the relevant unit into 5 (or 4) parts and step across.",answer:"8/5 = 1.6 sits between 1 and 2 (1 whole + 3/5); −7/4 = −1.75 sits between −2 and −1 (1¾ left of 0)."},
+      {id:"TR-6",src:"§3.4.2",q:"Why is the average (a + b)/2 always rational and between a and b?",approach:"Use closure of rationals, then compare with a and b.",answer:"Rationals are closed under + and ÷, so (a+b)/2 is rational; and for a < b, a < (a+b)/2 < b — the midpoint lies strictly between."},
+      {id:"TR-7",src:"§3.5",q:"Can √2 be written as a rational number p/q?",answer:"No — the proof by contradiction shows no such p/q exists. <b>√2 is irrational.</b>",approach:"Recall the outcome of the contradiction proof."},
+      {id:"TR-8",src:"§3.5.1",q:"Prove √3 is irrational. Does the same approach work for √5, √7, √10?",approach:"Repeat the contradiction, using ‘if 3 divides p² then 3 divides p’.",answer:"Yes — the method works for √3 (and √5, √7, √10): assuming p/q in lowest terms forces both p and q divisible by the prime, a contradiction. It fails only for perfect squares like √4 = 2 (rational)."},
+      {id:"TR-9",src:"§3.5.2",q:"How do we obtain lines whose lengths are irrational?",approach:"Think geometrically rather than by division.",answer:"Construct them — e.g. a right triangle with legs 1 and 1 has hypotenuse √2. Ruler-and-compass gives exact irrational lengths."},
+      {id:"TR-10",src:"§3.5.2",q:"Extend the construction to √3 and √5; generalise to √n.",approach:"Build each new triangle on the previous hypotenuse.",answer:"Legs √2 & 1 → √3; legs 2 & 1 → √5; in general legs √(n−1) & 1 → √n. Chaining these is the square-root spiral."},
+      {id:"TR-11",src:"§3.6.1",q:"Find the decimal expansions of 10/3 and 11/12. What repeats?",approach:"Long-divide each.",answer:"10/3 = 3.333… = 3.(3); 11/12 = 0.91666… = 0.91(6). Both repeat, because the denominators keep a factor of 3."},
+      {id:"TR-12",src:"§3.6.1",q:"Why does p/q terminate exactly when q's prime factors are only 2 and/or 5?",approach:"Think about turning the denominator into a power of ten.",answer:"Only when q = 2ᵃ5ᵇ can you multiply top and bottom to make the denominator 10ⁿ (since 10 = 2 × 5) — and a power of ten gives a terminating decimal."}
+    ]},
+    {group:"Exercise Set 3.1", items:[
+      {id:"E31-1",src:"Ex 3.1 Q1",q:"A merchant gets 15 ingots per 2 bags of spices. For 12 bags, how many ingots?",approach:"12 bags = 6 lots of 2 bags; scale the ratio.",answer:"12 = 6 × 2, so 6 × 15 = <b>90 ingots</b>."},
+      {id:"E31-2",src:"Ex 3.1 Q2",q:"11, 13, 17, 19 — what do they have in common? List the next three.",answer:"They are the <b>primes between 10 and 20</b>. The next three primes are 23, 29, 31.",approach:"Test each for divisibility."},
+      {id:"E31-3",src:"Ex 3.1 Q3",q:"Are the natural numbers closed under subtraction? Give examples.",approach:"Try subtracting a larger natural from a smaller one.",answer:"<b>No.</b> 3 − 5 = −2 and 2 − 7 = −5 are not natural numbers. Naturals are closed under addition but not subtraction."},
+      {id:"E31-4",src:"Ex 3.1 Q4*",q:"Each finger has 3 joints; the thumb counts them. How many on one hand, and how does it relate to base-12?",approach:"Count joints across the four fingers.",answer:"4 fingers × 3 joints = <b>12</b> — a natural way to count in base-12 (duodecimal) on one hand."}
+    ]},
+    {group:"Exercise Set 3.2", items:[
+      {id:"E32-1",src:"Ex 3.2 Q1",q:"Ladakh is 4 °C at noon; it drops 15 °C by midnight. Midnight temperature?",approach:"Subtract the drop from the noon value.",answer:"4 − 15 = <b>−11 °C</b>."},
+      {id:"E32-2",src:"Ex 3.2 Q2",q:"Loan ₹850, then profit ₹1200, then loss ₹450. Write as integers and find the final standing.",approach:"Debts negative, fortunes positive; add them.",answer:"−850 + 1200 − 450 = <b>−100</b> → a debt of ₹100."},
+      {id:"E32-3",src:"Ex 3.2 Q3 (i–iv)",q:"(−12)×5, (−8)×(−7), 0−(−14), (−20)÷4.",approach:"Apply Brahmagupta's sign rules.",answer:"(−12)×5 = <b>−60</b>; (−8)×(−7) = <b>56</b>; 0 − (−14) = <b>14</b>; (−20)÷4 = <b>−5</b>."},
+      {id:"E32-4",src:"Ex 3.2 Q4",q:"Explain why subtracting a negative equals adding a positive (e.g. 10 − (−5) = 15).",approach:"Read −(−5) as removing a debt.",answer:"Removing a ₹5 debt is the same as gaining ₹5, so 10 − (−5) = 10 + 5 = <b>15</b>."}
+    ]},
+    {group:"Exercise Set 3.3", items:[
+      {id:"E33-1",src:"Ex 3.3 Q1 (i–iv)",q:"Prove equal: 2/3 = 4/6, 5/4 = 10/8, −3/5 = −6/10, 9/3 = 3.",approach:"a/b = c/d exactly when ad = bc.",answer:"2·6 = 3·4 = 12 ✓; 5·8 = 4·10 = 40 ✓; (−3)·10 = 5·(−6) = −30 ✓; 9 = 3·3 ✓. All equal."},
+      {id:"E33-2",src:"Ex 3.3 Q2 (i–iii)",q:"Sums: 2/5 + 3/10, 7/12 + 5/8, −4/7 + 3/14.",approach:"Common denominator, then add numerators.",answer:"2/5 + 3/10 = 7/10; 7/12 + 5/8 = 29/24; −4/7 + 3/14 = −5/14."},
+      {id:"E33-3",src:"Ex 3.3 Q3 (i–iii)",q:"Differences: 5/6 − 1/4, 11/8 − 3/4, −7/9 − (−2/3).",approach:"Common denominator, then subtract.",answer:"5/6 − 1/4 = 7/12; 11/8 − 3/4 = 5/8; −7/9 − (−2/3) = −1/9."},
+      {id:"E33-4",src:"Ex 3.3 Q4 (i–iii)",q:"Products: 2/3 × 3/10, 7/11 × 5/8, −4/7 × 5/14.",approach:"Multiply numerators and denominators, then reduce.",answer:"2/3 × 3/10 = 1/5; 7/11 × 5/8 = 35/88; −4/7 × 5/14 = −10/49."},
+      {id:"E33-5",src:"Ex 3.3 Q5 (i–iii)",q:"Quotients: 2/3 ÷ 3/10, 7/11 ÷ 5/8, −4/7 ÷ 5/14.",approach:"Multiply by the reciprocal.",answer:"2/3 ÷ 3/10 = 20/9; 7/11 ÷ 5/8 = 56/55; −4/7 ÷ 5/14 = −8/5."},
+      {id:"E33-6",src:"Ex 3.3 Q6",q:"Show (1/2 + 3/4) × 8/3 = 1/2 × 8/3 + 3/4 × 8/3.",approach:"Compute both sides; distributivity means they match.",answer:"LHS = (5/4)(8/3) = 10/3. RHS = 4/3 + 2 = 10/3. Equal — the distributive law holds."},
+      {id:"E33-7",src:"Ex 3.3 Q7",q:"Simplify 7/9 × (6/7 − 3/4) using the distributive property.",approach:"Distribute: 7/9·6/7 − 7/9·3/4.",answer:"= 6/9 − 21/36 = 2/3 − 7/12 = 8/12 − 7/12 = <b>1/12</b>."},
+      {id:"E33-8",src:"Ex 3.3 Q8",q:"Find x: 5/6 (3/5 + x) = 5/6 + ½x.",approach:"Expand the left side, then collect the x terms.",answer:"½ + (5/6)x = 5/6 + ½x ⇒ (5/6 − ½)x = 5/6 − ½ ⇒ (1/3)x = 1/3 ⇒ <b>x = 1</b>."}
+    ]},
+    {group:"Exercise Set 3.4", items:[
+      {id:"E34-1",src:"Ex 3.4 Q1",q:"Represent 2/3, −5/4 and 11/2 on one number line.",approach:"Split the relevant unit into 3, 4, 2 parts respectively.",answer:"2/3 ≈ 0.67 (between 0 and 1); −5/4 = −1.25 (between −2 and −1); 11/2 = 5.5 (between 5 and 6)."},
+      {id:"E34-2",src:"Ex 3.4 Q2",q:"Find three distinct rationals strictly between −1/2 and 1/4.",approach:"Use a common denominator (8): −4/8 to 2/8.",answer:"e.g. −1/4, 0, 1/8 — any three values in (−0.5, 0.25)."},
+      {id:"E34-3",src:"Ex 3.4 Q3",q:"Simplify −1/4 + 5/12.",approach:"Common denominator 12.",answer:"−3/12 + 5/12 = 2/12 = <b>1/6</b>."},
+      {id:"E34-4",src:"Ex 3.4 Q4",q:"15¾ m of silk; each kurta needs 2¼ m. How many kurtas?",approach:"Divide: 63/4 ÷ 9/4.",answer:"63/4 × 4/9 = 63/9 = <b>7 kurtas</b> (using all the silk exactly)."},
+      {id:"E34-5",src:"Ex 3.4 Q5",q:"Find three rationals between 3.1415 and 3.1416.",approach:"Add more decimal places inside the gap.",answer:"e.g. 3.14151, 3.14155, 3.14159 — any three with extra digits between them."},
+      {id:"E34-6",src:"Ex 3.4 Q6*",q:"Other way(s) to find a rational between two rationals?",answer:"Besides the average, append an extra decimal place, or use a common denominator and pick an integer numerator that lies between.",approach:"Think beyond averaging."}
+    ]},
+    {group:"Exercise Set 3.5", items:[
+      {id:"E35-1",src:"Ex 3.5 Q1",q:"Which of 7/20, 4/15, 13/250 terminate? Then verify by long division.",approach:"Factor each denominator; only 2s and 5s ⇒ terminating.",answer:"20 = 2²×5 → 7/20 = 0.35 (terminating); 15 = 3×5 → 4/15 = 0.2(6) (repeating); 250 = 2×5³ → 13/250 = 0.052 (terminating)."},
+      {id:"E35-2",src:"Ex 3.5 Q2",q:"Long-divide 1/13 and find its repeating block. Is it cyclic for 2/13, 3/13, …?",approach:"Divide and record the 6-digit block; compare with multiples.",answer:"1/13 = 0.(076923); 2/13 = 0.(153846). The multiples fall into two cyclic six-digit families ({076923}, {153846}) — cyclic, like 1/7."},
+      {id:"E35-3",src:"Ex 3.5 Q3 (i–vi)",q:"Classify: √81, √12, 0.3̄, 0.12345…(repeating), 1.01001000…, 23.560185… (terminating). Give fractions where rational.",approach:"Perfect square/terminating/repeating ⇒ rational; else irrational.",answer:"√81 = 9 (rational); √12 = 2√3 (irrational); 0.3̄ = 1/3; 0.(12345) = 12345/99999 (rational); 1.01001000… (irrational, no fixed block); the finite decimal 23.560185… is rational."},
+      {id:"E35-4",src:"Ex 3.5 Q4",q:"Show 0.9̄ = 1 using algebra.",approach:"Let x = 0.9̄; multiply by 10 and subtract.",answer:"10x = 9.9̄ ⇒ 10x − x = 9 ⇒ 9x = 9 ⇒ <b>x = 1</b>. So 0.999… equals 1 exactly."},
+      {id:"E35-5",src:"Ex 3.5 Q5*",q:"Find more n whose reciprocal 1/n has a cyclic repeating block.",answer:"The ‘full-reptend’ primes: 1/17, 1/19, 1/23 give (n−1)-digit cyclic blocks (like 7).",approach:"Look for primes whose decimal period is n − 1."}
+    ]},
+    {group:"End-of-Chapter Exercises", items:[
+      {id:"EOC-1",src:"Q1 (i,ii)",q:"By long division, write 3/50 and 2/9 as decimals.",approach:"Divide; check whether the remainder ever hits 0.",answer:"3/50 = 0.06 (50 = 2×5², terminating); 2/9 = 0.(2) = 0.222… (repeating)."},
+      {id:"EOC-2",src:"Q2",q:"Prove that √5 is irrational.",hint:"Contradiction, using ‘5 divides p² ⇒ 5 divides p’.",approach:"Assume √5 = p/q in lowest terms and force a common factor.",answer:"5q² = p² ⇒ 5 | p ⇒ p = 5k ⇒ 5q² = 25k² ⇒ q² = 5k² ⇒ 5 | q. Both divisible by 5 contradicts lowest terms, so <b>√5 is irrational</b>."},
+      {id:"EOC-3",src:"Q3 (i–ix)",q:"Convert to p/q: 12.6, 0.0120, 3.05̄2, 1.235, 0.2̄3, 2.0̄5, 2.125, 3.125, 2.1625.",approach:"Terminating → over a power of ten and reduce; repeating → the 10ⁿx − x algebra.",answer:"Terminating ones: 12.6 = 63/5, 0.0120 = 3/250, 2.125 = 17/8, 3.125 = 25/8, 2.1625 = 173/80. The barred (repeating) ones use the 10ⁿx method — confirm the exact bar positions from the book PDF alongside."},
+      {id:"EOC-4",src:"Q4 (i,ii)",q:"Locate 0.532 and 1.15 on the number line.",approach:"Successive magnification — zoom into the interval and subdivide.",answer:"0.532 lies between 0.5 and 0.6 (nearer 0.53); 1.15 lies between 1.1 and 1.2. Subdivide and step to place each precisely."},
+      {id:"EOC-5",src:"Q5",q:"Find 6 rational numbers between 3 and 4.",approach:"Any fractions/decimals in the gap.",answer:"e.g. 3.1, 3.2, 3.3, 3.4, 3.5, 3.6 — any six values strictly between 3 and 4 (there are infinitely many)."},
+      {id:"EOC-6",src:"Q6",q:"Find 5 rational numbers between 2/5 and 3/5.",approach:"Common denominator: 2/5 = 20/50, 3/5 = 30/50.",answer:"e.g. 21/50, 22/50, 23/50, 24/50, 25/50 (= 1/2) — any five in (0.4, 0.6)."},
+      {id:"EOC-7",src:"Q7",q:"Find 5 rational numbers between 1/6 and 2/5.",approach:"Common denominator 30: 1/6 = 5/30, 2/5 = 12/30.",answer:"e.g. 6/30, 7/30, 8/30, 9/30, 10/30 (i.e. 1/5, 7/30, 4/15, 3/10, 1/3) — any five in (≈0.167, 0.4)."},
+      {id:"EOC-8",src:"Q8",q:"Find x: x/3 + x/5 = 16/15.",approach:"Common denominator on the left.",answer:"(5x + 3x)/15 = 8x/15 = 16/15 ⇒ 8x = 16 ⇒ <b>x = 2</b>."},
+      {id:"EOC-9",src:"Q9",q:"a, b are non-zero rationals with a + b = 0. Is ab positive or negative?",approach:"Express b in terms of a.",answer:"b = −a, so ab = −a². A square is positive and a ≠ 0, so ab is <b>negative</b>."},
+      {id:"EOC-10",src:"Q10",q:"A terminating decimal has its last non-zero digit at the 4th place. Show it is p/10⁴ (p not divisible by 10). Must the lowest-form denominator be divisible by 2⁴ or 5⁴?",approach:"Number of decimal places = max(power of 2, power of 5) in the lowest-form denominator.",answer:"It equals p/10⁴ with p not divisible by 10. Since the place count is max(a, b) for a denominator 2ᵃ5ᵇ, reaching the 4th place forces a = 4 or b = 4 — so <b>yes</b>, the denominator must be divisible by 2⁴ or 5⁴."},
+      {id:"EOC-11",src:"Q11",q:"Without dividing, is 18/125 terminating? If so, how many places?",approach:"Factor 125.",answer:"125 = 5³ (only 5s) → terminating, with max(0, 3) = <b>3</b> places: 18/125 = 0.144."},
+      {id:"EOC-12",src:"Q12",q:"A rational in lowest form has denominator 2³ × 5. How many decimal places will it have?",approach:"Places = max(power of 2, power of 5).",answer:"max(3, 1) = <b>3</b> decimal places."},
+      {id:"EOC-13",src:"Q13*",q:"a = 7/12, b = 5/6. Write both as k₁/m, k₂/m; find five rationals between; explain why k₂ − k₁ > n + 1 is needed for n such numbers.",approach:"Scale to a common denominator large enough to leave n integer numerators in the gap.",answer:"7/12 and 5/6 = 10/12 leave only 8/12, 9/12 between. Scale ×6: 42/72 and 60/72 — now 43/72…59/72 give plenty; pick five, e.g. 43/72,…,47/72. To fit n numbers with one denominator you need more than n integers strictly between, i.e. k₂ − k₁ > n + 1."},
+      {id:"EOC-14",src:"Q14*",q:"If x + y + z = 0 and xy + yz + zx = 0, show x = y = z = 0.",hint:"Square the first equation.",approach:"Use (x+y+z)² = x²+y²+z² + 2(xy+yz+zx).",answer:"0 = (x+y+z)² = x²+y²+z² + 2·0, so x²+y²+z² = 0. A sum of squares is 0 only if each is 0 ⇒ <b>x = y = z = 0</b>."},
+      {id:"EOC-15",src:"Q15*",q:"Show that (a + b)/2 lies between the rationals a and b.",approach:"Assume a < b and compare.",answer:"a = (a+a)/2 < (a+b)/2 < (b+b)/2 = b, so the average lies strictly between a and b."},
+      {id:"EOC-16",src:"Q16 · Fig 3.14",q:"Find the lengths of all the hypotenuses in the square-root spiral.",approach:"Each triangle adds a unit leg on the previous hypotenuse.",answer:"The hypotenuses are √2, √3, √4, √5, … in turn (the k-th is √(k+1)). Perfect squares like √4 = 2, √9 = 3 are rational; the rest are irrational."}
+    ]}
+  ];
+  window.TEXTBOOK_IDS=TEXTBOOK.flatMap(g=>g.items.map(it=>it.id));
+  function renderTextbook(){
+    const body=document.getElementById('tbBody');body.innerHTML='';
+    TEXTBOOK.forEach(group=>{
+      const gh=document.createElement('div');gh.className='tq-group';gh.textContent=group.group;body.appendChild(gh);
+      group.items.forEach(it=>{
+        const d=document.createElement('div');d.className='tq';
+        d.innerHTML=`<div class="tq-src">${it.src} · ${it.id}</div><div class="tq-q">${it.q}</div>`;
+        const btns=document.createElement('div');btns.className='tq-btns';const panels=[];
+        [['hint','💡 Hint',it.hint],['approach','🧭 Approach',it.approach],['answer','✓ Answer & reasoning',it.answer]].forEach(([k,label,content])=>{
+          if(!content)return;
+          const b=document.createElement('button');b.className='tq-btn';b.textContent=label;b.setAttribute('aria-expanded','false');
+          const p=document.createElement('div');p.className='tq-reveal '+k;p.innerHTML=content;
+          b.onclick=()=>{const open=p.classList.toggle('show');b.setAttribute('aria-expanded',open?'true':'false');};
+          btns.appendChild(b);panels.push(p);
+        });
+        d.appendChild(btns);panels.forEach(p=>d.appendChild(p));body.appendChild(d);
+      });
+    });
+  }
+  function openTextbook(){
+    if(!document.getElementById('tbBody').childNodes.length)renderTextbook();
+    const fr=document.getElementById('tbPdfFrame');
+    if(fr && !fr.getAttribute('src')) fr.setAttribute('src','iemh103.pdf#view=FitH');
+    show('textbook');
+  }
+
+  function renderHome(){
+    const g=document.getElementById('sectGrid');g.innerHTML='';
+    SECTIONS.forEach(s=>g.appendChild(card(s)));
+    const tg=document.getElementById('tbGrid');tg.innerHTML='';
+    const tb=document.createElement('button');tb.className='set-card';
+    tb.innerHTML=`<div class="num">📖 Textbook questions <span class="book">examples + exercises</span></div>`+
+      `<h3>Every question, worked</h3><p>All worked examples, exercises, Think-and-Reflect prompts and the end-of-chapter problems — each with a hint, an approach to check your plan, then full reasoning.</p>`+
+      `<div class="chips"><span class="chip">hint</span><span class="chip">approach</span><span class="chip">answer</span></div>`;
+    tb.onclick=()=>openTextbook();
+    tg.appendChild(tb);
+    const cg=document.getElementById('cumGrid');cg.innerHTML='';
+    const cc=document.createElement('button');cc.className='set-card cumulative';cc.style.width='100%';
+    cc.innerHTML=`<div class="num">Whole-chapter test <span class="book">all topics</span></div>`+
+      `<h3>Test yourself</h3><p>The full chapter mixed together — Explore, Practice, Quiz and Challenge across every topic, for cumulative exam-style practice.</p>`+
+      `<div class="chips"><span class="chip">cumulative</span><span class="chip">mixed</span></div>`;
+    cc.onclick=()=>{backTarget='home';show('home');};
+    cg.appendChild(cc);
+  }
+  window.renderSectionHome=renderHome;
+  renderHome();
+  show('secthome');
+})();
 </script>
 <script>
 fetch('../chapters_nav.html').then(r=>r.text()).then(html=>{
