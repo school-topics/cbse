@@ -250,17 +250,136 @@
   .dd-node{cursor:pointer}
   .dd-hint{font-size:.85rem;color:#5a6b88;margin:0 0 10px}
   .dd-hint b{color:var(--ink)}
+
+  /* ===== section-first shell ===== */
+  .set-card.cumulative{border-style:dashed;background:linear-gradient(0deg,rgba(184,137,43,.06),rgba(184,137,43,.06)),var(--card)}
+  .set-card .book{font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba;float:right;letter-spacing:.04em}
+  .set-card .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+  .chip{font-family:ui-monospace,monospace;font-size:.6rem;letter-spacing:.03em;text-transform:uppercase;
+    padding:3px 8px;border-radius:20px;background:rgba(27,42,74,.06);color:#5a6b88}
+  .sect-intro{color:#3a4a68;max-width:60ch;margin:0 0 18px;font-size:1rem}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:680px){.tiles{grid-template-columns:1fr}}
+  .tile{display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;
+    background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:16px 16px;transition:.14s;color:var(--ink)}
+  .tile:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 16px rgba(27,42,74,.1)}
+  .tile .t-ico{font-size:1.2rem;line-height:1}
+  .tile h4{margin:2px 0 0;font-size:1.05rem;font-weight:600}
+  .tile p{margin:0;font-size:.82rem;color:#3a4a68}
+  .tile .t-meta{margin-top:6px;font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba}
+  .tile.learn{border-color:var(--gold);background:rgba(184,137,43,.05)}
+  .tile.learn:hover{border-color:var(--gold)}
+  .learn-card{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:0 10px 10px 0;padding:16px 18px;margin-bottom:12px}
+  .learn-card h4{margin:0 0 6px;font-size:1.08rem}
+  .learn-card p{margin:0 0 12px;color:#3a4a68;font-size:.95rem;line-height:1.55}
+  .learn-card .try{font-family:ui-monospace,monospace;font-size:.74rem;padding:8px 14px;border:none;
+    border-radius:8px;background:var(--ink);color:var(--paper);cursor:pointer}
+  .learn-card .try:hover{background:var(--gold)}
+  /* textbook questions */
+  #tbGrid .set-card,#cumGrid .set-card{width:100%}
+  .tq-group{margin:24px 0 4px;font-family:ui-monospace,monospace;font-size:.72rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--gold);border-bottom:1.5px solid var(--line);padding-bottom:6px}
+  .tq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+  .tq-src{font-family:ui-monospace,monospace;font-size:.66rem;color:#9aa6ba;margin-bottom:4px;letter-spacing:.03em}
+  .tq-q{font-size:.98rem;margin-bottom:10px;line-height:1.5}
+  .tq-btns{display:flex;flex-wrap:wrap;gap:8px}
+  .tq-btn{font-family:ui-monospace,monospace;font-size:.72rem;padding:7px 12px;border:1.5px solid var(--line);
+    border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer;transition:.12s}
+  .tq-btn:hover{border-color:var(--ink)}
+  .tq-btn[aria-expanded="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tq-reveal{margin-top:10px;padding:11px 14px;border-radius:8px;font-size:.9rem;line-height:1.55;display:none}
+  .tq-reveal.show{display:block}
+  .tq-reveal.hint{background:rgba(184,137,43,.10);border-left:3px solid var(--gold)}
+  .tq-reveal.approach{background:rgba(27,108,168,.08);border-left:3px solid var(--pt2)}
+  .tq-reveal.answer{background:rgba(47,125,79,.10);border-left:3px solid var(--good)}
+  .tq-reveal b{color:var(--ink)}
+  /* textbook + PDF split view */
+  .wrap.wide{max-width:1320px}                 /* Textbook mode uses the extra width */
+  .tb-layout{display:flex;gap:18px;align-items:flex-start}
+  .tb-questions{flex:1 1 440px;max-width:560px;min-width:0}
+  .tb-pdf{flex:2 1 0;min-width:0;position:sticky;top:12px}
+  .tb-pdf iframe{width:100%;height:82vh;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .tb-credit{font-family:ui-monospace,monospace;font-size:.6rem;color:#9aa6ba;margin-top:6px;text-align:center}
+  .tb-pdf.hide-pdf{display:none}
+  .tb-layout:has(.tb-pdf.hide-pdf) .tb-questions{max-width:none}   /* book hidden → questions use full width */
+  @media(max-width:900px){
+    .tb-layout{flex-direction:column}
+    .tb-pdf{width:100%;position:static}
+    .tb-pdf iframe{height:65vh}
+    .tb-questions{max-width:none}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- HOME -->
-  <section id="home">
+  <!-- SECTION HOME (landing) -->
+  <section id="secthome">
     <p class="eyebrow">Grade 9 · Coordinate Geometry</p>
     <h1>Reiaan's Room</h1>
     <div class="rule"></div>
-    <p class="sub">Shalini is helping her brother Reiaan map his new room with a coordinate grid. Help them place furniture, measure distances, and find their way around — one point at a time.</p>
+    <p class="sub">Shalini is helping her brother Reiaan map his new room with a coordinate grid. Work through the chapter section by section — each section has an interactive explainer, then its own practice, quiz, challenge and deep dives.</p>
+    <div style="height:20px"></div>
+    <div class="setgrid" id="sectGrid"></div>
+    <div style="height:16px"></div>
+    <div id="tbGrid" style="margin-bottom:12px"></div>
+    <div id="cumGrid"></div>
+  </section>
+
+  <!-- SECTION DETAIL -->
+  <section id="sectview" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnSect">← Sections</button>
+      <div class="score" id="sectLabel"></div>
+      <div></div>
+    </div>
+    <h2 id="sectTitle" style="font-size:1.5rem;margin:0 0 6px"></h2>
+    <p class="sect-intro" id="sectIntro"></p>
+    <div class="tiles" id="tileGrid"></div>
+  </section>
+
+  <!-- LEARN (guided concept explainer) -->
+  <section id="learn" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnLearn">← Back</button>
+      <div class="score" id="learnLabel">Learn</div>
+      <div></div>
+    </div>
+    <h2 id="learnTitle" style="font-size:1.4rem;margin:0 0 6px"></h2>
+    <p class="sect-intro" id="learnIntro"></p>
+    <div id="learnBody"></div>
+  </section>
+
+  <!-- TEXTBOOK QUESTIONS (every question in the chapter) -->
+  <section id="textbook" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnTB">← Sections</button>
+      <div class="score">Textbook questions</div>
+      <button class="backlink" id="tbPdfToggle">📄 Hide book</button>
+    </div>
+    <h2 style="font-size:1.5rem;margin:0 0 6px">Every question in the chapter</h2>
+    <p class="sect-intro">All the worked examples, exercises, Think-and-Reflect prompts and end-of-chapter problems from the book. Reveal a <b>Hint</b>, check your <b>Approach</b> before you compute, then the full <b>Answer &amp; reasoning</b> — each on click. Scroll the book alongside to see any figure a question refers to.</p>
+    <div class="tb-layout" id="tbLayout">
+      <div class="tb-questions"><div id="tbBody"></div></div>
+      <aside class="tb-pdf" id="tbPdf">
+        <iframe id="tbPdfFrame" title="Ganita Manjari — Grade 9, Chapter 1"></iframe>
+        <div class="tb-credit">Source: NCERT · Ganita Manjari, Grade 9, Ch. 1 — reproduced for educational use</div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- HOME (whole-chapter cumulative menu) -->
+  <section id="home" class="hide">
+    <div class="topbar">
+      <button class="backlink" id="quitBtnHome">← Sections</button>
+      <div class="score">Whole-chapter test · all topics mixed</div>
+      <div></div>
+    </div>
+    <p class="eyebrow">Grade 9 · Coordinate Geometry</p>
+    <h1>Whole-chapter test</h1>
+    <div class="rule"></div>
+    <p class="sub">The full chapter, all topics mixed together — for cumulative, exam-style practice across everything Reiaan learned.</p>
     <div style="height:22px"></div>
     <div class="modes">
       <button class="mode-card" data-mode="explore">
@@ -633,6 +752,116 @@ const BANK = [
     draw:()=>{point(3,5,'(3,5)');point(5,3,'(5,3)');},
     type:'tf', answer:false,
     explain:"<b>False.</b> Order matters — (3, 5) and (5, 3) are different points. They coincide only when x = y."
+  },
+  // ---- extra authentic book items (mined from Ganita Manjari Ch.1) ----
+  // 16 — Fig 1.2 point on x-axis → C1-1.3b
+  { level:'easy',
+    view:{xmin:-2,xmax:8,ymin:-4,ymax:4},
+    story:"On the coordinate plane, point B is marked at (4.5, 0), just like in Fig. 1.2 of the chapter.",
+    ask:"Where does B lie?",
+    draw:()=>{point(4.5,0,'B');},
+    type:'mc', options:["On the x-axis","On the y-axis","In Quadrant I","In Quadrant IV"], answer:0,
+    explain:"B(4.5, 0) has y = 0, so it sits on the <b>x-axis</b>, 4.5 units right of O."
+  },
+  // 17 — origin (End-of-Ch Q1) → C1-1.3a
+  { level:'easy',
+    view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"The x-axis and the y-axis cross at one special point.",
+    ask:"What are the coordinates of that point of intersection?",
+    draw:()=>{point(0,0,'O');},
+    type:'mc', options:["(0, 0)","(1, 1)","(1, 0)","(0, 1)"], answer:0,
+    explain:"The axes intersect at the <b>origin O = (0, 0)</b>."
+  },
+  // 18 — line parallel to y-axis (End-of-Ch Q2) → C1-1.4a
+  { level:'medium',
+    view:{xmin:-8,xmax:6,ymin:-8,ymax:8},
+    story:"Point W has x-coordinate −5. Point H lies on the line drawn through W parallel to the y-axis.",
+    ask:"Which quadrants can H lie in?",
+    draw:()=>{seg(-5,-8,-5,8,'helper leg-y');point(-5,3,'H');},
+    type:'mc', options:["I or IV","II or III","I or II","III or IV"], answer:1,
+    explain:"That line keeps x = −5 (negative). With x < 0, a point lies in <b>Quadrant II</b> (y>0) or <b>Quadrant III</b> (y<0)."
+  },
+  // 19 — x-coord of point on y-axis (Think & Reflect) → C1-1.3b
+  { level:'easy',
+    view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"Look at several points that lie exactly on the y-axis.",
+    ask:"What is the x-coordinate of any point on the y-axis?",
+    draw:()=>{point(0,3,'');point(0,-2,'');point(0,5,'');},
+    type:'num', answer:0, tol:0.001, unit:'',
+    explain:"Every point on the y-axis has the form (0, y), so its x-coordinate is always <b>0</b>."
+  },
+  // 20 — bathroom vs room door (Exercise Set 1.1) → C1-1.3c
+  { level:'medium',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"Reiaan's room door is about 3.5 units wide. The bathroom door runs from B₁(0, 1.5) to B₂(0, 4).",
+    ask:"Is the bathroom door narrower or wider than the room door?",
+    draw:()=>{ROOM();point(0,1.5,'B₁');point(0,4,'B₂');seg(0,1.5,0,4,'hyp');},
+    type:'mc', options:["Narrower","Wider","Exactly the same","Cannot tell"], answer:0,
+    explain:"Bathroom door = |4 − 1.5| = 2.5 units, which is less than 3.5 → <b>narrower</b>."
+  },
+  // 21 — distance DM from Fig 1.6 → C1-2.2
+  { level:'hard',
+    view:{xmin:-2,xmax:13,ymin:-2,ymax:12},
+    story:"In the chapter's triangle ADM, two vertices are D(7, 1) and M(9, 6).",
+    ask:"What is the length DM?",
+    draw:()=>{point(7,1,'D');point(9,6,'M');seg(7,1,9,6,'hyp');seg(7,1,9,1,'helper leg-x');seg(9,1,9,6,'helper leg-y');},
+    type:'num', answer:5.39, tol:0.06, unit:'units (≈)',
+    explain:"Δx = 2, Δy = 5. √(2² + 5²) = √29 ≈ <b>5.39 units</b>."
+  },
+  // 22 — horizontal shift A→D (Think & Reflect) → C1-2.1
+  { level:'easy',
+    view:{xmin:-2,xmax:10,ymin:-2,ymax:8},
+    story:"You move from A(3, 4) to D(7, 1), as in the chapter's distance example.",
+    ask:"How far do you travel along the x-axis (the horizontal shift)?",
+    draw:()=>{point(3,4,'A');point(7,1,'D');seg(3,4,7,4,'helper leg-x');},
+    type:'num', answer:4, tol:0.01, unit:'units',
+    explain:"Horizontal shift = |x_D − x_A| = |7 − 3| = <b>4 units</b>. (The vertical shift is 3, giving AD = 5.)"
+  },
+  // 23 — distance from origin (bridges to Q12 circle) → C1-2.2
+  { level:'medium',
+    view:{xmin:-2,xmax:10,ymin:-2,ymax:10},
+    story:"A straight thread is stretched from the origin O(0, 0) to the point (6, 8).",
+    ask:"How long is the thread?",
+    draw:()=>{point(0,0,'O');point(6,8,'P');seg(0,0,6,8,'hyp');seg(0,0,6,0,'helper leg-x');seg(6,0,6,8,'helper leg-y');},
+    type:'num', answer:10, tol:0.02, unit:'units',
+    explain:"√(6² + 8²) = √(36 + 64) = √100 = <b>10 units</b>."
+  },
+  // 24 — reflection in x-axis (Think & Reflect Fig 1.9) → C1-2.4
+  { level:'medium',
+    view:{xmin:-2,xmax:10,ymin:-6,ymax:6},
+    story:"The point D(7, 1) is reflected across the x-axis (not the y-axis this time).",
+    ask:"Where does its image D′ land? Drag the marker there.",
+    draw:()=>{point(7,1,'D');seg(7,1,7,-1,'helper leg-y');},
+    type:'coord', correct:[7,-1],
+    explain:"Reflecting in the x-axis flips the sign of y only: (7, 1) → <b>(7, −1)</b>."
+  },
+  // 25 — reflection in y-axis (MC form) → C1-2.3
+  { level:'medium',
+    view:{xmin:-8,xmax:8,ymin:-6,ymax:6},
+    story:"The point (4, −3) is reflected across the y-axis.",
+    ask:"What are the coordinates of the image?",
+    draw:()=>{point(4,-3,'M');point(-4,-3,"M'");seg(4,-3,-4,-3,'helper leg-x');},
+    type:'mc', options:["(−4, −3)","(4, 3)","(−4, 3)","(3, −4)"], answer:0,
+    explain:"Reflection in the y-axis flips the sign of x only: (4, −3) → <b>(−4, −3)</b>."
+  },
+  // 26 — no negative numbers (End-of-Ch Q5) → C1-3.2
+  { level:'medium',
+    view:{xmin:-6,xmax:6,ymin:-6,ymax:6},
+    story:"Suppose a coordinate system had no negative numbers at all.",
+    ask:"Could it still locate every point in the whole plane?",
+    draw:()=>{point(3,3,'');point(-3,2,'');point(-2,-3,'');point(2,-3,'');},
+    type:'tf', answer:false,
+    explain:"<b>False.</b> Without negatives you only get Quadrant I (x, y ≥ 0). The other three quadrants need negative coordinates."
+  },
+  // 27 — RAMP mirror images (End-of-Ch Q3) → C1-3.1
+  { level:'hard',
+    view:{xmin:-7,xmax:5,ymin:-4,ymax:4},
+    story:"R(3, 0), A(0, −2), M(−5, −2) and P(−5, 2) are joined in order to form RAMP.",
+    ask:"Which two points are mirror images of each other, and in which axis?",
+    draw:()=>{point(3,0,'R');point(0,-2,'A');point(-5,-2,'M');point(-5,2,'P');
+      seg(3,0,0,-2);seg(0,-2,-5,-2);seg(-5,-2,-5,2);seg(-5,2,3,0);},
+    type:'mc', options:["M and P, in the x-axis","R and A, in the y-axis","A and P, in the x-axis","M and R, in the y-axis"], answer:0,
+    explain:"M(−5, −2) and P(−5, 2) share the same x and have opposite y → mirror images in the <b>x-axis</b>."
   }
 ];
 
@@ -796,7 +1025,8 @@ const CHALLENGE={set1:CH1, set2:CH2, set3:CH3};
 // NCERT coverage-map IDs per activity — the data-ncert hook for later book↔activity linking.
 // Index-aligned with each bank; attached onto the question objects so loadQuestion can tag the DOM.
 const NCERT={
-  BANK:['C1-1.3c','C1-1.3b','C1-1.3b','C1-1.4a','C1-2.1','C1-1.4c','C1-2.2','C1-2.3','C1-3.5','C1-3.10','C1-1.4a','C1-2.1','C1-2.2','C1-3.6','C1-1.4b'],
+  BANK:['C1-1.3c','C1-1.3b','C1-1.3b','C1-1.4a','C1-2.1','C1-1.4c','C1-2.2','C1-2.3','C1-3.5','C1-3.10','C1-1.4a','C1-2.1','C1-2.2','C1-3.6','C1-1.4b',
+        'C1-1.3b','C1-1.3a','C1-1.4a','C1-1.3b','C1-1.3c','C1-2.2','C1-2.1','C1-2.2','C1-2.4','C1-2.3','C1-3.2','C1-3.1'],
   set1:['C1-1.4a','C1-1.3b','C1-1.3a','C1-1.3b','C1-1.4c','C1-1.3b','C1-3.3'],
   set2:['C1-1.4a','C1-1.3b','C1-1.3c','C1-1.4a','C1-1.4c','C1-1.3a','C1-3.3','C1-3.5'],
   set3:['C1-1.4b','C1-1.4a','C1-3.10','C1-1.3b','C1-3.10','C1-3.10','C1-3.5','C1-3.6','C1-3.7']
@@ -814,12 +1044,31 @@ let activeBank=BANK, currentSet=null;
 
 const $=id=>document.getElementById(id);
 
-function show(sec){['home','explore','setpick','ddpick','deepdive','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));}
+function show(sec){
+  ['secthome','sectview','learn','textbook','home','explore','setpick','ddpick','deepdive','session','results'].forEach(s=>$(s).classList.toggle('hide',s!==sec));
+  const wrap=document.querySelector('.wrap'); if(wrap)wrap.classList.toggle('wide',sec==='textbook'); // Textbook mode gets the extra width
+}
+
+// where "back / menu" returns to, and how to replay the last scored run (set per launch)
+let backTarget='home', lastRun=null, runResultTitle=null;
+
+// Generic launcher: run an arbitrary list of question objects as a practice/quiz session.
+// Used by the per-section tiles (the cumulative menu still uses startMode/startChallenge).
+function runSet(items, m, opts){
+  opts=opts||{};
+  mode=m; activeBank=items; order=items.slice(); marks=order.map(()=>null); idx=0; correctCount=0;
+  backTarget=opts.back||'sectview';
+  runResultTitle=opts.title||null;
+  lastRun=()=>runSet(items,m,opts);
+  show('session'); renderPips(); loadQuestion();
+}
 
 function startMode(m){
+  backTarget='home'; runResultTitle=null;
   if(m==='explore'){show('explore');startExplore();return;}
   if(m==='challenge'){showSetPicker();return;}
-  if(m==='deepdive'){window.showDDPicker();return;}
+  if(m==='deepdive'){window.showDDPicker(null);return;}
+  lastRun=()=>startMode(m);
   mode=m; idx=0; correctCount=0;
   activeBank=BANK;
   order = m==='practice'?PRACTICE_SET.map(i=>BANK[i]):QUIZ_SET.map(i=>BANK[i]);
@@ -854,6 +1103,7 @@ function startChallenge(setKey){
   activeBank=CHALLENGE[setKey];
   order=activeBank.map(q=>q);
   marks=order.map(()=>null);
+  backTarget='setpick'; runResultTitle=null; lastRun=()=>startChallenge(setKey);
   show('session');
   renderPips();
   loadQuestion();
@@ -1024,6 +1274,7 @@ function finishSession(){
       : pct>=0.6?"Solid grasp — review the ones you missed and go again."
       : "Good start. Try Practice mode to build up, then come back.";
   }
+  if(runResultTitle)$('resTitle').textContent=runResultTitle;
   const stars=Math.round((correctCount/order.length)*5);
   $('resStars').textContent='★★★★★'.slice(0,stars)+'☆☆☆☆☆'.slice(0,5-stars);
   show('results');
@@ -1062,6 +1313,7 @@ function finishSession(){
     {key:'refl',    title:'Reflection',  label:'Reflection',  ncert:'C1-2.3'}
   ];
   let tab='coords';
+  let activeTabs=TABS;   // may be narrowed to a section's tabs via startExplore(tabKeys)
 
   const corner=k=>({x:FURN[k].x, y:FURN[k].y});
   function quadOf(x,y){
@@ -1284,48 +1536,57 @@ function finishSession(){
 
   function renderTabs(){
     const strip=document.getElementById('xtabs');strip.innerHTML='';
-    TABS.forEach(t=>{
+    activeTabs.forEach(t=>{
       const b=document.createElement('button');b.className='xtab';
       b.setAttribute('aria-selected', t.key===tab);b.textContent=t.label;
       b.onclick=()=>setTab(t.key);
       strip.appendChild(b);
     });
-    const i=TABS.findIndex(t=>t.key===tab);
-    document.getElementById('xTitle').textContent=TABS[i].title;
-    document.getElementById('xModeLabel').textContent='Explore · '+TABS[i].title;
-    document.getElementById('xCount').textContent=`${i+1} / ${TABS.length}`;
+    const i=activeTabs.findIndex(t=>t.key===tab);
+    document.getElementById('xTitle').textContent=activeTabs[i].title;
+    document.getElementById('xModeLabel').textContent='Explore · '+activeTabs[i].title;
+    document.getElementById('xCount').textContent=`${i+1} / ${activeTabs.length}`;
     document.getElementById('xPrev').disabled=(i===0);
-    document.getElementById('xNext').disabled=(i===TABS.length-1);
+    document.getElementById('xNext').disabled=(i===activeTabs.length-1);
   }
   function setTab(key){ tab=key; document.getElementById('explore').dataset.ncert=(TABS.find(t=>t.key===key)||{}).ncert||''; renderTabs();renderControls();render(); }
 
-  window.startExplore=function(){
+  window.startExplore=function(tabKeys, startKey){
     if(!started){
       document.getElementById('xPrev').addEventListener('click',()=>{
-        const i=TABS.findIndex(t=>t.key===tab);if(i>0)setTab(TABS[i-1].key);
+        const i=activeTabs.findIndex(t=>t.key===tab);if(i>0)setTab(activeTabs[i-1].key);
       });
       document.getElementById('xNext').addEventListener('click',()=>{
-        const i=TABS.findIndex(t=>t.key===tab);if(i<TABS.length-1)setTab(TABS[i+1].key);
+        const i=activeTabs.findIndex(t=>t.key===tab);if(i<activeTabs.length-1)setTab(activeTabs[i+1].key);
       });
       started=true;
     }
+    // narrow to a section's tabs if given, else show all
+    activeTabs = (tabKeys&&tabKeys.length) ? TABS.filter(t=>tabKeys.includes(t.key)) : TABS;
+    if(!activeTabs.length) activeTabs=TABS;
     // reset furniture to their room positions each entry
     FURN.bed.x=3;FURN.bed.y=5; FURN.wardrobe.x=3;FURN.wardrobe.y=0; FURN.door.x=7;FURN.door.y=0;
-    selA='bed';selB='wardrobe';tab='coords';
-    document.getElementById('explore').dataset.ncert=TABS[0].ncert;
+    selA='bed';selB='wardrobe';
+    tab = (startKey && activeTabs.some(t=>t.key===startKey)) ? startKey : activeTabs[0].key;
+    const cur = activeTabs.find(t=>t.key===tab)||activeTabs[0];
+    document.getElementById('explore').dataset.ncert=cur.ncert;
     renderTabs();renderControls();render();
   };
 })();
 
 // nav
 document.querySelectorAll('.mode-card').forEach(c=>c.onclick=()=>startMode(c.dataset.mode));
-$('quitBtn').onclick=()=>show('home');
-$('quitBtnX').onclick=()=>show('home');
-$('quitBtnDP').onclick=()=>show('home');
-$('quitBtnD').onclick=()=>window.showDDPicker();
-$('menuBtn').onclick=()=>{ if(mode==='challenge')showSetPicker(); else show('home'); };
+$('quitBtn').onclick=()=>show(backTarget);
+$('quitBtnX').onclick=()=>show(backTarget);
+$('quitBtnDP').onclick=()=>show(backTarget);
+$('quitBtnD').onclick=()=>{ if(backTarget==='learn')show('learn'); else window.showDDPicker(); };  // learn→explainer, else filtered picker
+$('quitBtnLearn').onclick=()=>show('sectview');
+$('menuBtn').onclick=()=>{ if(mode==='challenge'&&backTarget==='setpick')showSetPicker(); else show(backTarget); };
 $('quitBtnS').onclick=()=>show('home');
-$('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
+$('quitBtnHome').onclick=()=>show('secthome');
+$('quitBtnSect').onclick=()=>show('secthome');
+$('quitBtnTB').onclick=()=>show('secthome');
+$('retryBtn').onclick=()=>{ if(lastRun)lastRun(); else if(mode==='challenge')startChallenge(currentSet); else startMode(mode); };
 </script>
 <script>
 // ===================== DEEP DIVES =====================
@@ -1794,9 +2055,13 @@ $('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); el
     {id:'vertices',    ncert:'C1-3.7',tier:'hard',  title:'Vertices from midpoints',blurb:'The reverse puzzle: given three midpoints, rebuild the triangle’s corners.',build:vertices}
   ];
   window.DEEPDIVE_IDS=DEEPDIVES.map(d=>d.ncert); // for coverage bookkeeping
-  window.showDDPicker=function(){
+  let lastDDFilter=null;                          // remembered so the activity back-button re-shows the same picker
+  // filter: array of dd ids → show only those; null → show all; undefined → reuse last
+  window.showDDPicker=function(filter){
+    if(filter!==undefined) lastDDFilter=filter;
+    const list = lastDDFilter ? DEEPDIVES.filter(d=>lastDDFilter.includes(d.id)) : DEEPDIVES;
     const grid=document.getElementById('ddGrid');grid.innerHTML='';
-    DEEPDIVES.forEach(dd=>{
+    list.forEach(dd=>{
       const c=document.createElement('button');c.className='set-card';
       c.innerHTML=`<div class="num">Deep dive <span class="ncert">${dd.ncert}</span></div><h3>${dd.title}</h3><p>${dd.blurb}</p><span class="tier ${dd.tier}">${dd.tier}</span>`;
       c.onclick=()=>openDeepDive(dd);
@@ -1804,6 +2069,7 @@ $('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); el
     });
     show('ddpick');
   };
+  window.openDeepDiveById=function(id){const dd=DEEPDIVES.find(d=>d.id===id);if(dd)openDeepDive(dd);};
   function openDeepDive(dd){
     const old=document.getElementById('svgD');
     const fresh=old.cloneNode(false);old.parentNode.replaceChild(fresh,old); // drop old listeners
@@ -1816,6 +2082,395 @@ $('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); el
     show('deepdive');
     dd.build({svg:fresh,controls,readout,explain});
   }
+})();
+</script>
+<script>
+// ===================== SECTION-FIRST SHELL =====================
+// Groups the existing (data-ncert-tagged) activities into book sections. Each
+// section card opens a tile screen: Learn (Explore) + Practice/Quiz/Challenge
+// (BANK/CH filtered by ncert) + Deep dives (filtered picker). The whole-chapter
+// menu (#home) is kept as the cumulative track.
+(function(){
+  const SECTIONS=[
+    { id:'grid', num:'Section 1', book:'§1.2–1.3', title:'Settling In & the Grid',
+      blurb:'Axes, the origin, plotting points, points on an axis, quadrants, and why (x,y) ≠ (y,x).',
+      chips:['coordinates','quadrants','axes'],
+      intro:'Shalini maps Reiaan’s room on a grid. Meet the x- and y-axes and the origin, see how an ordered pair (x, y) names one exact point, when a point sits on an axis, and the four quadrants.',
+      ncert:['C1-1.2','C1-1.3a','C1-1.3b','C1-1.3c','C1-1.4a','C1-1.4b','C1-1.4c'],
+      tabs:['coords','quad'], deepdives:['city-grid'],
+      learn:[
+        {h:'Axes, the origin, and reading (x, y)', tab:'coords',
+         p:'Two perpendicular number lines — the horizontal x-axis and the vertical y-axis — meet at the origin O = (0, 0). A point’s coordinates (x, y) give its distance from the y-axis first, then from the x-axis. Order matters, so x always comes first.'},
+        {h:'Points that sit on an axis', tab:'coords',
+         p:'A point on the x-axis has y = 0, giving the form (x, 0); a point on the y-axis has x = 0, giving (0, y). The origin (0, 0) lies on both axes at once.'},
+        {h:'The four quadrants', tab:'quad',
+         p:'The axes cut the plane into four quadrants with sign patterns (+, +), (−, +), (−, −) and (+, −) for I, II, III and IV. A point on an axis belongs to no quadrant.'},
+        {h:'Order matters: (x, y) vs (y, x)', dd:'city-grid',
+         p:'(4, 3) and (3, 4) are different points — swapping the two numbers lands you somewhere else, just like naming a different street crossing. They coincide only when x = y.'}
+      ] },
+    { id:'distance', num:'Section 2', book:'§1.4', title:'Distance & Reflection',
+      blurb:'Distance along an axis, the Baudhāyana–Pythagoras distance formula, and reflections.',
+      chips:['distance','pythagoras','reflection'],
+      intro:'How far apart are two points? Start with shifts along an axis, build up to the Baudhāyana–Pythagoras distance formula, and see how reflecting a shape keeps its lengths.',
+      ncert:['C1-2.1','C1-2.2','C1-2.3','C1-2.4','C1-3.6'],
+      tabs:['dist','refl'], deepdives:['circle','pixel-screen'],
+      learn:[
+        {h:'Distance along an axis', tab:'dist',
+         p:'When two points share a row or a column, the distance is just the difference: horizontal |x₂ − x₁|, or vertical |y₂ − y₁|. No formula needed yet.'},
+        {h:'The distance formula', tab:'dist',
+         p:'For any two points, the Baudhāyana–Pythagoras theorem gives distance = √((x₂ − x₁)² + (y₂ − y₁)²) — the hypotenuse of the right triangle made by the horizontal and vertical shifts.'},
+        {h:'Distance from the origin, and circles', dd:'circle',
+         p:'The distance of a point from O is √(x² + y²). Points at equal distance from O trace a circle of that radius — a point is inside if nearer, outside if farther.'},
+        {h:'Reflection preserves length', tab:'refl',
+         p:'Reflecting across the y-axis flips the sign of x; across the x-axis flips the sign of y. Lengths are unchanged — a mirror image is the same size.'}
+      ] },
+    { id:'deeper', num:'Section 3', book:'End-of-chapter', title:'Going Deeper',
+      blurb:'Collinearity, triangle construction, midpoints & trisection, and the reverse-midpoint puzzle.',
+      chips:['collinearity','midpoint','construction'],
+      intro:'The deeper end-of-chapter ideas: test collinearity without plotting, construct triangles from the origin, discover the midpoint pattern and trisection, then solve the reverse-midpoint puzzle.',
+      ncert:['C1-3.1','C1-3.2','C1-3.3','C1-3.4','C1-3.5','C1-3.7','C1-3.10'],
+      deepdives:['collinearity','triangle','midpoint','vertices'],
+      learn:[
+        {h:'Collinearity without plotting', dd:'collinearity',
+         p:'Three points lie on one straight line exactly when the triangle they form has zero area — that is, when (xB−xA)(yC−yA) equals (xC−xA)(yB−yA). It is the "equal slopes" test, checked with no plotting, and it never breaks on vertical lines.'},
+        {h:'Triangles from the origin', dd:'triangle',
+         p:'Pin one vertex at the origin O and place the other two. A right-angled isosceles triangle needs a right angle plus two equal sides; an isosceles triangle straddling Quadrants III and IV is easiest as a mirror image across the y-axis.'},
+        {h:'Midpoint = the average (and trisection)', dd:'midpoint',
+         p:'The midpoint of S and T is simply the average of their coordinates: ((Sx+Tx)/2, (Sy+Ty)/2). The two trisection points cut the segment into thirds: P = S + (T−S)/3 and Q = S + 2(T−S)/3.'},
+        {h:'The reverse-midpoint puzzle', dd:'vertices',
+         p:'Given the three side-midpoints D, E, F of a triangle, recover its corners with A = D+F−E, B = D+E−F, C = E+F−D — the midpoint rule run backwards.'}
+      ] },
+    { id:'history', num:'Context', book:'§1.1', title:'History & Context',
+      blurb:'The deep roots of coordinates — from the Sindhu-Sarasvatī grid to Descartes.',
+      chips:['reading','history'], reading:true,
+      intro:'Coordinates have deep roots in Bhārat: the Sindhu-Sarasvatī cities laid out on N–S / E–W grids, Baudhāyana’s geometry, Āryabhaṭa’s celestial coordinates, and Brahmagupta’s zero and negative numbers — ideas that reached Europe centuries later with Fermat and Descartes, who formalised the plane we use today.',
+      ncert:['C1-1.1'] }
+  ];
+  const rank={easy:0,medium:1,hard:2};
+  const bank = ns => { const s=new Set(ns); return BANK.filter(q=>s.has(q.ncert)); };
+  const chal = ns => { const s=new Set(ns); return [...CH1,...CH2,...CH3].filter(q=>s.has(q.ncert)); };
+
+  function card(sec){
+    const c=document.createElement('button');c.className='set-card';
+    c.innerHTML=`<div class="num">${sec.num} <span class="book">${sec.book}</span></div>`+
+      `<h3>${sec.title}</h3><p>${sec.blurb}</p>`+
+      `<div class="chips">${sec.chips.map(x=>`<span class="chip">${x}</span>`).join('')}</div>`;
+    c.onclick=()=>openSection(sec);return c;
+  }
+  function tile(ico,title,desc,meta,cls,onClick){
+    const t=document.createElement('button');t.className='tile'+(cls?(' '+cls):'');
+    t.innerHTML=`<span class="t-ico">${ico}</span><h4>${title}</h4><p>${desc}</p>`+(meta?`<span class="t-meta">${meta}</span>`:'');
+    t.onclick=onClick;return t;
+  }
+  function openSection(sec){
+    document.getElementById('sectTitle').textContent=sec.title;
+    document.getElementById('sectLabel').textContent=sec.num+' · '+sec.book;
+    document.getElementById('sectIntro').textContent=sec.intro;
+    const grid=document.getElementById('tileGrid');grid.innerHTML='';
+    if(sec.reading){
+      grid.style.gridTemplateColumns='1fr';
+      const p=document.createElement('div');p.className='tile learn';p.style.cursor='default';
+      p.innerHTML=`<span class="t-ico">📜</span><h4>Read: the story of coordinates</h4><p>${sec.intro} Every deep-dive and quiz in this chapter rests on these ideas.</p>`;
+      grid.appendChild(p);show('sectview');return;
+    }
+    grid.style.gridTemplateColumns='';
+    const P=bank(sec.ncert);
+    const quiz=[...P].sort((a,b)=>(rank[a.level]||1)-(rank[b.level]||1)).slice(0,5);
+    let C=chal(sec.ncert);
+    if(C.length<3) C=C.concat(P.filter(q=>q.level==='hard'));   // top up thin challenge pools with the section's hardest items
+    C=C.slice(0,8);
+    if(sec.learn&&sec.learn.length)
+      grid.appendChild(tile('🧭','Learn','Guided walk-through of each idea, each with a link into the matching interactive.',
+        sec.learn.length+' guided ideas','learn',()=>openLearn(sec)));
+    else if(sec.tabs&&sec.tabs.length)
+      grid.appendChild(tile('🧭','Learn','Interactive explainer — drag things and watch the coordinates react.',
+        sec.tabs.length+' interactive view'+(sec.tabs.length>1?'s':''),'learn',
+        ()=>{backTarget='sectview';show('explore');window.startExplore(sec.tabs);}));
+    if(P.length)
+      grid.appendChild(tile('✏️','Practice','Guided questions with a worked explanation every time. Unscored.',
+        P.length+' questions',null,()=>runSet(P,'practice',{back:'sectview',title:sec.title+' · Practice'})));
+    if(quiz.length)
+      grid.appendChild(tile('✅','Quiz','A short scored check on this section, easy → hard.',
+        quiz.length+' questions · scored',null,()=>runSet(quiz,'quiz',{back:'sectview',title:sec.title+' · Quiz'})));
+    if(C.length)
+      grid.appendChild(tile('🏆','Challenge','Tougher, exam-style items for this section. Scored.',
+        C.length+' questions · scored',null,()=>runSet(C,'quiz',{back:'sectview',title:sec.title+' · Challenge'})));
+    if(sec.deepdives&&sec.deepdives.length)
+      grid.appendChild(tile('🔬','Deep dives','Standalone interactives for the deeper ideas here.',
+        sec.deepdives.length+' activit'+(sec.deepdives.length>1?'ies':'y'),null,
+        ()=>{backTarget='sectview';window.showDDPicker(sec.deepdives);}));
+    show('sectview');
+  }
+  function openLearn(sec){
+    document.getElementById('learnTitle').textContent=sec.title+' — Learn';
+    document.getElementById('learnLabel').textContent=sec.num+' · Learn';
+    document.getElementById('learnIntro').textContent=sec.intro;
+    const body=document.getElementById('learnBody');body.innerHTML='';
+    sec.learn.forEach(c=>{
+      const d=document.createElement('div');d.className='learn-card';
+      d.innerHTML=`<h4>${c.h}</h4><p>${c.p}</p>`;
+      const b=document.createElement('button');b.className='try';
+      b.textContent=c.tab?'Open the interactive plane →':'Try the interactive →';
+      b.onclick=()=>{ backTarget='learn';
+        if(c.tab){show('explore');window.startExplore(sec.tabs||[c.tab], c.tab);}
+        else window.openDeepDiveById(c.dd);
+      };
+      d.appendChild(b);body.appendChild(d);
+    });
+    show('learn');
+  }
+  // ---- Textbook Questions: every question in the chapter (IDs mirror spec/02-questions-map.md) ----
+  const TEXTBOOK=[
+    {group:'Worked examples', items:[
+      {id:'WE-1', src:'§1.3 · Fig 1.2', q:'Where do B(4.5, 0), G(0, −4.5) and H(0, 4) lie?',
+       hint:'Look at which coordinate is zero.',
+       approach:'A point (x, 0) is on the x-axis; a point (0, y) is on the y-axis. The non-zero value is the distance from O.',
+       answer:'<b>B(4.5, 0)</b> — on the x-axis, 4.5 right of O. <b>G(0, −4.5)</b> — on the y-axis, 4.5 below O. <b>H(0, 4)</b> — on the y-axis, 4 above O.'},
+      {id:'WE-2', src:'§1.3 · Fig 1.4', q:'In which quadrants are S(3, −5) and Q(−5, 3)?',
+       hint:'Use the sign pattern of (x, y).',
+       approach:'Quadrant I (+,+), II (−,+), III (−,−), IV (+,−). Read the signs.',
+       answer:'S(3, −5) is (+, −) → <b>Quadrant IV</b>. Q(−5, 3) is (−, +) → <b>Quadrant II</b>.'},
+      {id:'WE-3', src:'§1.4 · Fig 1.6–1.7', q:'Find the distance AD where A(3, 4) and D(7, 1).',
+       hint:'Drop a right triangle: move horizontally, then vertically.',
+       approach:'Horizontal leg = |x_D − x_A|, vertical leg = |y_A − y_D|; then AD = √(leg₁² + leg₂²) by Baudhāyana–Pythagoras.',
+       answer:'CD = 7 − 3 = 4, AC = 4 − 1 = 3, so AD = √(4² + 3²) = √25 = <b>5 units</b>.'},
+      {id:'WE-4', src:'§1.4 · Fig 1.6', q:'Find DM and MA where D(7, 1), M(9, 6), A(3, 4).',
+       approach:'Same right-triangle rule √(Δx² + Δy²) for each pair.',
+       answer:'DM = √((9−7)² + (6−1)²) = √(4+25) = <b>√29</b>. MA = √((9−3)² + (6−4)²) = √(36+4) = <b>√40</b>.'},
+      {id:'WE-5', src:'§1.4 · Fig 1.8', q:'What is the general distance formula between (x₁, y₁) and (x₂, y₂)?',
+       approach:'The horizontal and vertical shifts are the legs of a right triangle; the distance is its hypotenuse.',
+       answer:'distance = <b>√((x₂ − x₁)² + (y₂ − y₁)²)</b>. It does not matter whether the differences are positive or negative — they are squared.'},
+      {id:'WE-6', src:'§1.4 · Fig 1.9', q:'Reflect A(3,4), D(7,1), M(9,6) in the y-axis. Give the images; do lengths change?',
+       hint:'Reflection in the y-axis flips the sign of x.',
+       approach:'Negate each x-coordinate, keep y; then recompute one side to check the length.',
+       answer:'A′(−3, 4), D′(−7, 1), M′(−9, 6). Lengths are unchanged — e.g. A′D′ = √(4² + 3²) = 5 = AD. Reflection preserves distances.'}
+    ]},
+    {group:'In-text prompts', items:[
+      {id:'IT-1', src:'§1.2 · Fig 1.1', q:'Why can the position of the windows not be marked on the floor map?',
+       approach:'Ask what a floor map records versus what locating a window needs.',
+       answer:'The floor map is <b>2-D</b> — it fixes positions across the floor (x, y). A window sits partway <b>up a wall</b>, so it needs a third dimension (height) that this flat map cannot show.'},
+      {id:'IT-2', src:'§1.3 · Fig 1.4', q:'Mark S(3,−5) and Q(−5,3); then mark any point P in Quadrant I and R in Quadrant III, and write their coordinates.',
+       approach:'Place S and Q by their signs; then choose P with both coordinates positive and R with both negative.',
+       answer:'S(3,−5) → QIV, Q(−5,3) → QII. Any P = (+, +) works (e.g. (2, 4) in QI); any R = (−, −) works (e.g. (−3, −2) in QIII). Answers vary.'}
+    ]},
+    {group:'Exercise Set 1.1 (Fig 1.3)', items:[
+      {id:'E11-i', src:'Ex 1.1 (i)', q:'How far is the door D₁R₁ from the left wall (the y-axis)? How far from the x-axis?',
+       hint:'Distance from the y-axis is the x-coordinate; distance from the x-axis is the y-coordinate.',
+       approach:'Read D₁ off Fig 1.3: its x gives the distance from the y-axis, its y gives the distance from the x-axis.',
+       answer:'The door lies on the floor line (the x-axis), so its distance from the x-axis is <b>0</b>. Its distance from the y-axis equals the door’s x-coordinate (≈ 8 units in Fig 1.3).'},
+      {id:'E11-ii', src:'Ex 1.1 (ii)', q:'What are the coordinates of D₁?',
+       approach:'Count right for x and up for y straight off the grid.',
+       answer:'From Fig 1.3, D₁ ≈ <b>(8, 0)</b> — it is on the floor line, so y = 0 (exact x is read from the figure).'},
+      {id:'E11-iii', src:'Ex 1.1 (iii)', q:'If R₁ = (11.5, 0), how wide is the door? Is it comfortable, and wheelchair-accessible?',
+       hint:'Both ends are on the x-axis, so subtract x-coordinates.',
+       approach:'Width = |x(R₁) − x(D₁)| (a horizontal distance). Compare with real doorways (~2.5–3 ft standard; wheelchairs need ~2.7 ft+ clear).',
+       answer:'Width = |11.5 − 8| = <b>3.5 units</b> (≈ 3.5 ft) — generous and comfortably wheelchair-accessible.'},
+      {id:'E11-iv', src:'Ex 1.1 (iv)', q:'If B₁(0, 1.5) and B₂(0, 4) are the ends of the bathroom door, is it narrower or wider than the room door?',
+       approach:'Both ends are on the y-axis → width = |y₂ − y₁|; compare with the 3.5-unit room door.',
+       answer:'Bathroom door = |4 − 1.5| = 2.5 units < 3.5 → <b>narrower</b> than the room door.'}
+    ]},
+    {group:'Think & Reflect — doors', items:[
+      {id:'TRD-1', src:'T&R · doors 1', q:'What are the standard widths for a room door? (Look around your home and school.)',
+       approach:'Measure or estimate a few doors and compare them against a common standard width.',
+       answer:'An observation task. Typical interior doors are about <b>2.5–3 ft (≈ 0.75–0.9 m)</b> wide; main doors a bit wider. Compare what you measure at home and school.'},
+      {id:'TRD-2', src:'T&R · doors 2', q:'Are the doors in your school suitable for people in wheelchairs?',
+       approach:'Compare each door’s clear opening against the width a wheelchair needs to pass.',
+       answer:'An observation task. A wheelchair needs roughly <b>2.7–3 ft (≈ 0.8–0.9 m)</b> of clear width to pass comfortably; check whether your school’s doors meet that.'}
+    ]},
+    {group:'Think & Reflect — quadrants', items:[
+      {id:'TRQ-1', src:'T&R · quad 1', q:'What is the x-coordinate of a point on the y-axis?',
+       approach:'Recall the form of any point that sits on the y-axis.',
+       answer:'<b>0</b> — every point on the y-axis has the form (0, y).'},
+      {id:'TRQ-2', src:'T&R · quad 2', q:'Is there a similar generalisation for a point on the x-axis?',
+       approach:'Mirror the y-axis rule — ask what must be zero for a point on the x-axis.',
+       answer:'Yes — its y-coordinate is <b>0</b>; points on the x-axis have the form (x, 0).'},
+      {id:'TRQ-3', src:'T&R · quad 3', q:'Does the point Q(y, x) ever coincide with P(x, y)?',
+       hint:'When would swapping the two coordinates land on the same spot?',
+       approach:'Ask when swapping the two coordinates leaves the point unmoved.',
+       answer:'Only when <b>x = y</b>. Otherwise (x, y) and (y, x) are different points — e.g. (3, 5) ≠ (5, 3).'},
+      {id:'TRQ-4', src:'T&R · quad 4', q:'Is the claim true: if x ≠ y then (x, y) ≠ (y, x), and (x, y) = (y, x) if and only if x = y?',
+       approach:'Check the "only if x = y" claim against a case where x ≠ y.',
+       answer:'<b>True.</b> Swapping the coordinates leaves the point unchanged exactly when the two coordinates are already equal.'}
+    ]},
+    {group:'Exercise Set 1.2 (Fig 1.5)', items:[
+      {id:'E12-1i', src:'Ex 1.2 Q1(i)', q:'A study table has feet at (8, 9), (11, 9) and (11, 7). Where is the fourth foot?',
+       hint:'Three corners of a rectangle fix the fourth.',
+       approach:'The fourth corner shares its x with one adjacent corner and its y with the other.',
+       answer:'Match x with (8, 9) and y with (11, 7) → <b>(8, 7)</b>.'},
+      {id:'E12-1ii', src:'Ex 1.2 Q1(ii)', q:'Is this a good spot for the table?',
+       approach:'Judge it against the room layout — clearance from the door and wardrobe, and walking space.',
+       answer:'A judgement from the layout in Fig 1.5 — check it does not block the door or wardrobe and leaves walking space. Reasonable answers differ.'},
+      {id:'E12-1iii', src:'Ex 1.2 Q1(iii)', q:'What is the width and length of the table? Can you tell its height?',
+       approach:'Width and length are the side differences; height is a third dimension.',
+       answer:'Width = |11 − 8| = 3, length = |9 − 7| = 2. Height is <b>not determinable</b> — Fig 1.5 is a floor plan (2-D).'},
+      {id:'E12-2', src:'Ex 1.2 Q2', q:'If the bathroom door hinged at B₁ opens into the bedroom, will it hit the wardrobe? What if it is made wider?',
+       approach:'The door sweeps a quarter-circle of radius = its width about the hinge B₁. See whether that arc reaches the wardrobe in Fig 1.5.',
+       answer:'Figure-based: swing an arc of radius 2.5 about B₁ and check overlap with the wardrobe. A wider door sweeps a larger arc, so it is <b>more</b> likely to hit — the exact answer depends on the wardrobe’s position in Fig 1.5.'},
+      {id:'E12-3i', src:'Ex 1.2 Q3(i)', q:'What are the coordinates of the four bathroom corners O, F, R and P?',
+       approach:'Read each corner off the grid; opposite corners of a rectangle share coordinates.',
+       answer:'Figure-based: read O, F, R, P directly from Fig 1.5 (O is the origin). The four form a rectangle, so opposite corners share an x or a y.'},
+      {id:'E12-3ii', src:'Ex 1.2 Q3(ii)', q:'What is the shape of the showering area SHWR? Write its four corners.',
+       approach:'Check whether opposite sides are equal and the corners are right angles.',
+       answer:'SHWR is a <b>rectangle</b> (opposite sides equal, right-angled corners); its four corner coordinates are read off Fig 1.5.'},
+      {id:'E12-3iii', src:'Ex 1.2 Q3(iii)', q:'Mark a 3 ft × 2 ft washbasin and a 2 ft × 3 ft toilet; give the corners of these spaces.',
+       approach:'Pick a starting corner, then step the given width and length to place the other three corners.',
+       answer:'Choose a free corner in the bathroom; from it step 3 then 2 units (washbasin) or 2 then 3 units (toilet) to get each rectangle’s four corners. Exact positions depend on where you place them in Fig 1.5.'},
+      {id:'E12-4i', src:'Ex 1.2 Q4(i)', q:'The dining room is 18 ft × 15 ft with its length from P to A. Sketch it and give its corner coordinates.',
+       approach:'Lay an 18-by-15 rectangle along the P→A direction, starting from a known corner.',
+       answer:'Figure-based: the four corners follow from an 18 (length, P→A) by 15 (width) rectangle. Opposite corners differ by 18 along P→A and 15 across it.'},
+      {id:'E12-4ii', src:'Ex 1.2 Q4(ii)', q:'Place a 5 ft × 3 ft dining table exactly at the centre of the room; give the feet coordinates.',
+       approach:'Find the room’s centre, then offset by half the table’s width and half its length to each foot.',
+       answer:'The four feet are the room centre ± (2.5, 1.5) — i.e. half of 5 along the length and half of 3 across it, in each direction.'}
+    ]},
+    {group:'Think & Reflect — distance', items:[
+      {id:'TRDist-1', src:'T&R · distance 1', q:'Going from A(3, 4) to D(7, 1), what distance is covered along the x-axis? Along the y-axis?',
+       approach:'Take the absolute difference of the x-coordinates, then of the y-coordinates.',
+       answer:'Along x: |7 − 3| = <b>4</b>. Along y: |4 − 1| = <b>3</b>.'},
+      {id:'TRDist-2', src:'T&R · distance 2', q:'Can these distances help you find AD?',
+       approach:'They are the two legs of a right triangle with AD as the hypotenuse.',
+       answer:'Yes — AD = √(4² + 3²) = √25 = <b>5</b> (Baudhāyana–Pythagoras).'}
+    ]},
+    {group:'Think & Reflect — reflection', items:[
+      {id:'TRRef-1', src:'T&R · reflection 1', q:'After reflecting △ADM in the y-axis, what stayed the same and what changed?',
+       approach:'Compare each side length and each coordinate before and after the reflection.',
+       answer:'The <b>side lengths and shape stay the same</b>; only the <b>sign of each x-coordinate</b> changes.'},
+      {id:'TRRef-2', src:'T&R · reflection 2', q:'Would the observations be the same if △ADM were reflected in the x-axis instead?',
+       approach:'Repeat the reflection reasoning with the roles of x and y swapped.',
+       answer:'Yes — lengths are still preserved, but now the sign of each <b>y-coordinate</b> flips instead of the x-coordinate.'}
+    ]},
+    {group:'End-of-Chapter Exercises', items:[
+      {id:'EOC-1', src:'Q1', q:'What are the x- and y-coordinates of the point where the two axes intersect?',
+       approach:'Recall the special name and coordinates of the point where the axes cross.',
+       answer:'The axes meet at the <b>origin O = (0, 0)</b>: x-coordinate 0, y-coordinate 0.'},
+      {id:'EOC-2', src:'Q2', q:'Point W has x-coordinate −5. Predict the coordinates of point H on the line through W parallel to the y-axis. Which quadrants can H lie in?',
+       hint:'A line parallel to the y-axis keeps x fixed.',
+       approach:'Every point on that line has x = −5; only y varies. Decide the quadrant from the sign of y.',
+       answer:'H = (−5, y). With x negative: y > 0 → <b>Quadrant II</b>, y < 0 → <b>Quadrant III</b> (y = 0 puts it on the x-axis).'},
+      {id:'EOC-3i', src:'Q3(i)', q:'R(3,0), A(0,−2), M(−5,−2), P(−5,2) joined in order: which two sides are perpendicular?',
+       hint:'Sides that share an x are vertical; sides that share a y are horizontal.',
+       approach:'List each side; equal-y ⇒ horizontal, equal-x ⇒ vertical; a horizontal and a vertical side meet at a right angle.',
+       answer:'AM (y = −2 for both) is horizontal and MP (x = −5 for both) is vertical, so <b>AM ⊥ MP</b>.'},
+      {id:'EOC-3ii', src:'Q3(ii)', q:'RAMP: which side is parallel to one of the axes?',
+       approach:'A side is parallel to an axis when its endpoints share an x (∥ y-axis) or a y (∥ x-axis).',
+       answer:'AM (y = −2) is <b>parallel to the x-axis</b>; MP (x = −5) is <b>parallel to the y-axis</b>. Either is a valid answer.'},
+      {id:'EOC-3iii', src:'Q3(iii)', q:'RAMP: which two points are mirror images of each other, and in which axis?',
+       approach:'Mirror images in the x-axis share the same x and have opposite y.',
+       answer:'<b>M(−5, −2) and P(−5, 2)</b> — same x, opposite y — are mirror images in the <b>x-axis</b>.'},
+      {id:'EOC-4', src:'Q4', q:'Plot Z(5, −6). Construct a right-angled triangle IZN and find its three side lengths. (Answers may differ.)',
+       approach:'Make the right angle at Z by taking the legs parallel to the axes; then two sides are simple differences and the hypotenuse uses the distance formula.',
+       answer:'One valid choice: right angle at Z with I(5, 0) and N(0, −6). Then ZI = 6, ZN = 5, and IN = √(5² + 6²) = <b>√61</b>. Other right triangles are equally correct.'},
+      {id:'EOC-5', src:'Q5', q:'What would a coordinate system be like with no negative numbers? Could it locate every point in the plane?',
+       approach:'Ask which points would be impossible to name if coordinates could not be negative.',
+       answer:'It would cover only <b>Quadrant I</b> (x, y ≥ 0). Points left of or below the origin need negatives, so <b>no</b> — it could not locate every point.'},
+      {id:'EOC-6', src:'Q6', q:'Are M(−3, −4), A(0, 0) and G(6, 8) on one straight line? Give a method without plotting.',
+       hint:'Compare slopes, or use the zero-area test.',
+       approach:'Collinear ⇔ (xB−xA)(yC−yA) = (xC−xA)(yB−yA) (equal slopes / zero triangle area) — no plotting, no division.',
+       answer:'Taking A(0,0): (−3)(8) = −24 and (6)(−4) = −24 — equal, so the area is 0 → <b>collinear</b> (all on y = 4x/3).'},
+      {id:'EOC-7', src:'Q7', q:'Use your method to check whether R(−5, −1), B(−2, −5), C(4, −12) are collinear.',
+       approach:'Apply the same cross-multiplication test with one point as the base.',
+       answer:'Taking R: (−2−(−5))(−12−(−1)) = (3)(−11) = −33, but (4−(−5))(−5−(−1)) = (9)(−4) = −36. −33 ≠ −36 → <b>not collinear</b>.'},
+      {id:'EOC-8i', src:'Q8(i)', q:'Using the origin as one vertex, plot a right-angled isosceles triangle.',
+       approach:'Put the two equal legs along the axes so the right angle is at O.',
+       answer:'e.g. O(0,0), (4,0), (0,4): right angle at O with two equal legs of length 4. Answers may differ.'},
+      {id:'EOC-8ii', src:'Q8(ii)', q:'Plot an isosceles triangle with one vertex in Quadrant III and the other in Quadrant IV (origin as the third).',
+       approach:'Mirror one vertex across the y-axis so the two sides from O are equal.',
+       answer:'e.g. O(0,0), (−3,−4) in QIII, (3,−4) in QIV: |O to each| = 5, so isosceles. Answers may differ.'},
+      {id:'EOC-9', src:'Q9', q:'For each row, is M the midpoint of ST? S,M,T: (−3,0),(0,0),(3,0) | (2,3),(3,4),(4,5) | (0,0),(0,5),(0,−10) | (−8,7),(0,−2),(6,−3). What connection do you notice?',
+       hint:'Test whether M equals the average of S and T.',
+       approach:'Midpoint of S,T = ((Sx+Tx)/2, (Sy+Ty)/2); compare with the listed M.',
+       answer:'Row 1: avg (0,0) = M → <b>Yes</b>. Row 2: avg (3,4) = M → <b>Yes</b>. Row 3: avg (0,−5) ≠ (0,5) → <b>No</b>. Row 4: avg (−1,2) ≠ (0,−2) → <b>No</b>. Connection: the midpoint is the <b>average</b> of the endpoints.'},
+      {id:'EOC-10', src:'Q10', q:'Given M(−7, 1) is the midpoint of A(3, −4) and B(x, y), find B.',
+       approach:'From M = ((Ax+Bx)/2, (Ay+By)/2), solve B = 2M − A.',
+       answer:'B = (2·(−7) − 3, 2·1 − (−4)) = <b>(−17, 6)</b>.'},
+      {id:'EOC-11', src:'Q11', q:'P and Q trisect AB (P nearer A, Q nearer B), with A(4, 7), B(16, −2). Find P and Q.',
+       hint:'P is one-third of the way from A to B; Q is two-thirds.',
+       approach:'P = A + (B−A)/3, Q = A + 2(B−A)/3.',
+       answer:'B − A = (12, −9). P = (4+4, 7−3) = <b>(8, 4)</b>; Q = (4+8, 7−6) = <b>(12, 1)</b>.'},
+      {id:'EOC-12i', src:'Q12(i)', q:'Show A(1,−8), B(−4,7), C(−7,−4) lie on a circle centred at O; find its radius.',
+       hint:'Distance from O is √(x² + y²).',
+       approach:'Compute |OA|, |OB|, |OC|; if equal they share a circle whose radius is that value.',
+       answer:'|OA| = √(1+64) = √65, |OB| = √(16+49) = √65, |OC| = √(49+16) = √65 → all on a circle of radius <b>√65 ≈ 8.06</b>.'},
+      {id:'EOC-12ii', src:'Q12(ii)', q:'Do D(−5, 6) and E(0, 9) lie inside, on, or outside circle K?',
+       approach:'Compare |OD| and |OE| with the radius √65.',
+       answer:'|OD| = √(25+36) = √61 < √65 → D is <b>inside</b>. |OE| = √(0+81) = 9 > √65 → E is <b>outside</b>.'},
+      {id:'EOC-13', src:'Q13', q:'The midpoints of the sides of △ABC are D(5,1), E(6,5), F(0,3). Find A, B, C.',
+       hint:'Each vertex = sum of the two adjacent midpoints minus the opposite one.',
+       approach:'With D, E, F the side-midpoints: A = D+F−E, B = D+E−F, C = E+F−D; then verify by re-taking midpoints.',
+       answer:'A = (5+0−6, 1+3−5) = (−1, −1); B = (5+6−0, 1+5−3) = (11, 3); C = (6+0−5, 5+3−1) = (1, 7). Check: midpoint of A,B = (5,1) = D ✓.'},
+      {id:'EOC-14a', src:'Q14 (a)', q:'In the city grid, how many street intersections can be referred to as (4, 3)?',
+       hint:'A pair of street numbers fixes exactly one crossing.',
+       approach:'Each intersection is named by one N–S number and one E–W number — an ordered pair.',
+       answer:'<b>Exactly one</b> — the 4th N–S street meets the 3rd E–W street at a single crossing.'},
+      {id:'EOC-14b', src:'Q14 (b)', q:'How many intersections can be referred to as (3, 4)?',
+       approach:'An ordered pair fixes both streets — consider whether swapping the two numbers changes the crossing.',
+       answer:'Also <b>exactly one</b>, but a <b>different</b> crossing from (4, 3), since order matters: (4, 3) ≠ (3, 4).'},
+      {id:'EOC-15i', src:'Q15(i)', q:'On an 800×600 screen (origin bottom-left), circle A centre (100,150) r 80 and circle B centre (250,230) r 100 — does any part of either circle lie off-screen?',
+       hint:'Off-screen ⇔ centre ± radius leaves 0…800 in x or 0…600 in y.',
+       approach:'For each circle check x−r, x+r against [0,800] and y−r, y+r against [0,600].',
+       answer:'A spans x 20…180, y 70…230 — inside. B spans x 150…350, y 130…330 — inside. <b>Neither goes off-screen.</b>'},
+      {id:'EOC-15ii', src:'Q15(ii)', q:'Do the two circles intersect?',
+       approach:'They intersect when the distance between centres is less than rA + rB.',
+       answer:'Distance = √((250−100)² + (230−150)²) = √(22500+6400) = √28900 = 170, and rA + rB = 180. 170 < 180 → <b>they intersect</b>.'},
+      {id:'EOC-16', src:'Q16', q:'Plot A(2,1), B(−1,2), C(−2,−1), D(1,−2). Is ABCD a square? Why? What is its area?',
+       hint:'Check all four sides equal and the diagonals equal.',
+       approach:'Compute the four side lengths with the distance formula; equal sides + equal diagonals ⇒ square. Area = side².',
+       answer:'Each side = √((−1−2)² + (2−1)²) = √10, and the diagonals are equal → <b>square</b>. Area = (√10)² = <b>10 square units</b>.'}
+    ]}
+  ];
+  window.TEXTBOOK_IDS=TEXTBOOK.flatMap(g=>g.items.map(it=>it.id)); // for validation against the coverage map
+
+  function renderTextbook(){
+    const body=document.getElementById('tbBody');body.innerHTML='';
+    TEXTBOOK.forEach(group=>{
+      const gh=document.createElement('div');gh.className='tq-group';gh.textContent=group.group;body.appendChild(gh);
+      group.items.forEach(it=>{
+        const d=document.createElement('div');d.className='tq';
+        d.innerHTML=`<div class="tq-src">${it.src} · ${it.id}</div><div class="tq-q">${it.q}</div>`;
+        const btns=document.createElement('div');btns.className='tq-btns';
+        const panels=[];
+        [['hint','💡 Hint',it.hint],['approach','🧭 Approach',it.approach],['answer','✓ Answer & reasoning',it.answer]].forEach(([k,label,content])=>{
+          if(!content)return;
+          const b=document.createElement('button');b.className='tq-btn';b.textContent=label;b.setAttribute('aria-expanded','false');
+          const p=document.createElement('div');p.className='tq-reveal '+k;p.innerHTML=content;
+          b.onclick=()=>{const open=p.classList.toggle('show');b.setAttribute('aria-expanded',open?'true':'false');};
+          btns.appendChild(b);panels.push(p);
+        });
+        d.appendChild(btns);panels.forEach(p=>d.appendChild(p));
+        body.appendChild(d);
+      });
+    });
+  }
+  function openTextbook(){
+    if(!document.getElementById('tbBody').childNodes.length)renderTextbook();
+    const fr=document.getElementById('tbPdfFrame');          // load the PDF only on first open
+    if(fr && !fr.getAttribute('src')) fr.setAttribute('src','iemh101.pdf#view=FitH');
+    show('textbook');
+  }
+  document.getElementById('tbPdfToggle').onclick=()=>{
+    const p=document.getElementById('tbPdf'), hidden=p.classList.toggle('hide-pdf');
+    document.getElementById('tbPdfToggle').textContent=hidden?'📄 Show book':'📄 Hide book';
+  };
+
+  function renderHome(){
+    const g=document.getElementById('sectGrid');g.innerHTML='';
+    SECTIONS.forEach(s=>g.appendChild(card(s)));
+    const tg=document.getElementById('tbGrid');tg.innerHTML='';
+    const tb=document.createElement('button');tb.className='set-card';
+    tb.innerHTML=`<div class="num">📖 Textbook questions <span class="book">examples + exercises</span></div>`+
+      `<h3>Every question, worked</h3><p>All worked examples, exercises, Think-and-Reflect prompts and the end-of-chapter problems — each with a hint, an approach to check your plan, then full reasoning.</p>`+
+      `<div class="chips"><span class="chip">hint</span><span class="chip">approach</span><span class="chip">answer</span></div>`;
+    tb.onclick=()=>openTextbook();
+    tg.appendChild(tb);
+    const cg=document.getElementById('cumGrid');cg.innerHTML='';
+    const cc=document.createElement('button');cc.className='set-card cumulative';
+    cc.innerHTML=`<div class="num">Whole-chapter test <span class="book">all topics</span></div>`+
+      `<h3>Test yourself</h3><p>The full chapter mixed together — Explore, Practice, Quiz and Challenge across every topic, for cumulative exam-style practice.</p>`+
+      `<div class="chips"><span class="chip">cumulative</span><span class="chip">mixed</span></div>`;
+    cc.onclick=()=>{backTarget='home';show('home');};
+    cg.appendChild(cc);
+  }
+  renderHome();
+  show('secthome');
 })();
 </script>
 <script>
