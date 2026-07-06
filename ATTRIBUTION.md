@@ -19,8 +19,12 @@ The PDF and quoted questions are reproduced here **solely for non-commercial,
 educational use**. If you are the rights holder and would prefer the file be
 removed, please open an issue.
 
-## Original work
+## Other content
 
-The interactive activities, the section/quiz/challenge/deep-dive engines, the
-"Textbook Questions" hint/approach/answer explanations, and the coverage maps
-(`spec/`) are original works built on the chapter's concepts and exercises.
+The rest of this repository — the interactive activities, the
+section/quiz/challenge/deep-dive engines, the "Textbook Questions"
+hint/approach/answer explanations, and the coverage maps (`spec/`) — is provided
+for non-commercial educational use. **No claim of originality or ownership is
+made** over any concept, method, wording, or approach; similar work may well
+exist elsewhere. If any material here is yours, or you believe it should be
+credited differently or removed, please open an issue and we will address it.
