@@ -31,7 +31,7 @@ interactive needed (link only).
 | C1-3.1 | End-of-Ch Q1-Q3 | Origin coords; point parallel to axis; RAMP quadrilateral (perp/parallel sides, mirror images) | **[partial]** | RAMP is a multi-point reasoning task — good Challenge Set 1. |
 | C1-3.2 | End-of-Ch Q4-Q5 | Build a right triangle from a point; "what if no negatives?" | **[partial]** | The "no negative numbers" question is conceptual — Challenge/Think. |
 | C1-3.3 | **End-of-Ch Q6-Q7 — collinearity** | Are 3 points on a straight line? Method *without plotting* | **[covered]** | Deep-dive "Collinearity" (drag A,B,C; cross-product test, no vertical-line crash). Also Challenge Set 1 & 2 collinearity items. |
-| C1-3.4 | End-of-Ch Q8 | Plot triangles (right-isosceles; vertices in QIII & QIV) using origin | **[partial]** | **Consciously deferred.** Open-ended free-construction task (book: "answers may differ"). No dedicated activity; partially served by Explore point-plotting and the Challenge classify-figure/square-vertex items. Candidate for a future "plot-a-triangle" deep-dive if desired. |
+| C1-3.4 | End-of-Ch Q8 | Plot triangles (right-isosceles; vertices in QIII & QIV) using origin | **[covered]** | Deep-dive "Plot a triangle" — origin fixed as one vertex, drag B & C; two tasks (right-isosceles; isosceles across QIII & QIV). Validates by geometric property so any correct construction passes ("answers may differ"). |
 | C1-3.5 | **End-of-Ch Q9-Q11 — midpoint & trisection** | Is M the midpoint of ST? Derive midpoint formula; trisection points | **[covered]** | Deep-dive "Midpoint & trisection" — discovery flow (place M, then reveal average pattern), plus trisection and reverse-endpoint modes. Challenge Set 2 find-the-endpoint item. |
 | C1-3.6 | **End-of-Ch Q12 — circle / distance from origin** | Show 3 points lie on a circle centred at O; inside/on/outside | **[covered]** | Deep-dive "Points on a circle" (drag P, adjustable radius, inside/on/outside verdict, "Load book problem" √65). Also Quiz Q5 and Challenge Set 3. |
 | C1-3.7 | **End-of-Ch Q13 — midpoints → vertices** | Given 3 midpoints of a triangle, reconstruct the vertices | **[covered]** | Deep-dive "Vertices from midpoints" — drag A,B,C until side-midpoints hit D,E,F; Hint + "Solve it for me" (A=D+F−E …). Capstone Challenge Set 3 item. |
@@ -58,17 +58,18 @@ that aren't "drag a point". **All six are now built as deep-dive interactives**
 5. City street-grid modelling (C1-3.8) ✅
 6. Pixel-screen modelling (C1-3.9) ✅
 
-All six share one grid/axis helper and one pointer pipeline (no duplicated
-axis-rendering), and each is tagged `data-ncert="<ID>"` for later book↔activity
-linking. The question bank was extended so the deeper material (circle,
+A seventh deep-dive, "Plot a triangle" (C1-3.4, book Q8), closes the last
+construction gap. All share one grid/axis helper and one pointer pipeline (no
+duplicated axis-rendering), and each is tagged `data-ncert="<ID>"` for later
+book↔activity linking. The question bank was extended so the deeper material (circle,
 find-the-endpoint, reverse-midpoints, ordered-pair) also shows up in
 Practice/Quiz/Challenge, not only in deep-dives.
 
 **Coverage score, updated (validated against the textbook PDF):**
-**13 covered, 9 partial, 0 gap, 1 text** (23 rows).
-The six deep-dive gaps and the (x,y)≠(y,x) gap (C1-1.4b) are closed. The one
-remaining not-fully-covered item is C1-3.4 (book Q8), an open-ended free-triangle
-construction consciously deferred with a note above. Remaining [partial] rows are
+**14 covered, 8 partial, 0 gap, 1 text** (23 rows).
+Every [gap] is closed — the six deep-dive gaps, the (x,y)≠(y,x) gap (C1-1.4b),
+and C1-3.4 (book Q8) via the seventh "Plot a triangle" deep-dive. Remaining
+[partial] rows are
 shallow-but-present items (e.g. C1-1.3b "on an axis" edge case, C1-2.4 x-axis
 reflection, C1-3.1 RAMP, C1-3.10 square-check) — all touched by at least one
 tier/Explore mode and left as "adequate" rather than expanded.

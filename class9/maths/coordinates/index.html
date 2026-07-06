@@ -285,8 +285,8 @@
       </button>
       <button class="mode-card" data-mode="deepdive">
         <h3>Deep Dives</h3>
-        <p>Six standalone interactives for the deeper end-of-chapter ideas: city grids, pixel screens, circles, collinearity, midpoints and the reverse-midpoint puzzle.</p>
-        <span class="tag">6 activities · explore the hard bits</span>
+        <p>Seven standalone interactives for the deeper end-of-chapter ideas: city grids, pixel screens, circles, collinearity, triangle construction, midpoints and the reverse-midpoint puzzle.</p>
+        <span class="tag">7 activities · explore the hard bits</span>
       </button>
     </div>
   </section>
@@ -1568,6 +1568,79 @@ $('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); el
     render();
   }
 
+  // ================= C1-3.4 · plot a triangle from the origin =================
+  // Book Q8 is open-ended ("answers may differ"), so we validate by geometric
+  // property — any correct construction passes, not one fixed set of coordinates.
+  function plotTriangle(root){
+    const view={xmin:-8,xmax:8,ymin:-8,ymax:8};
+    const g=Grid(root.svg,view), drag=Drag(g);
+    const O={x:0,y:0};
+    let task='right', B={x:4,y:1}, C={x:-2,y:3};
+    const d2=(p,q)=>{const dx=q.x-p.x,dy=q.y-p.y;return dx*dx+dy*dy;};
+    const len=(p,q)=>Math.sqrt(d2(p,q));
+    const area2=()=>Math.abs(B.x*C.y-C.x*B.y);       // twice area, O at origin
+    const quad=p=>(p.x===0||p.y===0)?'axis':(p.x>0?(p.y>0?'I':'IV'):(p.y>0?'II':'III'));
+    function rightAngleAt(){                          // 'O' | 'B' | 'C' | null
+      if(B.x*C.x+B.y*C.y===0)return'O';
+      if((O.x-B.x)*(C.x-B.x)+(O.y-B.y)*(C.y-B.y)===0)return'B';
+      if((O.x-C.x)*(B.x-C.x)+(O.y-C.y)*(B.y-C.y)===0)return'C';
+      return null;
+    }
+    const isIso=()=>{const a=d2(O,B),b=d2(O,C),c=d2(B,C);return a===b||b===c||a===c;};
+    function ok(){
+      if(area2()===0)return false;                   // degenerate → not a triangle
+      return task==='right'
+        ? (rightAngleAt()!==null&&isIso())            // right angle + isosceles ⟺ right-isosceles
+        : (isIso()&&((quad(B)==='III'&&quad(C)==='IV')||(quad(B)==='IV'&&quad(C)==='III')));
+    }
+    function render(){
+      g.clear();g.grid({step:1,tickStep:2});
+      const good=ok();
+      g.line(O.x,O.y,B.x,B.y,{stroke:good?'#2f7d4f':'#9aa6ba',w:good?2.5:1.5});
+      g.line(O.x,O.y,C.x,C.y,{stroke:good?'#2f7d4f':'#9aa6ba',w:good?2.5:1.5});
+      g.line(B.x,B.y,C.x,C.y,{stroke:good?'#2f7d4f':'#9aa6ba',w:good?2.5:1.5});
+      g.dot(0,0,{r:5,fill:'#1b2a4a'});g.label(0,0,'O',{dx:-13,dy:14});
+      drag.handle(B.x,B.y,{label:'B',fill:'#c0392b',onMove:(x,y)=>{B={x,y};render();}});
+      drag.handle(C.x,C.y,{label:'C',fill:'#1b6ca8',onMove:(x,y)=>{C={x,y};render();}});
+      readout();
+    }
+    function readout(){
+      const ra=rightAngleAt(),degen=area2()===0,good=ok();
+      root.readout.innerHTML=
+       `<div class="row"><span class="k">O, B, C</span><span class="v">(0,0) (${B.x},${B.y}) (${C.x},${C.y})</span></div>`+
+       `<div class="row"><span class="k">|OB|, |OC|, |BC|</span><span class="v">${len(O,B).toFixed(2)}, ${len(O,C).toFixed(2)}, ${len(B,C).toFixed(2)}</span></div>`+
+       `<div class="row"><span class="k">right angle</span><span class="v">${ra?('at '+ra):'none'}</span></div>`+
+       `<div class="row"><span class="k">isosceles?</span><span class="v">${degen?'—':(isIso()?'yes':'no')}</span></div>`+
+       (task==='q34'?`<div class="row"><span class="k">B, C quadrants</span><span class="v">${quad(B)}, ${quad(C)}</span></div>`:'')+
+       `<div class="row"><span class="k">verdict</span><span class="v"><span class="verdict ${good?'von':'vout'}">${good?'valid!':(degen?'not a triangle':'not yet')}</span></span></div>`;
+      root.explain.innerHTML=good
+        ?(task==='right'
+          ?`Right-angled isosceles triangle — right angle at ${ra}, and the two sides meeting there are equal. The book notes answers may differ; this is one valid construction.`
+          :`Isosceles triangle with B in ${quad(B)} and C in ${quad(C)}, and O at the origin — one of many valid answers.`)
+        :(task==='right'
+          ?'Goal: place B and C so triangle OBC has a right angle <b>and</b> two equal sides. Tip: put equal legs on the axes, e.g. B(4,0), C(0,4).'
+          :'Goal: an isosceles triangle with O a vertex, one vertex in <b>Quadrant III</b> (−,−) and one in <b>Quadrant IV</b> (+,−). Tip: mirror across the y-axis.');
+    }
+    function buildControls(){
+      root.controls.innerHTML='';
+      const seg=document.createElement('div');seg.className='ddbtns';
+      [['right','Right isosceles'],['q34','QIII & QIV isosceles']].forEach(([k,lab])=>{
+        const b=document.createElement('button');b.className='ddbtn';b.setAttribute('aria-pressed',k===task);b.textContent=lab;
+        b.onclick=()=>{task=k;buildControls();render();};
+        seg.appendChild(b);
+      });
+      root.controls.appendChild(seg);
+      root.controls.appendChild(hintP(task==='right'
+        ?'Use the origin O as one vertex. Drag B and C to build a <b>right-angled isosceles</b> triangle.'
+        :'Use O as one vertex. Drag B into <b>Quadrant III</b> and C into <b>Quadrant IV</b> for an <b>isosceles</b> triangle.'));
+      root.controls.appendChild(btnRow(ddbtn('Show an example',()=>{
+        if(task==='right'){B={x:4,y:0};C={x:0,y:4};} else{B={x:-3,y:-4};C={x:3,y:-4};}
+        render();
+      },true)));
+    }
+    buildControls();render();
+  }
+
   // ================= C1-3.5 · midpoint & trisection (discovery) =================
   function midpoint(root){
     const view={xmin:-9,xmax:9,ymin:-9,ymax:9};
@@ -1716,6 +1789,7 @@ $('retryBtn').onclick=()=>{ if(mode==='challenge')startChallenge(currentSet); el
     {id:'pixel-screen',ncert:'C1-3.9',tier:'easy',  title:'Pixel screen',         blurb:'An 800×600 screen, origin bottom-left. Do the circles fit? Do they overlap?',build:pixelScreen},
     {id:'circle',      ncert:'C1-3.6',tier:'medium',title:'Points on a circle',   blurb:'Distance from the origin is a point’s radius. Classify inside / on / outside.',build:circleDistance},
     {id:'collinearity',ncert:'C1-3.3',tier:'medium',title:'Collinearity',         blurb:'Are three points on one line? Discover the test that needs no plotting.',build:collinearity},
+    {id:'triangle',    ncert:'C1-3.4',tier:'medium',title:'Plot a triangle',      blurb:'Build a right-isosceles triangle, and an isosceles one across QIII & QIV, from the origin.',build:plotTriangle},
     {id:'midpoint',    ncert:'C1-3.5',tier:'hard',  title:'Midpoint & trisection',blurb:'Place the midpoint by feel, then discover it’s just the average. Plus trisection.',build:midpoint},
     {id:'vertices',    ncert:'C1-3.7',tier:'hard',  title:'Vertices from midpoints',blurb:'The reverse puzzle: given three midpoints, rebuild the triangle’s corners.',build:vertices}
   ];
